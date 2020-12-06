@@ -27,9 +27,11 @@ CREATE TABLE `user`
 CREATE TABLE `medical_card`
 (
     `id`               INTEGER NOT NULL AUTO_INCREMENT,
+#     `chronic_diseases` TEXT,
+#     `vaccinations`     TEXT,
+
     `chronic_diseases` TEXT,
     `vaccinations`     TEXT,
-
     PRIMARY KEY (`id`)
 );
 
