@@ -4,7 +4,6 @@ import dao.mysql.TransactionFactoryImpl;
 import exception.PersistentException;
 import service.MedicalCardService;
 import service.ServiceFactory;
-import service.impl.MedicalCardServiceImpl;
 import service.impl.ServiceFactoryImpl;
 
 public class Runner {

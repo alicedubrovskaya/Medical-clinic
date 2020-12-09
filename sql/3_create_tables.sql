@@ -1,35 +1,39 @@
 USE `clinic_db`;
 
-/*Doctor's specialization?*/
-
 /* One to one: patient - medical card?*/
 
 CREATE TABLE `user`
 (
+    `id`       INTEGER      NOT NULL AUTO_INCREMENT,
+    `login`    VARCHAR(255) NOT NULL UNIQUE,
+    `password` CHAR(32)     NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `patient`
+(
     `id`          INTEGER             NOT NULL AUTO_INCREMENT,
-    `login`       VARCHAR(255)        NOT NULL UNIQUE,
-    `password`    CHAR(32)            NOT NULL,
     `name`        VARCHAR(255)        NOT NULL,
     `surname`     VARCHAR(255)        NOT NULL,
-    `email`       varchar(255) UNIQUE NOT NULL,
+    `email`       VARCHAR(255) UNIQUE NOT NULL,
     `phoneNumber` INTEGER,
-    `address`     varchar(255),
-    `role`        TINYINT             NOT NULL CHECK (`role` IN (0, 1, 2)),
+    `address`     VARCHAR(255),
+    PRIMARY KEY (`id`)
+);
 
-    /*
-     * 0 - administrator (Role.ADMINISTRATOR)
-     * 1 - patient (Role.PATIENT)
-     * 2 - doctor (Role.DOCTOR)
-     */
+CREATE TABLE `doctor`
+(
+    `id`             INTEGER      NOT NULL AUTO_INCREMENT,
+    `name`           VARCHAR(255) NOT NULL,
+    `surname`        VARCHAR(255) NOT NULL,
+    `specialization` TINYINT      NOT NULL CHECK (`specialization` IN (0, 1, 2)),
+#    to add more
     PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `medical_card`
 (
     `id`               INTEGER NOT NULL AUTO_INCREMENT,
-#     `chronic_diseases` TEXT,
-#     `vaccinations`     TEXT,
-
     `chronic_diseases` TEXT,
     `vaccinations`     TEXT,
     PRIMARY KEY (`id`)
@@ -43,15 +47,12 @@ CREATE TABLE `timetable`
 
 CREATE TABLE `appointment`
 (
-    `id`              INTEGER      NOT NULL AUTO_INCREMENT,
+    `id`              INTEGER NOT NULL AUTO_INCREMENT,
     `time`            DATETIME,
-    /*
-     was or not
-     */
-    `status`          VARCHAR(255) NOT NULL,
-    `complaints`      TEXT         NOT NULL,
-    `medical_report`  TEXT         NOT NULL,
-    `recommendation`  TEXT         NOT NULL,
+    `status`          TINYINT NOT NULL CHECK (`status` IN (0, 1)),
+    `complaints`      TEXT,
+    `medical_report`  TEXT,
+    `recommendation`  TEXT,
 
     `medical_card_id` INTEGER,
     `doctor_id`       INTEGER,
@@ -59,7 +60,7 @@ CREATE TABLE `appointment`
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`medical_card_id`) REFERENCES `medical_card` (id),
-    FOREIGN KEY (`doctor_id`) REFERENCES `user` (id),
+    FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (id),
     FOREIGN KEY (`timetable_id`) REFERENCES `timetable` (id)
 );
 
