@@ -1,4 +1,4 @@
-package dao.mysql;
+package dao.database;
 
 import dao.*;
 import exception.PersistentException;
@@ -16,7 +16,7 @@ public class TransactionImpl implements Transaction {
     private static Map<Class<? extends Dao<?>>, Class<? extends BaseDaoImpl>> classes = new ConcurrentHashMap<>();
 
     static {
-        classes.put(MedicalCardDao.class, MedicalCardImpl.class);
+        classes.put(MedicalCardDao.class, MedicalCardDaoImpl.class);
     }
 
     private Connection connection;
@@ -28,17 +28,17 @@ public class TransactionImpl implements Transaction {
     @SuppressWarnings("unchecked")
     @Override
     public <Type extends Dao<?>> Type createDao(Class<Type> key) throws PersistentException {
-        Class<? extends BaseDaoImpl> value = classes.get(key);
-        if (value != null) {
-            try {
-                BaseDaoImpl dao = value.newInstance();
-                dao.setConnection(connection);
-                return (Type) dao;
-            } catch (InstantiationException | IllegalAccessException e) {
-                logger.error("It is impossible to create data access object", e);
-                throw new PersistentException(e);
-            }
-        }
+//        Class<? extends BaseDaoImpl> value = classes.get(key);
+//        if (value != null) {
+//            try {
+//                BaseDaoImpl dao = value.newInstance();
+//                dao.setConnection(connection);
+//                return (Type) dao;
+//            } catch (InstantiationException | IllegalAccessException e) {
+//                logger.error("It is impossible to create data access object", e);
+//                throw new PersistentException(e);
+//            }
+//        }
         return null;
     }
 

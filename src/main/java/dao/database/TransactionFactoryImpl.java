@@ -1,4 +1,4 @@
-package dao.mysql;
+package dao.database;
 
 import dao.Transaction;
 import dao.TransactionFactory;

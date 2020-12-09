@@ -1,18 +1,20 @@
-package dao.mysql;
+package dao.database;
 
+import dao.ConnectorDB;
 import dao.MedicalCardDao;
 import domain.MedicalCard;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
-public class MedicalCardImpl extends BaseDaoImpl implements MedicalCardDao {
+public class MedicalCardDaoImpl extends BaseDaoImpl implements MedicalCardDao {
     private final Logger logger = LogManager.getLogger(getClass().getName());
+
+    public MedicalCardDaoImpl() {
+         this.connector = new ConnectorDB();
+    }
 
     @Override
     public Integer create(MedicalCard medicalCard) throws PersistentException {
@@ -22,6 +24,7 @@ public class MedicalCardImpl extends BaseDaoImpl implements MedicalCardDao {
         ResultSet resultSet = null;
 
         try {
+            Connection connection = connector.getConnection();
             statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, medicalCard.getChronicDiseases());
             statement.setString(2, medicalCard.getVaccinations());

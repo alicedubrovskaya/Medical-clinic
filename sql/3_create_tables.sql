@@ -16,7 +16,7 @@ CREATE TABLE `patient`
     `name`        VARCHAR(255)        NOT NULL,
     `surname`     VARCHAR(255)        NOT NULL,
     `email`       VARCHAR(255) UNIQUE NOT NULL,
-    `phoneNumber` INTEGER,
+    `phone_number` VARCHAR(255)        NOT NULL,
     `address`     VARCHAR(255),
     PRIMARY KEY (`id`)
 );
