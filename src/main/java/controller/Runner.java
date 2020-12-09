@@ -1,14 +1,20 @@
 package controller;
 
-import dao.database.PatientDaoImpl;
-import domain.Patient;
+import dao.database.DoctorDaoImpl;
+import domain.Doctor;
+import domain.Specialization;
 import exception.PersistentException;
 
 public class Runner {
     public static void main(String[] args) {
-        PatientDaoImpl patientDao = new PatientDaoImpl();
+        DoctorDaoImpl doctorDao = new DoctorDaoImpl();
+        Doctor doctor =new Doctor();
+        doctor.setId(2);
+        doctor.setName("Алиса");
+        doctor.setSpecialization(Specialization.CARDIOLOGIST);
+        doctor.setSurname("Дубровская");
         try {
-            patientDao.readByEmail("denisik");
+            doctorDao.update(doctor);
         } catch (PersistentException e) {
             e.printStackTrace();
         }
