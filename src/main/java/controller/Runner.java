@@ -1,20 +1,18 @@
 package controller;
 
-import dao.database.DoctorDaoImpl;
-import domain.Doctor;
-import domain.Specialization;
+import dao.MedicalCardDao;
+import dao.database.MedicalCardDaoImpl;
+import domain.MedicalCard;
 import exception.PersistentException;
 
 public class Runner {
     public static void main(String[] args) {
-        DoctorDaoImpl doctorDao = new DoctorDaoImpl();
-        Doctor doctor =new Doctor();
-        doctor.setId(2);
-        doctor.setName("Алиса");
-        doctor.setSpecialization(Specialization.CARDIOLOGIST);
-        doctor.setSurname("Дубровская");
+        MedicalCardDao medicalCardDao = new MedicalCardDaoImpl();
+        MedicalCard medicalCard = new MedicalCard();
+        medicalCard.setId(1);
+        medicalCard.setVaccinations("");
         try {
-            doctorDao.update(doctor);
+            medicalCardDao.delete(1);
         } catch (PersistentException e) {
             e.printStackTrace();
         }

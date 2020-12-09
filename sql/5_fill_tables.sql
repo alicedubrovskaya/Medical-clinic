@@ -7,3 +7,8 @@ INSERT INTO `doctor`
     (`id`, `name`, `surname`, `specialization`)
 VALUES (1, 'Денисик', 'Дарья', 1),
        (2, 'Монетина', 'Виктория', 2);
+
+INSERT INTO `medical_card`
+(`id`, `chronic_diseases`, `vaccinations`)
+VALUES (1, 'Аллергия на пениц ряд', 'Прививка Б'),
+       (2, 'Вазомоторный ринит', 'Прививка А');
