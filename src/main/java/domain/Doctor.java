@@ -1,13 +1,13 @@
 package domain;
 
 public class Doctor extends Person {
-    private Specialization specialization;
+    private String specialization;
 
-    public Specialization getSpecialization() {
+    public String getSpecialization() {
         return specialization;
     }
 
-    public void setSpecialization(Specialization specialization) {
+    public void setSpecialization(String specialization) {
         this.specialization = specialization;
     }
 }

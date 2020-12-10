@@ -1,4 +1,4 @@
-package domain;
+package domain.enumeration;
 
 public enum Status {
     WAS("был"),

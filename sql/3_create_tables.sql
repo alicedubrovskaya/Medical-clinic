@@ -1,7 +1,5 @@
 USE `clinic_db`;
 
-/* One to one: patient - medical card?*/
-
 CREATE TABLE `user`
 (
     `id`       INTEGER      NOT NULL AUTO_INCREMENT,
@@ -10,26 +8,6 @@ CREATE TABLE `user`
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `patient`
-(
-    `id`          INTEGER             NOT NULL AUTO_INCREMENT,
-    `name`        VARCHAR(255)        NOT NULL,
-    `surname`     VARCHAR(255)        NOT NULL,
-    `email`       VARCHAR(255) UNIQUE NOT NULL,
-    `phone_number` VARCHAR(255)        NOT NULL,
-    `address`     VARCHAR(255),
-    PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `doctor`
-(
-    `id`             INTEGER      NOT NULL AUTO_INCREMENT,
-    `name`           VARCHAR(255) NOT NULL,
-    `surname`        VARCHAR(255) NOT NULL,
-    `specialization` TINYINT      NOT NULL CHECK (`specialization` IN (0, 1, 2)),
-#    to add more
-    PRIMARY KEY (`id`)
-);
 
 CREATE TABLE `medical_card`
 (
@@ -39,9 +17,41 @@ CREATE TABLE `medical_card`
     PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `patient`
+(
+    `id`              INTEGER             NOT NULL AUTO_INCREMENT,
+    `name`            VARCHAR(255)        NOT NULL,
+    `surname`         VARCHAR(255)        NOT NULL,
+    `email`           VARCHAR(255) UNIQUE NOT NULL,
+    `phone_number`    VARCHAR(255)        NOT NULL,
+    `address`         VARCHAR(255),
+    `medical_card_id` INTEGER UNIQUE,
+    FOREIGN KEY (`medical_card_id`) REFERENCES `medical_card` (`id`),
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `specialization`
+(
+    `id`   INTEGER             NOT NULL AUTO_INCREMENT,
+    `type` VARCHAR(255) UNIQUE NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `doctor`
+(
+    `id`                INTEGER      NOT NULL AUTO_INCREMENT,
+    `name`              VARCHAR(255) NOT NULL,
+    `surname`           VARCHAR(255) NOT NULL,
+    `specialization_id` INTEGER,
+
+    FOREIGN KEY (`specialization_id`) REFERENCES `specialization` (id),
+    PRIMARY KEY (`id`)
+);
+
 CREATE TABLE `timetable`
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id`   INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255),
     PRIMARY KEY (`id`)
 );
 
@@ -49,7 +59,8 @@ CREATE TABLE `appointment`
 (
     `id`              INTEGER NOT NULL AUTO_INCREMENT,
     `time`            DATETIME,
-    `status`          TINYINT NOT NULL CHECK (`status` IN (0, 1)),
+    `approved`        BOOLEAN DEFAULT FALSE,
+    `status`          TINYINT CHECK (`status` IN (0, 1)),
     `complaints`      TEXT,
     `medical_report`  TEXT,
     `recommendation`  TEXT,
