@@ -73,6 +73,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             }
             try {
                 statement.close();
+                specializationStatement.close();
             } catch (SQLException | NullPointerException e) {
             }
         }
@@ -113,6 +114,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             }
             try {
                 statement.close();
+                specializationStatement.close();
             } catch (SQLException | NullPointerException e) {
             }
         }
@@ -144,6 +146,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
         } finally {
             try {
                 statement.close();
+                specializationStatement.close();
             } catch (SQLException | NullPointerException e) {
             }
         }
@@ -203,6 +206,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             }
             try {
                 statement.close();
+                specializationStatement.close();
             } catch (SQLException | NullPointerException e) {
             }
         }

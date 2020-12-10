@@ -2,6 +2,7 @@ package dao.database;
 
 import dao.ConnectorDB;
 import dao.PatientDao;
+import domain.MedicalCard;
 import domain.Patient;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
@@ -12,14 +13,16 @@ import java.sql.*;
 public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
     private final Logger logger = LogManager.getLogger(getClass().getName());
     private static final String CREATE_PATIENT =
-            "INSERT INTO `patient`(`name`, `surname`, `email`, `phone_number`, `address`) " +
-                    "VALUES (?,?,?,?,?)";
-    private static final String READ_PATIENT = "SELECT `name`, `surname`, `email`, `phone_number`, `address`" +
-            " FROM `patient` WHERE `id`=?  ";
+            "INSERT INTO `patient`(`name`, `surname`, `email`, `phone_number`, `address`, `medical_card_id`) " +
+                    "VALUES (?,?,?,?,?,?)";
+    private static final String READ_PATIENT = "SELECT `name`, `surname`, `email`, `phone_number`," +
+            " `address`, `medical_card_id` FROM `patient` WHERE `id`=?  ";
     private static final String READ_PATIENT_BY_EMAIL =
-            "SELECT `id`, `name`, `surname`, `phone_number`, `address` FROM `patient` WHERE `email`=?  ";
+            "SELECT `id`, `name`, `surname`, `phone_number`, `address`,`medical_card_id`  FROM `patient`" +
+                    " WHERE `email`=?  ";
     private static final String UPDATE_PATIENT = "UPDATE `patient` " +
-            "SET `name`=?, `surname`=?, `email`=?, `phone_number`=?, `address`=? WHERE `id` = ?";
+            "SET `name`=?, `surname`=?, `email`=?, `phone_number`=?, `address`=?, `medical_card_id`=?" +
+            " WHERE `id` = ?";
     private static final String DELETE_PATIENT = "DELETE FROM `patient` WHERE `id` = ?";
 
 
@@ -39,6 +42,11 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             statement.setString(3, patient.getEmail());
             statement.setString(4, patient.getPhoneNumber());
             statement.setString(5, patient.getAddress());
+            if (patient.getMedicalCard() != null && patient.getMedicalCard().getId() != null) {
+                statement.setInt(6, patient.getMedicalCard().getId());
+            } else {
+                statement.setNull(6, Types.INTEGER);
+            }
 
             statement.executeUpdate();
             resultSet = statement.getGeneratedKeys();
@@ -67,7 +75,8 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            statement = connector.getPreparedStatement(READ_PATIENT);
+            Connection connection = connector.getConnection();
+            statement = connection.prepareStatement(READ_PATIENT);
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
             Patient patient = null;
@@ -79,6 +88,12 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
                 patient.setEmail(resultSet.getString("email"));
                 patient.setPhoneNumber(resultSet.getString("phone_number"));
                 patient.setAddress(resultSet.getString("address"));
+                Integer medicalCardId = resultSet.getInt("medical_card_id");
+                if (!resultSet.wasNull()) {
+                    MedicalCard medicalCard = new MedicalCard();
+                    medicalCard.setId(medicalCardId);
+                    patient.setMedicalCard(medicalCard);
+                }
             }
             return patient;
         } catch (SQLException e) {
@@ -99,13 +114,20 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
     public void update(Patient patient) throws PersistentException {
         PreparedStatement statement = null;
         try {
-            statement = connector.getPreparedStatement(UPDATE_PATIENT);
+            Connection connection = connector.getConnection();
+            statement = connection.prepareStatement(UPDATE_PATIENT);
             statement.setString(1, patient.getName());
             statement.setString(2, patient.getSurname());
             statement.setString(3, patient.getEmail());
             statement.setString(4, patient.getPhoneNumber());
             statement.setString(5, patient.getAddress());
-            statement.setInt(6, patient.getId());
+            if (patient.getMedicalCard() != null && patient.getMedicalCard().getId() != null) {
+                statement.setInt(6, patient.getMedicalCard().getId());
+            } else {
+                statement.setNull(6, Types.INTEGER);
+            }
+            statement.setInt(7, patient.getId());
+
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new PersistentException(e);
@@ -140,7 +162,8 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            statement = connector.getPreparedStatement(READ_PATIENT_BY_EMAIL);
+            Connection connection = connector.getConnection();
+            statement = connection.prepareStatement(READ_PATIENT_BY_EMAIL);
             statement.setString(1, email);
             resultSet = statement.executeQuery();
             Patient patient = null;
@@ -152,6 +175,12 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
                 patient.setEmail(email);
                 patient.setPhoneNumber(resultSet.getString("phone_number"));
                 patient.setAddress(resultSet.getString("address"));
+                Integer medicalCardId = resultSet.getInt("medical_card_id");
+                if (!resultSet.wasNull()) {
+                    MedicalCard medicalCard = new MedicalCard();
+                    medicalCard.setId(medicalCardId);
+                    patient.setMedicalCard(medicalCard);
+                }
             }
             return patient;
         } catch (SQLException e) {

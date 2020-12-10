@@ -3,8 +3,6 @@ package domain;
 import java.util.List;
 
 public class MedicalCard extends Entity {
-    //In sql - Text
-    //TODO
     private String chronicDiseases;
     private String vaccinations;
     private List<Appointment> appointments;

@@ -11,9 +11,9 @@ public class Appointment extends Entity {
     private String complaints;
     private String medicalReport;
     private String recommendation;
+    private String timetable;
     private MedicalCard medicalCard;
     private Doctor doctor;
-    //TODO to add timetable everywhere (in SQL queries too)
 
     public Date getTime() {
         return time;
@@ -33,6 +33,14 @@ public class Appointment extends Entity {
 
     public String getRecommendation() {
         return recommendation;
+    }
+
+    public String getTimetable() {
+        return timetable;
+    }
+
+    public void setTimetable(String timetable) {
+        this.timetable = timetable;
     }
 
     public void setTime(Date time) {

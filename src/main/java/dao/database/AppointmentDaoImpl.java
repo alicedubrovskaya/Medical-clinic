@@ -27,6 +27,12 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             " `medical_report`, `recommendation`, `medical_card_id`, `doctor_id`, `timetable_id`" +
             " FROM `appointment` WHERE `time`=?";
 
+    private static final String READ_TIMETABLE_BY_NAME = "SELECT `id` FROM `timetable` " +
+            "WHERE `name`=?";
+
+    private static final String READ_TIMETABLE_BY_ID = "SELECT `name` FROM `timetable` " +
+            "WHERE `id`=?";
+
     private static final String UPDATE_APPOINTMENT = "UPDATE `appointment` SET `time` =?,`approved`=?," +
             " `status`=?, `complaints`=?, `medical_report`=?, `recommendation`=?, `medical_card_id`=?," +
             " `doctor_id`=?, `timetable_id`=? WHERE `id` = ?";
@@ -41,11 +47,20 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
 
     @Override
     public Integer create(Appointment appointment) throws PersistentException {
-        //TODO tests
         PreparedStatement statement = null;
+        PreparedStatement timetableStatement = null;
         ResultSet resultSet = null;
         try {
             Connection connection = connector.getConnection();
+
+            timetableStatement = connection.prepareStatement(READ_TIMETABLE_BY_NAME);
+            timetableStatement.setString(1, appointment.getTimetable());
+            resultSet = timetableStatement.executeQuery();
+            Integer timetableID = null;
+            if (resultSet.next()) {
+                timetableID = resultSet.getInt("id");
+            }
+
             statement = connection.prepareStatement(CREATE_APPOINTMENT, Statement.RETURN_GENERATED_KEYS);
             statement.setDate(1, appointment.getTime());
             statement.setBoolean(2, appointment.isApproved());
@@ -63,8 +78,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             } else {
                 statement.setNull(8, Types.INTEGER);
             }
-            //TODO timetable normal
-            statement.setInt(9, 1);
+            statement.setInt(9, timetableID);
 
             statement.executeUpdate();
             resultSet = statement.getGeneratedKeys();
@@ -83,6 +97,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             }
             try {
                 statement.close();
+                timetableStatement.close();
             } catch (SQLException | NullPointerException e) {
             }
         }
@@ -91,6 +106,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     @Override
     public Appointment read(Integer id) throws PersistentException {
         PreparedStatement statement = null;
+        PreparedStatement timetableStatement = null;
         ResultSet resultSet = null;
         try {
             Connection connection = connector.getConnection();
@@ -119,7 +135,12 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                     doctor.setId(doctorId);
                     appointment.setDoctor(doctor);
                 }
-                //TODO timetable
+                timetableStatement = connection.prepareStatement(READ_TIMETABLE_BY_ID);
+                timetableStatement.setInt(1, resultSet.getInt("timetable_id"));
+                resultSet = timetableStatement.executeQuery();
+                if (resultSet.next()) {
+                    appointment.setTimetable(resultSet.getString("name"));
+                }
 
             }
             return appointment;
@@ -132,6 +153,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             }
             try {
                 statement.close();
+                timetableStatement.close();
             } catch (SQLException | NullPointerException e) {
             }
         }
@@ -140,6 +162,8 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     @Override
     public void update(Appointment appointment) throws PersistentException {
         PreparedStatement statement = null;
+        PreparedStatement timetableStatement = null;
+        ResultSet resultSet= null;
         try {
             Connection connection = connector.getConnection();
             statement = connection.prepareStatement(UPDATE_APPOINTMENT);
@@ -159,8 +183,16 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             } else {
                 statement.setNull(8, Types.INTEGER);
             }
-            //TODO timetable normal
-            statement.setInt(9, 1);
+
+            timetableStatement = connection.prepareStatement(READ_TIMETABLE_BY_NAME);
+            timetableStatement.setString(1, appointment.getTimetable());
+            resultSet = timetableStatement.executeQuery();
+            Integer timetableID = null;
+            if (resultSet.next()) {
+                timetableID = resultSet.getInt("id");
+            }
+
+            statement.setInt(9, timetableID);
             statement.setInt(10, appointment.getId());
 
             statement.executeUpdate();
@@ -194,9 +226,12 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     @Override
     public List<Appointment> readByTime(Date date) throws PersistentException {
         PreparedStatement statement = null;
+        PreparedStatement timetableStatement = null;
         ResultSet resultSet = null;
+        ResultSet resultSetTimetable=null;
         try {
             Connection connection = connector.getConnection();
+
             statement = connection.prepareStatement(READ_APPOINTMENT_BY_TIME);
             statement.setDate(1, date);
             resultSet = statement.executeQuery();
@@ -223,7 +258,12 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                     doctor.setId(doctorId);
                     appointment.setDoctor(doctor);
                 }
-                //TODO timetable
+                timetableStatement = connection.prepareStatement(READ_TIMETABLE_BY_ID);
+                timetableStatement.setInt(1, resultSet.getInt("timetable_id"));
+                resultSetTimetable = timetableStatement.executeQuery();
+                if (resultSetTimetable.next()) {
+                    appointment.setTimetable(resultSetTimetable.getString("name"));
+                }
                 appointments.add(appointment);
             }
             return appointments;
@@ -232,10 +272,12 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
         } finally {
             try {
                 resultSet.close();
+                resultSetTimetable.close();
             } catch (SQLException | NullPointerException e) {
             }
             try {
                 statement.close();
+                timetableStatement.close();
             } catch (SQLException | NullPointerException e) {
             }
         }
