@@ -1,12 +1,12 @@
 package domain.enumeration;
 
-public enum Status {
-    WAS("был"),
-    MISSED("пропустил");
+public enum Shift {
+    FIRST("первая"),
+    SECOND("вторая");
 
     private String name;
 
-    Status(String name) {
+    Shift(String name) {
         this.name = name;
     }
 
@@ -18,8 +18,7 @@ public enum Status {
         return ordinal();
     }
 
-    public static Status getById(Integer id) {
-        return Status.values()[id];
+    public static Shift getById(Integer id) {
+        return Shift.values()[id];
     }
-
 }

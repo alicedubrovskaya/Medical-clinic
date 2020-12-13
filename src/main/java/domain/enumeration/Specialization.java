@@ -7,7 +7,7 @@ public enum Specialization {
 
     private String name;
 
-    private Specialization(String name) {
+    Specialization(String name) {
         this.name = name;
     }
 
