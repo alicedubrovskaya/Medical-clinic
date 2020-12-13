@@ -11,9 +11,8 @@ public class Appointment extends Entity {
     private String complaints;
     private String medicalReport;
     private String recommendation;
-    private String timetable;
-    private MedicalCard medicalCard;
     private Doctor doctor;
+    private Patient patient;
 
     public Date getTime() {
         return time;
@@ -35,24 +34,20 @@ public class Appointment extends Entity {
         return recommendation;
     }
 
-    public String getTimetable() {
-        return timetable;
-    }
-
-    public void setTimetable(String timetable) {
-        this.timetable = timetable;
-    }
-
     public void setTime(Date time) {
         this.time = time;
     }
 
-    public MedicalCard getMedicalCard() {
-        return medicalCard;
-    }
-
     public Doctor getDoctor() {
         return doctor;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     public boolean isApproved() {
@@ -73,10 +68,6 @@ public class Appointment extends Entity {
 
     public void setRecommendation(String recommendation) {
         this.recommendation = recommendation;
-    }
-
-    public void setMedicalCard(MedicalCard medicalCard) {
-        this.medicalCard = medicalCard;
     }
 
     public void setDoctor(Doctor doctor) {

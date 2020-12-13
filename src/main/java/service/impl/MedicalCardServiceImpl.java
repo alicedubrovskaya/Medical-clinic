@@ -1,7 +1,5 @@
 package service.impl;
 
-import dao.MedicalCardDao;
-import domain.MedicalCard;
 import exception.PersistentException;
 import service.MedicalCardService;
 

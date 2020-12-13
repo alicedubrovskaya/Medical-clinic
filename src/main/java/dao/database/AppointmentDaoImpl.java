@@ -4,7 +4,7 @@ import dao.AppointmentDao;
 import dao.ConnectorDB;
 import domain.Appointment;
 import domain.Doctor;
-import domain.MedicalCard;
+import domain.Patient;
 import domain.enumeration.Status;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
@@ -17,25 +17,19 @@ import java.util.List;
 
 public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     private static final String CREATE_APPOINTMENT = "INSERT INTO `appointment` (`time`, `approved`," +
-            " `status`, `complaints`, `medical_report`, `recommendation`, `medical_card_id`, `doctor_id`, " +
-            "`timetable_id`) VALUES (?,?,?,?,?,?,?,?,?)";
+            " `status`, `complaints`, `medical_report`, `recommendation`, `patient_id`, `doctor_id`)" +
+            " VALUES (?,?,?,?,?,?,?,?,?)";
 
-    private static final String READ_APPOINTMENT = "SELECT `time`, `approved`,  `status`, `complaints`, `medical_report`," +
-            " `recommendation`, `medical_card_id`, `doctor_id`, `timetable_id` FROM `appointment` WHERE `id`=?";
+    private static final String READ_APPOINTMENT = "SELECT `time`, `approved`,  `status`, `complaints`," +
+            " `medical_report`,`recommendation`, `patient_id`, `doctor_id` FROM `appointment` WHERE `id`=?";
 
     private static final String READ_APPOINTMENT_BY_TIME = "SELECT `id`, `approved`, `status`, `complaints`," +
-            " `medical_report`, `recommendation`, `medical_card_id`, `doctor_id`, `timetable_id`" +
+            " `medical_report`, `recommendation`, `patient_id`, `doctor_id` " +
             " FROM `appointment` WHERE `time`=?";
 
-    private static final String READ_TIMETABLE_BY_NAME = "SELECT `id` FROM `timetable` " +
-            "WHERE `name`=?";
-
-    private static final String READ_TIMETABLE_BY_ID = "SELECT `name` FROM `timetable` " +
-            "WHERE `id`=?";
-
     private static final String UPDATE_APPOINTMENT = "UPDATE `appointment` SET `time` =?,`approved`=?," +
-            " `status`=?, `complaints`=?, `medical_report`=?, `recommendation`=?, `medical_card_id`=?," +
-            " `doctor_id`=?, `timetable_id`=? WHERE `id` = ?";
+            " `status`=?, `complaints`=?, `medical_report`=?, `recommendation`=?, `patient_id`=?," +
+            " `doctor_id`=? WHERE `id` = ?";
 
     private static final String DELETE_APPOINTMENT = "DELETE FROM `appointment` WHERE `id`=?";
     private final Logger logger = LogManager.getLogger(getClass().getName());
@@ -48,18 +42,9 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     @Override
     public Integer create(Appointment appointment) throws PersistentException {
         PreparedStatement statement = null;
-        PreparedStatement timetableStatement = null;
         ResultSet resultSet = null;
         try {
             Connection connection = connector.getConnection();
-
-            timetableStatement = connection.prepareStatement(READ_TIMETABLE_BY_NAME);
-            timetableStatement.setString(1, appointment.getTimetable());
-            resultSet = timetableStatement.executeQuery();
-            Integer timetableID = null;
-            if (resultSet.next()) {
-                timetableID = resultSet.getInt("id");
-            }
 
             statement = connection.prepareStatement(CREATE_APPOINTMENT, Statement.RETURN_GENERATED_KEYS);
             statement.setDate(1, appointment.getTime());
@@ -68,8 +53,8 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             statement.setString(4, appointment.getComplaints());
             statement.setString(5, appointment.getMedicalReport());
             statement.setString(6, appointment.getRecommendation());
-            if (appointment.getMedicalCard() != null && appointment.getMedicalCard().getId() != null) {
-                statement.setInt(7, appointment.getMedicalCard().getId());
+            if (appointment.getPatient() != null && appointment.getPatient().getId() != null) {
+                statement.setInt(7, appointment.getPatient().getId());
             } else {
                 statement.setNull(7, Types.INTEGER);
             }
@@ -78,7 +63,6 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             } else {
                 statement.setNull(8, Types.INTEGER);
             }
-            statement.setInt(9, timetableID);
 
             statement.executeUpdate();
             resultSet = statement.getGeneratedKeys();
@@ -97,7 +81,6 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             }
             try {
                 statement.close();
-                timetableStatement.close();
             } catch (SQLException | NullPointerException e) {
             }
         }
@@ -106,7 +89,6 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     @Override
     public Appointment read(Integer id) throws PersistentException {
         PreparedStatement statement = null;
-        PreparedStatement timetableStatement = null;
         ResultSet resultSet = null;
         try {
             Connection connection = connector.getConnection();
@@ -123,11 +105,11 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 appointment.setComplaints(resultSet.getString("complaints"));
                 appointment.setMedicalReport(resultSet.getString("medical_report"));
                 appointment.setRecommendation(resultSet.getString("recommendation"));
-                Integer medicalId = resultSet.getInt("medical_card_id");
+                Integer patientId = resultSet.getInt("patient_id");
                 if (!resultSet.wasNull()) {
-                    MedicalCard medicalCard = new MedicalCard();
-                    medicalCard.setId(medicalId);
-                    appointment.setMedicalCard(medicalCard);
+                    Patient patient = new Patient();
+                    patient.setId(patientId);
+                    appointment.setPatient(patient);
                 }
                 Integer doctorId = resultSet.getInt("doctor_id");
                 if (!resultSet.wasNull()) {
@@ -135,13 +117,6 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                     doctor.setId(doctorId);
                     appointment.setDoctor(doctor);
                 }
-                timetableStatement = connection.prepareStatement(READ_TIMETABLE_BY_ID);
-                timetableStatement.setInt(1, resultSet.getInt("timetable_id"));
-                resultSet = timetableStatement.executeQuery();
-                if (resultSet.next()) {
-                    appointment.setTimetable(resultSet.getString("name"));
-                }
-
             }
             return appointment;
         } catch (SQLException e) {
@@ -153,7 +128,6 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             }
             try {
                 statement.close();
-                timetableStatement.close();
             } catch (SQLException | NullPointerException e) {
             }
         }
@@ -162,8 +136,6 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     @Override
     public void update(Appointment appointment) throws PersistentException {
         PreparedStatement statement = null;
-        PreparedStatement timetableStatement = null;
-        ResultSet resultSet= null;
         try {
             Connection connection = connector.getConnection();
             statement = connection.prepareStatement(UPDATE_APPOINTMENT);
@@ -173,8 +145,8 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             statement.setString(4, appointment.getComplaints());
             statement.setString(5, appointment.getMedicalReport());
             statement.setString(6, appointment.getRecommendation());
-            if (appointment.getMedicalCard() != null && appointment.getMedicalCard().getId() != null) {
-                statement.setInt(7, appointment.getMedicalCard().getId());
+            if (appointment.getPatient() != null && appointment.getPatient().getId() != null) {
+                statement.setInt(7, appointment.getPatient().getId());
             } else {
                 statement.setNull(7, Types.INTEGER);
             }
@@ -184,16 +156,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 statement.setNull(8, Types.INTEGER);
             }
 
-            timetableStatement = connection.prepareStatement(READ_TIMETABLE_BY_NAME);
-            timetableStatement.setString(1, appointment.getTimetable());
-            resultSet = timetableStatement.executeQuery();
-            Integer timetableID = null;
-            if (resultSet.next()) {
-                timetableID = resultSet.getInt("id");
-            }
-
-            statement.setInt(9, timetableID);
-            statement.setInt(10, appointment.getId());
+            statement.setInt(9, appointment.getId());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -226,7 +189,6 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     @Override
     public List<Appointment> readByTime(Date date) throws PersistentException {
         PreparedStatement statement = null;
-        PreparedStatement timetableStatement = null;
         ResultSet resultSet = null;
         ResultSet resultSetTimetable=null;
         try {
@@ -246,23 +208,17 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 appointment.setComplaints(resultSet.getString("complaints"));
                 appointment.setMedicalReport(resultSet.getString("medical_report"));
                 appointment.setRecommendation(resultSet.getString("recommendation"));
-                Integer medicalId = resultSet.getInt("medical_card_id");
+                Integer patientId = resultSet.getInt("patient_id");
                 if (!resultSet.wasNull()) {
-                    MedicalCard medicalCard = new MedicalCard();
-                    medicalCard.setId(medicalId);
-                    appointment.setMedicalCard(medicalCard);
+                    Patient patient = new Patient();
+                    patient.setId(patientId);
+                    appointment.setPatient(patient);
                 }
                 Integer doctorId = resultSet.getInt("doctor_id");
                 if (!resultSet.wasNull()) {
                     Doctor doctor = new Doctor();
                     doctor.setId(doctorId);
                     appointment.setDoctor(doctor);
-                }
-                timetableStatement = connection.prepareStatement(READ_TIMETABLE_BY_ID);
-                timetableStatement.setInt(1, resultSet.getInt("timetable_id"));
-                resultSetTimetable = timetableStatement.executeQuery();
-                if (resultSetTimetable.next()) {
-                    appointment.setTimetable(resultSetTimetable.getString("name"));
                 }
                 appointments.add(appointment);
             }
@@ -277,7 +233,6 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             }
             try {
                 statement.close();
-                timetableStatement.close();
             } catch (SQLException | NullPointerException e) {
             }
         }

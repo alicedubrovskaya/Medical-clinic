@@ -3,6 +3,7 @@ package dao.database;
 import dao.ConnectorDB;
 import dao.DoctorDao;
 import domain.Doctor;
+import domain.enumeration.Shift;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,12 +14,14 @@ import java.util.List;
 
 public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
     private final Logger logger = LogManager.getLogger(getClass().getName());
-    private static final String CREATE_DOCTOR = "INSERT INTO `doctor` (`name`, `surname`, `specialization_id`)" +
-            "VALUES (?,?,?)";
-    private static final String READ_DOCTOR = "SELECT `name`, `surname`, `specialization_id` " +
-            " FROM `doctor` WHERE id=?";
+    private static final String CREATE_DOCTOR = "INSERT INTO `doctor` (`id`, `name`, `surname`," +
+            " `specialization_id`, `working_shift`) VALUES (?,?,?,?,?)";
+
+    private static final String READ_DOCTOR = "SELECT `name`, `surname`, `specialization_id`," +
+            "`working_shift` FROM `doctor` WHERE id=?";
+
     private static final String READ_DOCTOR_BY_SPECIALIZATION = "SELECT `id`, `name`, `surname` " +
-            " FROM `doctor` WHERE specialization_id=?";
+            "`working_shift` FROM `doctor` WHERE specialization_id=?";
 
     private static final String READ_SPECIALIZATION_BY_TYPE = "SELECT `id` FROM `specialization` " +
             "WHERE `type`=?";
@@ -27,9 +30,9 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             "WHERE `id`=?";
 
     private static final String UPDATE_DOCTOR = "UPDATE `doctor` " +
-            "SET `name`=?, `surname`=?, `specialization_id`=? WHERE `id` = ?";
-    private static final String DELETE_DOCTOR = "DELETE FROM `doctor` WHERE `id` = ?";
+            "SET `name`=?, `surname`=?, `specialization_id`=?, `working_shift`=? WHERE `id` = ?";
 
+    private static final String DELETE_DOCTOR = "DELETE FROM `doctor` WHERE `id` = ?";
 
     public DoctorDaoImpl() {
         this.connector = new ConnectorDB();
@@ -51,19 +54,16 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
                 specializationID = resultSet.getInt("id");
             }
 
-            statement = connection.prepareStatement(CREATE_DOCTOR, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, doctor.getName());
-            statement.setString(2, doctor.getSurname());
-            statement.setInt(3, specializationID);
+            statement = connection.prepareStatement(CREATE_DOCTOR);
+            statement.setInt(1, doctor.getId());
+            statement.setString(2, doctor.getName());
+            statement.setString(3, doctor.getSurname());
+            statement.setInt(4, specializationID);
+            statement.setInt(5, doctor.getWorkingShift().getId());
 
             statement.executeUpdate();
-            resultSet = statement.getGeneratedKeys();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            } else {
-                logger.error("There is no autoincremented index after trying to add record into table `doctor`");
-                throw new PersistentException();
-            }
+            return doctor.getId();
+
         } catch (SQLException e) {
             throw new PersistentException(e);
         } finally {
@@ -96,6 +96,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
                 doctor.setId(id);
                 doctor.setName(resultSet.getString("name"));
                 doctor.setSurname(resultSet.getString("surname"));
+                doctor.setWorkingShift(Shift.getById(resultSet.getInt("working_shift")));
 
                 specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_ID);
                 specializationStatement.setInt(1, resultSet.getInt("specialization_id"));
@@ -131,7 +132,8 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             statement = connection.prepareStatement(UPDATE_DOCTOR);
             statement.setString(1, doctor.getName());
             statement.setString(2, doctor.getSurname());
-            statement.setInt(4, doctor.getId());
+            statement.setInt(4, doctor.getWorkingShift().getId());
+            statement.setInt(5, doctor.getId());
 
             specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_TYPE);
             specializationStatement.setString(1, doctor.getSpecialization());
@@ -194,6 +196,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
                 doctor.setName(resultSet.getString("name"));
                 doctor.setSurname(resultSet.getString("surname"));
                 doctor.setSpecialization(specialization);
+                doctor.setWorkingShift(Shift.getById(resultSet.getInt("working_shift")));
                 doctors.add(doctor);
             }
             return doctors;

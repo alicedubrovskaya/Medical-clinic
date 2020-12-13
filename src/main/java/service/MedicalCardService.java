@@ -1,6 +1,5 @@
 package service;
 
-import domain.MedicalCard;
 import exception.PersistentException;
 
 public interface MedicalCardService extends Service {
