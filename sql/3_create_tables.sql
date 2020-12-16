@@ -35,15 +35,6 @@ CREATE TABLE `disease`
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `patient_disease`
-(
-    `patient_id` INTEGER NOT NULL,
-    `disease_id` INTEGER NOT NULL,
-    FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`),
-    FOREIGN KEY (`disease_id`) REFERENCES `disease` (`id`),
-    PRIMARY KEY (`patient_id`, `disease_id`)
-);
-
 CREATE TABLE `doctor`
 (
     `id`                INTEGER      NOT NULL,
@@ -66,6 +57,14 @@ CREATE TABLE `vacation`
     PRIMARY KEY (`doctor_id`)
 );
 
+CREATE TABLE `holiday`
+(
+    `id`   INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255),
+    `day`  DATE    NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
 CREATE TABLE `appointment`
 (
     `id`             INTEGER NOT NULL AUTO_INCREMENT,
@@ -82,6 +81,17 @@ CREATE TABLE `appointment`
     PRIMARY KEY (`id`),
     FOREIGN KEY (`patient_id`) REFERENCES `patient` (id),
     FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (id)
+);
+
+CREATE TABLE `patient_disease`
+(
+    `patient_id`     INTEGER NOT NULL,
+    `disease_id`     INTEGER NOT NULL,
+    `appointment_id` INTEGER NOT NULL,
+    FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`),
+    FOREIGN KEY (`disease_id`) REFERENCES `disease` (`id`),
+    FOREIGN KEY (`appointment_id`) REFERENCES `appointment` (`id`),
+    PRIMARY KEY (`patient_id`, `disease_id`)
 );
 
 
