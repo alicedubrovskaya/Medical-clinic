@@ -3,6 +3,7 @@ package controller;
 import dao.TransactionFactory;
 import dao.database.TransactionFactoryImpl;
 import dao.pool.ConnectionPool;
+import domain.User;
 import exception.PersistentException;
 import service.ServiceFactory;
 import service.UserService;
@@ -26,7 +27,10 @@ public class Runner {
             TransactionFactory transactionFactory = new TransactionFactoryImpl();
             ServiceFactory serviceFactory = new ServiceFactoryImpl(transactionFactory);
             UserService userService = serviceFactory.getService(UserService.class);
-            userService.delete(1);
+            User user = new User();
+            user.setLogin("bob");
+            user.setPassword("pass");
+            userService.save(user);
 
         } catch (PersistentException e) {
             e.printStackTrace();
