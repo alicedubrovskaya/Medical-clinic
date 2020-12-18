@@ -9,5 +9,5 @@ VALUES (3, 'dasha', 'denis', 1, 1);
 
 INSERT INTO `appointment`
 (`time`, `status`, `patient_id`, `doctor_id`)
-VALUES ('2020-01-01 12:00:00', 0, 1, 3),
-       ('2020-01-01 12:00:00', 0, 2, 3);
+VALUES ('2020-01-01 12:00:00.0', 0, 1, 3),
+       ('2020-01-01 12:00:00.0', 0, 2, 3);

@@ -29,7 +29,7 @@ public class Runner {
             TransactionFactory transactionFactory = new TransactionFactoryImpl();
             ServiceFactory serviceFactory = new ServiceFactoryImpl(transactionFactory);
             AppointmentService appointmentService = serviceFactory.getService(AppointmentService.class);
-            Calendar calendar = new GregorianCalendar(2020, 1 , 1, 12,0,0);
+            Calendar calendar = new GregorianCalendar(2020, 0 , 1, 12,0,0);
             appointmentService.findByTime(calendar.getTime());
 
         } catch (PersistentException e) {

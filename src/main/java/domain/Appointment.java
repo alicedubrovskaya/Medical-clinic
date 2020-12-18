@@ -2,7 +2,7 @@ package domain;
 
 import domain.enumeration.Status;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Appointment extends Entity {
     private Date time;

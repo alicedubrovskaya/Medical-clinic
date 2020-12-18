@@ -40,7 +40,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
         ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(CREATE_APPOINTMENT, Statement.RETURN_GENERATED_KEYS);
-            statement.setDate(1, appointment.getTime());
+            statement.setTimestamp(1, new Timestamp(appointment.getTime().getTime()));
             statement.setBoolean(2, appointment.isApproved());
             statement.setInt(3, appointment.getStatus().getId());
             statement.setString(4, appointment.getComplaints());
@@ -130,7 +130,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(UPDATE_APPOINTMENT);
-            statement.setDate(1, appointment.getTime());
+            statement.setTimestamp(1, new Timestamp(appointment.getTime().getTime()));
             statement.setBoolean(2, appointment.isApproved());
             statement.setInt(3, appointment.getStatus().getId());
             statement.setString(4, appointment.getComplaints());
@@ -184,14 +184,14 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
         ResultSet resultSetTimetable = null;
         try {
             statement = connection.prepareStatement(READ_APPOINTMENT_BY_TIME);
-            statement.setDate(1, new java.sql.Date(date.getTime()));
+            statement.setTimestamp(1, new Timestamp(date.getTime()));
             resultSet = statement.executeQuery();
             Appointment appointment = null;
             List<Appointment> appointments = new ArrayList<>();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 appointment = new Appointment();
                 appointment.setId(resultSet.getInt("id"));
-                appointment.setTime(new java.sql.Date(date.getTime()));
+                appointment.setTime(date);
                 appointment.setApproved(resultSet.getBoolean("approved"));
                 appointment.setStatus(Status.getById(resultSet.getInt("status")));
                 appointment.setComplaints(resultSet.getString("complaints"));
