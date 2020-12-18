@@ -7,6 +7,14 @@ public class User extends Entity {
     private String password;
     private Role role;
 
+    public User(String login, String password, Role role){
+        this.login = login;
+        this.password = password;
+        this.role = role;
+    }
+
+    public User(){}
+
     public String getLogin() {
         return login;
     }

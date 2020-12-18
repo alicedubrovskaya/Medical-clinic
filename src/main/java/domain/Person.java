@@ -1,6 +1,6 @@
 package domain;
 
-public abstract class Person extends Entity {
+public abstract class Person extends User {
     private String surname;
     private String name;
 

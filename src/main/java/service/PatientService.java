@@ -1,7 +1,6 @@
 package service;
 
 import domain.Patient;
-import domain.User;
 import exception.PersistentException;
 
 public interface PatientService extends Service{
@@ -11,5 +10,5 @@ public interface PatientService extends Service{
 
     Patient findByEmail(String email) throws PersistentException;
 
-    Patient findById(String id) throws PersistentException;
+    Patient findById(Integer id) throws PersistentException;
 }
