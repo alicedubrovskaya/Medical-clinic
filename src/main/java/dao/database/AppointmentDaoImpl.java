@@ -11,7 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -184,14 +184,14 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
         ResultSet resultSetTimetable = null;
         try {
             statement = connection.prepareStatement(READ_APPOINTMENT_BY_TIME);
-            statement.setDate(1, date);
+            statement.setDate(1, new java.sql.Date(date.getTime()));
             resultSet = statement.executeQuery();
             Appointment appointment = null;
             List<Appointment> appointments = new ArrayList<>();
             if (resultSet.next()) {
                 appointment = new Appointment();
                 appointment.setId(resultSet.getInt("id"));
-                appointment.setTime(date);
+                appointment.setTime(new java.sql.Date(date.getTime()));
                 appointment.setApproved(resultSet.getBoolean("approved"));
                 appointment.setStatus(Status.getById(resultSet.getInt("status")));
                 appointment.setComplaints(resultSet.getString("complaints"));

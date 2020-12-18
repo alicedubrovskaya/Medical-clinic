@@ -1,9 +1,13 @@
 INSERT INTO `patient`
-    (`id`, `name`, `surname`, `email`, `phone_number`, `address`)
-VALUES (1, 'Денисик', 'Павел', 'denisik@gmail.com', '123', 'Минск'),
-       (2, 'Агеенко', 'Маргарита', 'ageenko@gmail.com', '456', 'Ратомка');
+(`id`, `name`, `surname`, `email`, `phone_number`, `address`)
+VALUES (1, 'alisa', 'dubrovskaya', 'alicedubrovskaya@gmail.com', '123', 'Pr-t'),
+       (2, 'pasha', 'denisik', 'denisik@gmail.com', '124', 'Pr-t');
 
-INSERT INTO `medical_card`
-(`id`, `chronic_diseases`, `vaccinations`)
-VALUES (1, 'Аллергия на пениц ряд', 'Прививка Б'),
-       (2, 'Вазомоторный ринит', 'Прививка А');
+INSERT INTO `doctor`
+(`id`, `name`, `surname`, `specialization_id`, `working_shift`)
+VALUES (3, 'dasha', 'denis', 1, 1);
+
+INSERT INTO `appointment`
+(`time`, `status`, `patient_id`, `doctor_id`)
+VALUES ('2020-01-01 12:00:00', 0, 1, 3),
+       ('2020-01-01 12:00:00', 0, 2, 3);

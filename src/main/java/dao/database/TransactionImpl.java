@@ -17,6 +17,9 @@ public class TransactionImpl implements Transaction {
 
     static {
         classes.put(UserDao.class, UserDaoImpl.class);
+        classes.put(PatientDao.class, PatientDaoImpl.class);
+        classes.put(DoctorDao.class, DoctorDaoImpl.class);
+        classes.put(AppointmentDao.class, AppointmentDaoImpl.class);
     }
 
     private Connection connection;

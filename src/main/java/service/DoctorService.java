@@ -6,7 +6,7 @@ import exception.PersistentException;
 
 import java.util.List;
 
-public interface DoctorService {
+public interface DoctorService extends Service {
     void save(Doctor doctor) throws PersistentException;
 
     Doctor findById(Integer id) throws PersistentException;

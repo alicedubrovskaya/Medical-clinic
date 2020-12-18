@@ -3,11 +3,13 @@ package controller;
 import dao.TransactionFactory;
 import dao.database.TransactionFactoryImpl;
 import dao.pool.ConnectionPool;
-import domain.User;
 import exception.PersistentException;
+import service.AppointmentService;
 import service.ServiceFactory;
-import service.UserService;
 import service.impl.ServiceFactoryImpl;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class Runner {
     public static void main(String[] args) {
@@ -26,11 +28,9 @@ public class Runner {
 
             TransactionFactory transactionFactory = new TransactionFactoryImpl();
             ServiceFactory serviceFactory = new ServiceFactoryImpl(transactionFactory);
-            UserService userService = serviceFactory.getService(UserService.class);
-            User user = new User();
-            user.setLogin("bob");
-            user.setPassword("pass");
-            userService.save(user);
+            AppointmentService appointmentService = serviceFactory.getService(AppointmentService.class);
+            Calendar calendar = new GregorianCalendar(2020, 1 , 1, 12,0,0);
+            appointmentService.findByTime(calendar.getTime());
 
         } catch (PersistentException e) {
             e.printStackTrace();

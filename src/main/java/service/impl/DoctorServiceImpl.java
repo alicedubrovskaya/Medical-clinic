@@ -1,7 +1,6 @@
 package service.impl;
 
 import dao.DoctorDao;
-import dao.PatientDao;
 import dao.UserDao;
 import domain.Doctor;
 import domain.User;

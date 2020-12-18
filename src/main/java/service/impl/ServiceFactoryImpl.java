@@ -5,10 +5,7 @@ import dao.TransactionFactory;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import service.PatientService;
-import service.Service;
-import service.ServiceFactory;
-import service.UserService;
+import service.*;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -23,6 +20,8 @@ public class ServiceFactoryImpl implements ServiceFactory {
 	static {
 		SERVICES.put(UserService.class, UserServiceImpl.class);
 		SERVICES.put(PatientService.class, PatientServiceImpl.class);
+		SERVICES.put(DoctorService.class, DoctorServiceImpl.class);
+		SERVICES.put(AppointmentService.class, AppointmentServiceImpl.class);
 	}
 
 	private TransactionFactory factory;
