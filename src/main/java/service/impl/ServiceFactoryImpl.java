@@ -5,9 +5,9 @@ import dao.TransactionFactory;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import service.MedicalCardService;
 import service.Service;
 import service.ServiceFactory;
+import service.UserService;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -20,7 +20,7 @@ public class ServiceFactoryImpl implements ServiceFactory {
 	private static final Map<Class<? extends Service>, Class<? extends ServiceImpl>> SERVICES = new ConcurrentHashMap<>();
 
 	static {
-		SERVICES.put(MedicalCardService.class, MedicalCardServiceImpl.class);
+		SERVICES.put(UserService.class, UserServiceImpl.class);
 	}
 
 	private TransactionFactory factory;

@@ -18,7 +18,7 @@ import java.util.List;
 public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     private static final String CREATE_APPOINTMENT = "INSERT INTO `appointment` (`time`, `approved`," +
             " `status`, `complaints`, `medical_report`, `recommendation`, `patient_id`, `doctor_id`)" +
-            " VALUES (?,?,?,?,?,?,?,?,?)";
+            " VALUES (?,?,?,?,?,?,?,?)";
 
     private static final String READ_APPOINTMENT = "SELECT `time`, `approved`,  `status`, `complaints`," +
             " `medical_report`,`recommendation`, `patient_id`, `doctor_id` FROM `appointment` WHERE `id`=?";
@@ -34,18 +34,11 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     private static final String DELETE_APPOINTMENT = "DELETE FROM `appointment` WHERE `id`=?";
     private final Logger logger = LogManager.getLogger(getClass().getName());
 
-
-    public AppointmentDaoImpl() {
-        this.connector = new ConnectorDB();
-    }
-
     @Override
     public Integer create(Appointment appointment) throws PersistentException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            Connection connection = connector.getConnection();
-
             statement = connection.prepareStatement(CREATE_APPOINTMENT, Statement.RETURN_GENERATED_KEYS);
             statement.setDate(1, appointment.getTime());
             statement.setBoolean(2, appointment.isApproved());
@@ -91,7 +84,6 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            Connection connection = connector.getConnection();
             statement = connection.prepareStatement(READ_APPOINTMENT);
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
@@ -137,7 +129,6 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     public void update(Appointment appointment) throws PersistentException {
         PreparedStatement statement = null;
         try {
-            Connection connection = connector.getConnection();
             statement = connection.prepareStatement(UPDATE_APPOINTMENT);
             statement.setDate(1, appointment.getTime());
             statement.setBoolean(2, appointment.isApproved());
@@ -173,7 +164,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     public void delete(Integer id) throws PersistentException {
         PreparedStatement statement = null;
         try {
-            statement = connector.getPreparedStatement(DELETE_APPOINTMENT);
+            statement = connection.prepareStatement(DELETE_APPOINTMENT);
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -190,10 +181,8 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     public List<Appointment> readByTime(Date date) throws PersistentException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        ResultSet resultSetTimetable=null;
+        ResultSet resultSetTimetable = null;
         try {
-            Connection connection = connector.getConnection();
-
             statement = connection.prepareStatement(READ_APPOINTMENT_BY_TIME);
             statement.setDate(1, date);
             resultSet = statement.executeQuery();

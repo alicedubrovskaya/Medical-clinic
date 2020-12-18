@@ -34,18 +34,12 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
 
     private static final String DELETE_DOCTOR = "DELETE FROM `doctor` WHERE `id` = ?";
 
-    public DoctorDaoImpl() {
-        this.connector = new ConnectorDB();
-    }
-
     @Override
     public Integer create(Doctor doctor) throws PersistentException {
         PreparedStatement statement = null;
         PreparedStatement specializationStatement = null;
         ResultSet resultSet = null;
         try {
-            Connection connection = connector.getConnection();
-
             specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_TYPE);
             specializationStatement.setString(1, doctor.getSpecialization());
             resultSet = specializationStatement.executeQuery();
@@ -85,8 +79,6 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
         PreparedStatement specializationStatement = null;
         ResultSet resultSet = null;
         try {
-            Connection connection = connector.getConnection();
-
             statement = connection.prepareStatement(READ_DOCTOR);
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
@@ -127,8 +119,6 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
         PreparedStatement specializationStatement = null;
         ResultSet resultSet = null;
         try {
-            Connection connection = connector.getConnection();
-
             statement = connection.prepareStatement(UPDATE_DOCTOR);
             statement.setString(1, doctor.getName());
             statement.setString(2, doctor.getSurname());
@@ -158,7 +148,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
     public void delete(Integer id) throws PersistentException {
         PreparedStatement statement = null;
         try {
-            statement = connector.getPreparedStatement(DELETE_DOCTOR);
+            statement = connection.prepareStatement(DELETE_DOCTOR);
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -177,7 +167,6 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
         PreparedStatement specializationStatement = null;
         ResultSet resultSet = null;
         try {
-            Connection connection = connector.getConnection();
             statement = connection.prepareStatement(READ_DOCTOR_BY_SPECIALIZATION);
 
             specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_TYPE);

@@ -28,16 +28,10 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
 
     private static final String DELETE_PATIENT = "DELETE FROM `patient` WHERE `id` = ?";
 
-
-    public PatientDaoImpl() {
-        this.connector = new ConnectorDB();
-    }
-
     @Override
     public Integer create(Patient patient) throws PersistentException {
         PreparedStatement statement = null;
         try {
-            Connection connection = connector.getConnection();
             statement = connection.prepareStatement(CREATE_PATIENT);
             statement.setInt(1, patient.getId());
             statement.setString(2, patient.getName());
@@ -63,7 +57,6 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            Connection connection = connector.getConnection();
             statement = connection.prepareStatement(READ_PATIENT);
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
@@ -96,7 +89,6 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
     public void update(Patient patient) throws PersistentException {
         PreparedStatement statement = null;
         try {
-            Connection connection = connector.getConnection();
             statement = connection.prepareStatement(UPDATE_PATIENT);
             statement.setString(1, patient.getName());
             statement.setString(2, patient.getSurname());
@@ -121,7 +113,7 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
 
         PreparedStatement statement = null;
         try {
-            statement = connector.getPreparedStatement(DELETE_PATIENT);
+            statement = connection.prepareStatement(DELETE_PATIENT);
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -139,7 +131,6 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            Connection connection = connector.getConnection();
             statement = connection.prepareStatement(READ_PATIENT_BY_EMAIL);
             statement.setString(1, email);
             resultSet = statement.executeQuery();

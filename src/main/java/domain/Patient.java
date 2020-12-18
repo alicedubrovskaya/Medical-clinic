@@ -4,7 +4,6 @@ public class Patient extends Person{
     private String email;
     private String phoneNumber;
     private String address;
-    private MedicalCard medicalCard;
 
     public String getEmail() {
         return email;
@@ -16,14 +15,6 @@ public class Patient extends Person{
 
     public String getAddress() {
         return address;
-    }
-
-    public MedicalCard getMedicalCard() {
-        return medicalCard;
-    }
-
-    public void setMedicalCard(MedicalCard medicalCard) {
-        this.medicalCard = medicalCard;
     }
 
     public void setEmail(String email) {
