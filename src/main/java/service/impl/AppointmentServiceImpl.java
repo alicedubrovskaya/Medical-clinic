@@ -41,6 +41,12 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
     }
 
     @Override
+    public Appointment findByPatientAndDisease(Integer patientId, String diseaseName) throws PersistentException {
+        AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
+        return appointmentDao.readByPatientAndDisease(patientId, diseaseName);
+    }
+
+    @Override
     public void delete(Integer id) throws PersistentException {
         AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
         appointmentDao.delete(id);

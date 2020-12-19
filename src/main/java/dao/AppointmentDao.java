@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface AppointmentDao extends Dao<Appointment> {
     List<Appointment> readByTime(Date date) throws PersistentException;
+
+    Appointment readByPatientAndDisease(Integer patientId, String diseaseName) throws PersistentException;
 }

@@ -26,6 +26,12 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             " `medical_report`, `recommendation`, `patient_id`, `doctor_id` " +
             " FROM `appointment` WHERE `time`=?";
 
+    private static final String READ_APPOINTMENT_BY_PATIENT_AND_DISEASE = "SELECT `time`, `complaints`, `medical_report`," +
+            " `recommendation` FROM `appointment` JOIN patient_disease on appointment.id = patient_disease.appointment_id " +
+            "WHERE patient_disease.patient_id = ? AND disease_id=?";
+
+    private static final String READ_DISEASE_BY_NAME = "SELECT `id` FROM `disease` WHERE `name` =?";
+
     private static final String UPDATE_APPOINTMENT = "UPDATE `appointment` SET `time` =?,`approved`=?," +
             " `status`=?, `complaints`=?, `medical_report`=?, `recommendation`=?, `patient_id`=?," +
             " `doctor_id`=? WHERE `id` = ?";
@@ -217,6 +223,48 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             try {
                 resultSet.close();
                 resultSetTimetable.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+            try {
+                statement.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+        }
+    }
+
+    @Override
+    public Appointment readByPatientAndDisease(Integer patientId, String diseaseName) throws PersistentException {
+        PreparedStatement statement = null;
+        ResultSet resultSetDisease = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(READ_DISEASE_BY_NAME);
+            statement.setString(1, diseaseName);
+            resultSetDisease = statement.executeQuery();
+
+            Integer diseaseId = null;
+            Appointment appointment = null;
+            if (resultSetDisease.next()) {
+                diseaseId = resultSetDisease.getInt("id");
+                statement = connection.prepareStatement(READ_APPOINTMENT_BY_PATIENT_AND_DISEASE);
+                statement.setInt(1, patientId);
+                statement.setInt(2, diseaseId);
+                resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    appointment = new Appointment();
+                    appointment.setTime(resultSet.getTime("time"));
+                    appointment.setComplaints(resultSet.getString("complaints"));
+                    appointment.setMedicalReport(resultSet.getString("medical_report"));
+                    appointment.setRecommendation(resultSet.getString("recommendation"));
+                }
+            }
+            return appointment;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        } finally {
+            try {
+                resultSet.close();
+                resultSetDisease.close();
             } catch (SQLException | NullPointerException e) {
             }
             try {

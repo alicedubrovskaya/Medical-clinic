@@ -27,12 +27,13 @@ public class Runner {
 
             TransactionFactory transactionFactory = new TransactionFactoryImpl();
             ServiceFactory serviceFactory = new ServiceFactoryImpl(transactionFactory);
-//            AppointmentService appointmentService = serviceFactory.getService(AppointmentService.class);
+            AppointmentService appointmentService = serviceFactory.getService(AppointmentService.class);
+            appointmentService.findByPatientAndDisease(1, "аллергия");
 //            Calendar calendar = new GregorianCalendar(2020, 0 , 1, 12,0,0);
 //            appointmentService.findByTime(calendar.getTime());
 
-            PatientService patientService = serviceFactory.getService(PatientService.class);
-            patientService.findById(1);
+//            PatientService patientService = serviceFactory.getService(PatientService.class);
+//            patientService.findById(1);
         } catch (PersistentException e) {
             e.printStackTrace();
         }
