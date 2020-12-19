@@ -23,7 +23,6 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
 
     private static final String DELETE_VACATION = "DELETE FROM `vacation` WHERE `doctor_id` = ?";
 
-
     @Override
     public Integer create(Vacation vacation) throws PersistentException {
         PreparedStatement statement = null;

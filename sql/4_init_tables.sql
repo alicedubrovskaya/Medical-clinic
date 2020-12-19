@@ -5,5 +5,10 @@ VALUES ('alisa', 'pass', 2),
        ('dasha', 'pass', 1),
        ('victoria', 'pass', 1);
 INSERT INTO `specialization`
-(type)
+    (type)
 VALUES ('кардиолог');
+
+INSERT INTO `disease` (name)
+VALUES ('аллергия'),
+       ('ринит'),
+       ('артроз');

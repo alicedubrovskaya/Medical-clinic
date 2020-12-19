@@ -87,7 +87,7 @@ CREATE TABLE `patient_disease`
 (
     `patient_id`     INTEGER NOT NULL,
     `disease_id`     INTEGER NOT NULL,
-    `appointment_id` INTEGER NOT NULL,
+    `appointment_id` INTEGER,
     FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`),
     FOREIGN KEY (`disease_id`) REFERENCES `disease` (`id`),
     FOREIGN KEY (`appointment_id`) REFERENCES `appointment` (`id`),

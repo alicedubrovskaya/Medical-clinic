@@ -4,10 +4,7 @@ import dao.TransactionFactory;
 import dao.database.TransactionFactoryImpl;
 import dao.pool.ConnectionPool;
 import exception.PersistentException;
-import service.AppointmentService;
-import service.DoctorService;
-import service.ServiceFactory;
-import service.VacationService;
+import service.*;
 import service.impl.ServiceFactoryImpl;
 
 import java.util.Calendar;
@@ -34,9 +31,8 @@ public class Runner {
 //            Calendar calendar = new GregorianCalendar(2020, 0 , 1, 12,0,0);
 //            appointmentService.findByTime(calendar.getTime());
 
-            VacationService vacationService = serviceFactory.getService(VacationService.class);
-            Calendar calendar = new GregorianCalendar(2020, 0 , 15, 0,0,0);
-            vacationService.findByTime(calendar.getTime());
+            PatientService patientService = serviceFactory.getService(PatientService.class);
+            patientService.findById(1);
         } catch (PersistentException e) {
             e.printStackTrace();
         }
