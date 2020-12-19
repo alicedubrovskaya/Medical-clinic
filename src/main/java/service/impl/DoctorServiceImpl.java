@@ -1,13 +1,19 @@
 package service.impl;
 
 import dao.DoctorDao;
+import dao.PatientDao;
 import dao.UserDao;
+import domain.Appointment;
 import domain.Doctor;
+import domain.Patient;
 import domain.User;
 import exception.PersistentException;
 import service.DoctorService;
 
+import javax.print.Doc;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
     @Override

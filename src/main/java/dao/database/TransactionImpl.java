@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TransactionImpl implements Transaction {
     private final Logger logger = LogManager.getLogger(getClass().getName());
 
-    private static Map<Class<? extends Dao<?>>, Class<? extends BaseDaoImpl>> classes = new ConcurrentHashMap<>();
+    private static final Map<Class<? extends Dao<?>>, Class<? extends BaseDaoImpl>> classes = new ConcurrentHashMap<>();
 
     static {
         classes.put(UserDao.class, UserDaoImpl.class);
@@ -23,7 +23,7 @@ public class TransactionImpl implements Transaction {
         classes.put(VacationDao.class, VacationDaoImpl.class);
     }
 
-    private Connection connection;
+    private final Connection connection;
 
     public TransactionImpl(Connection connection) {
         this.connection = connection;

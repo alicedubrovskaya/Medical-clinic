@@ -4,19 +4,20 @@ import dao.AppointmentDao;
 import domain.Appointment;
 import domain.Doctor;
 import domain.Patient;
+import domain.enumeration.Shift;
 import domain.enumeration.Status;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Date;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     private static final String CREATE_APPOINTMENT = "INSERT INTO `appointment` (`time`, `approved`," +
-            " `status`, `complaints`, `medical_report`, `recommendation`, `patient_id`, `doctor_id`)" +
+            "`status`, `complaints`, `medical_report`, `recommendation`, `patient_id`, `doctor_id`)" +
             " VALUES (?,?,?,?,?,?,?,?)";
 
     private static final String READ_APPOINTMENT = "SELECT `time`, `approved`,  `status`, `complaints`," +
@@ -25,6 +26,9 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     private static final String READ_APPOINTMENT_BY_TIME = "SELECT `id`, `approved`, `status`, `complaints`," +
             " `medical_report`, `recommendation`, `patient_id`, `doctor_id` " +
             " FROM `appointment` WHERE `time`=?";
+    private static final String READ_APPOINTMENT_BY_TIME_AND_DOCTOR = "SELECT `id`, `approved`, `status`, `complaints`," +
+            " `medical_report`, `recommendation`, `patient_id` " +
+            " FROM `appointment` WHERE `time`=? AND `doctor_id`=?";
 
     private static final String READ_APPOINTMENT_BY_PATIENT_AND_DISEASE = "SELECT `time`, `complaints`, `medical_report`," +
             " `recommendation` FROM `appointment` JOIN patient_disease on appointment.id = patient_disease.appointment_id " +
@@ -183,6 +187,33 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     }
 
     @Override
+    public List<Appointment> createAppointments(Date date, Doctor doctor) throws PersistentException {
+        long start = 0;
+        long end = 0;
+        if (doctor.getWorkingShift().equals(Shift.FIRST)) {
+            start = date.getTime() + TimeUnit.HOURS.toMillis(8);
+            end = date.getTime() + TimeUnit.HOURS.toMillis(13);
+        } else {
+            start = date.getTime() + TimeUnit.HOURS.toMillis(14);
+            end = date.getTime() + TimeUnit.HOURS.toMillis(19);
+        }
+
+        long currentTime = start;
+        List<Appointment> appointments = new ArrayList<>();
+        Appointment appointment = null;
+        while (currentTime < end) {
+            appointment = new Appointment();
+            appointment.setTime(new Date(currentTime));
+            appointment.setApproved(false);
+            appointment.setDoctor(doctor);
+            appointment.setStatus(Status.MISSED);
+            currentTime += TimeUnit.MINUTES.toMillis(20);
+            appointments.add(appointment);
+        }
+        return appointments;
+    }
+
+    @Override
     public List<Appointment> readByTime(Date date) throws PersistentException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -217,6 +248,50 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 appointments.add(appointment);
             }
             return appointments;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        } finally {
+            try {
+                resultSet.close();
+                resultSetTimetable.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+            try {
+                statement.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+        }
+    }
+
+    @Override
+    public Appointment readByTimeAndDoctor(Date date, Doctor doctor) throws PersistentException {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        ResultSet resultSetTimetable = null;
+        try {
+            statement = connection.prepareStatement(READ_APPOINTMENT_BY_TIME_AND_DOCTOR);
+            statement.setTimestamp(1, new Timestamp(date.getTime()));
+            statement.setInt(2, doctor.getId());
+            resultSet = statement.executeQuery();
+            Appointment appointment = null;
+            if (resultSet.next()) {
+                appointment = new Appointment();
+                appointment.setId(resultSet.getInt("id"));
+                appointment.setTime(date);
+                appointment.setApproved(resultSet.getBoolean("approved"));
+                appointment.setStatus(Status.getById(resultSet.getInt("status")));
+                appointment.setComplaints(resultSet.getString("complaints"));
+                appointment.setMedicalReport(resultSet.getString("medical_report"));
+                appointment.setRecommendation(resultSet.getString("recommendation"));
+                Integer patientId = resultSet.getInt("patient_id");
+                if (!resultSet.wasNull()) {
+                    Patient patient = new Patient();
+                    patient.setId(patientId);
+                    appointment.setPatient(patient);
+                }
+                appointment.setDoctor(doctor);
+            }
+            return appointment;
         } catch (SQLException e) {
             throw new PersistentException(e);
         } finally {

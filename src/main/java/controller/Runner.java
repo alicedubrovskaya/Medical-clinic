@@ -8,6 +8,7 @@ import service.*;
 import service.impl.ServiceFactoryImpl;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class Runner {
@@ -28,7 +29,10 @@ public class Runner {
             TransactionFactory transactionFactory = new TransactionFactoryImpl();
             ServiceFactory serviceFactory = new ServiceFactoryImpl(transactionFactory);
             AppointmentService appointmentService = serviceFactory.getService(AppointmentService.class);
-            appointmentService.findByPatientAndDisease(1, "аллергия");
+            DoctorService doctorService = serviceFactory.getService(DoctorService.class);
+            Calendar calendar = new GregorianCalendar(2020, 1 , 12);
+            appointmentService.createAppointments(calendar.getTime(), doctorService.findById(3));
+
 //            Calendar calendar = new GregorianCalendar(2020, 0 , 1, 12,0,0);
 //            appointmentService.findByTime(calendar.getTime());
 

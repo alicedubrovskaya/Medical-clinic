@@ -18,7 +18,16 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         if (appointment.getId() != null) {
             appointmentDao.update(appointment);
         } else {
-            appointment.setId(appointmentDao.create(appointment));
+            appointmentDao.create(appointment);
+        }
+    }
+
+    @Override
+    public void saveGenerated(Appointment appointment) throws PersistentException {
+        AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
+        Appointment existingAppointment = findByTimeAndDoctor(appointment.getTime(), appointment.getDoctor());
+        if (existingAppointment == null) {
+            appointmentDao.create(appointment);
         }
     }
 
@@ -41,6 +50,16 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
     }
 
     @Override
+    public Appointment findByTimeAndDoctor(Date date, Doctor doctor) throws PersistentException {
+        AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
+        Appointment appointment = appointmentDao.readByTimeAndDoctor(date, doctor);
+        if (appointment != null) {
+            buildAppointment(Arrays.asList(appointment));
+        }
+        return appointment;
+    }
+
+    @Override
     public Appointment findByPatientAndDisease(Integer patientId, String diseaseName) throws PersistentException {
         AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
         return appointmentDao.readByPatientAndDisease(patientId, diseaseName);
@@ -50,6 +69,16 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
     public void delete(Integer id) throws PersistentException {
         AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
         appointmentDao.delete(id);
+    }
+
+    @Override
+    public List<Appointment> createAppointments(Date date, Doctor doctor) throws PersistentException {
+        AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
+        List<Appointment> appointments = appointmentDao.createAppointments(date, doctor);
+        for (Appointment appointment : appointments) {
+            saveGenerated(appointment);
+        }
+        return appointments;
     }
 
     private void buildAppointment(List<Appointment> appointments) throws PersistentException {
