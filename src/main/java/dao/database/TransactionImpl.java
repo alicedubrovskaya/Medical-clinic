@@ -20,6 +20,7 @@ public class TransactionImpl implements Transaction {
         classes.put(PatientDao.class, PatientDaoImpl.class);
         classes.put(DoctorDao.class, DoctorDaoImpl.class);
         classes.put(AppointmentDao.class, AppointmentDaoImpl.class);
+        classes.put(VacationDao.class, VacationDaoImpl.class);
     }
 
     private Connection connection;

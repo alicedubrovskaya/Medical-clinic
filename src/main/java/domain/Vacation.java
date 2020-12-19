@@ -2,7 +2,7 @@ package domain;
 
 import java.sql.Date;
 
-public class Vacation {
+public class Vacation extends Entity {
     private Date start;
     private Date end;
 

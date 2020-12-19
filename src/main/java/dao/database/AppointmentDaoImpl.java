@@ -1,7 +1,6 @@
 package dao.database;
 
 import dao.AppointmentDao;
-import dao.ConnectorDB;
 import domain.Appointment;
 import domain.Doctor;
 import domain.Patient;
@@ -11,8 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {

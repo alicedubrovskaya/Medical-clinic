@@ -1,6 +1,5 @@
 package dao.database;
 
-import dao.ConnectorDB;
 import dao.DoctorDao;
 import domain.Doctor;
 import domain.enumeration.Shift;
@@ -8,7 +7,9 @@ import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

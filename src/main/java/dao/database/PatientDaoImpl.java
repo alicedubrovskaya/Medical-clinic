@@ -1,13 +1,14 @@
 package dao.database;
 
-import dao.ConnectorDB;
 import dao.PatientDao;
 import domain.Patient;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
     private final Logger logger = LogManager.getLogger(getClass().getName());
