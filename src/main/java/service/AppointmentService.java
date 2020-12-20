@@ -6,6 +6,7 @@ import exception.PersistentException;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface AppointmentService extends Service {
     void save(Appointment appointment) throws PersistentException;
@@ -23,4 +24,6 @@ public interface AppointmentService extends Service {
     void delete(Integer id) throws PersistentException;
 
     List<Appointment> createAppointments(Date date, Doctor doctor) throws PersistentException;
+
+    Map<Date, List<Appointment>> createAppointmentsForDoctors(Date date, int countOfDays) throws PersistentException;
 }

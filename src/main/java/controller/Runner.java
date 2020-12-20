@@ -30,8 +30,8 @@ public class Runner {
             ServiceFactory serviceFactory = new ServiceFactoryImpl(transactionFactory);
             AppointmentService appointmentService = serviceFactory.getService(AppointmentService.class);
             DoctorService doctorService = serviceFactory.getService(DoctorService.class);
-            Calendar calendar = new GregorianCalendar(2020, 1 , 12);
-            appointmentService.createAppointments(calendar.getTime(), doctorService.findById(3));
+            Calendar calendar = new GregorianCalendar(2020, 0 , 12);
+            appointmentService.createAppointmentsForDoctors(calendar.getTime(), 30);
 
 //            Calendar calendar = new GregorianCalendar(2020, 0 , 1, 12,0,0);
 //            appointmentService.findByTime(calendar.getTime());

@@ -10,6 +10,7 @@ import exception.PersistentException;
 import service.AppointmentService;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class AppointmentServiceImpl extends ServiceImpl implements AppointmentService {
     @Override
@@ -18,7 +19,7 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         if (appointment.getId() != null) {
             appointmentDao.update(appointment);
         } else {
-            appointmentDao.create(appointment);
+            appointment.setId(appointmentDao.create(appointment));
         }
     }
 
@@ -27,7 +28,7 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
         Appointment existingAppointment = findByTimeAndDoctor(appointment.getTime(), appointment.getDoctor());
         if (existingAppointment == null) {
-            appointmentDao.create(appointment);
+            appointment.setId(appointmentDao.create(appointment));
         }
     }
 
@@ -79,6 +80,31 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
             saveGenerated(appointment);
         }
         return appointments;
+    }
+
+    @Override
+    public Map<Date, List<Appointment>> createAppointmentsForDoctors(Date date, int countOfDays) throws PersistentException {
+        long currentDate = date.getTime();
+        long lastDate = date.getTime() + TimeUnit.DAYS.toMillis(countOfDays);
+
+        DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
+        List<Doctor> doctors = new ArrayList<>();
+        List<Appointment> appointments = new ArrayList<>();
+        Date appointmentDate = null;
+        Map<Date, List<Appointment>> createdAppointments = new HashMap();
+
+        while (currentDate <= lastDate) {
+            appointmentDate = new Date(currentDate);
+            doctors = doctorDao.readWithoutVacation(appointmentDate);
+            for (Doctor doctor : doctors) {
+                appointments = createAppointments(appointmentDate, doctor);
+            }
+            createdAppointments.put(appointmentDate, appointments);
+            doctors.clear();
+            appointments.clear();
+            currentDate+=TimeUnit.DAYS.toMillis(1);
+        }
+        return createdAppointments;
     }
 
     private void buildAppointment(List<Appointment> appointments) throws PersistentException {

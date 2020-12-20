@@ -43,6 +43,12 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
     }
 
     @Override
+    public List<Doctor> findAll() throws PersistentException {
+        DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
+        return doctorDao.read();
+    }
+
+    @Override
     public void delete(Integer id) throws PersistentException {
         DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
         doctorDao.delete(id);

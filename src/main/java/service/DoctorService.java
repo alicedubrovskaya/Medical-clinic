@@ -13,5 +13,7 @@ public interface DoctorService extends Service {
 
     List<Doctor> findBySpecializationType(String specialization) throws PersistentException;
 
+    List<Doctor> findAll() throws PersistentException;
+
     void delete(Integer id) throws PersistentException;
 }
