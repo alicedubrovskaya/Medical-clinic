@@ -3,6 +3,7 @@ package service.impl;
 import dao.AppointmentDao;
 import dao.DoctorDao;
 import dao.PatientDao;
+import dao.VacationDao;
 import domain.Appointment;
 import domain.Doctor;
 import domain.Patient;
@@ -88,6 +89,7 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         long lastDate = date.getTime() + TimeUnit.DAYS.toMillis(countOfDays);
 
         DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
+        VacationDao vacationDao = transaction.createDao(VacationDao.class);
         List<Doctor> doctors = new ArrayList<>();
         List<Appointment> appointments = new ArrayList<>();
         Date appointmentDate = null;
@@ -95,14 +97,17 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
 
         while (currentDate <= lastDate) {
             appointmentDate = new Date(currentDate);
-            doctors = doctorDao.readWithoutVacation(appointmentDate);
-            for (Doctor doctor : doctors) {
-                appointments = createAppointments(appointmentDate, doctor);
+            if (defineDayOfWeek(appointmentDate) != 1 && defineDayOfWeek(appointmentDate) != 7 &&
+                    vacationDao.readBySpecifiedDate(appointmentDate) == null) {
+                doctors = doctorDao.readWithoutVacation(appointmentDate);
+                for (Doctor doctor : doctors) {
+                    appointments = createAppointments(appointmentDate, doctor);
+                }
+                createdAppointments.put(appointmentDate, appointments);
+                doctors.clear();
+                appointments.clear();
             }
-            createdAppointments.put(appointmentDate, appointments);
-            doctors.clear();
-            appointments.clear();
-            currentDate+=TimeUnit.DAYS.toMillis(1);
+            currentDate += TimeUnit.DAYS.toMillis(1);
         }
         return createdAppointments;
     }
@@ -140,5 +145,11 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
                 appointment.setPatient(patient);
             }
         }
+    }
+
+    private int defineDayOfWeek(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.DAY_OF_WEEK);
     }
 }

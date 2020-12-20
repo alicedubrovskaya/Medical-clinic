@@ -188,8 +188,8 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
 
     @Override
     public List<Appointment> createAppointments(Date date, Doctor doctor) throws PersistentException {
-        long start = 0;
-        long end = 0;
+        long start;
+        long end;
         if (doctor.getWorkingShift().equals(Shift.FIRST)) {
             start = date.getTime() + TimeUnit.HOURS.toMillis(8);
             end = date.getTime() + TimeUnit.HOURS.toMillis(13);
@@ -200,7 +200,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
 
         long currentTime = start;
         List<Appointment> appointments = new ArrayList<>();
-        Appointment appointment = null;
+        Appointment appointment;
         while (currentTime < end) {
             appointment = new Appointment();
             appointment.setTime(new Date(currentTime));

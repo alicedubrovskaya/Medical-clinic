@@ -19,6 +19,8 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
 
     private static final String READ_VACATION_BY_TIME = "SELECT * FROM vacation WHERE ? BETWEEN `start` and `end`";
 
+    private static final String READ_VACATION_FOR_ALL = "SELECT * FROM holiday WHERE `day` = ? ";
+
     private static final String UPDATE_VACATION = "UPDATE `vacation` SET `start`=?, `end`=? WHERE `doctor_id`=?";
 
     private static final String DELETE_VACATION = "DELETE FROM `vacation` WHERE `doctor_id` = ?";
@@ -139,6 +141,38 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
         } finally {
             try {
                 resultSet.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+            try {
+                statement.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+        }
+    }
+
+    @Override
+    public Vacation readBySpecifiedDate(Date date) throws PersistentException {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(READ_VACATION_FOR_ALL);
+            statement.setDate(1, new java.sql.Date(date.getTime()));
+            resultSet = statement.executeQuery();
+
+            Vacation vacation = null;
+            if (resultSet.next()) {
+                vacation = new Vacation();
+                vacation.setStart(resultSet.getDate("day"));
+                vacation.setEnd(resultSet.getDate("day"));
+            }
+            return vacation;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
             } catch (SQLException | NullPointerException e) {
             }
             try {

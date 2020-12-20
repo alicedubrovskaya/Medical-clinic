@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface VacationDao extends Dao<Vacation> {
     List<Vacation> readByTime(Date date) throws PersistentException;
+
+    Vacation readBySpecifiedDate(Date date) throws PersistentException;
 }

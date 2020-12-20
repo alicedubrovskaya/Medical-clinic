@@ -12,3 +12,7 @@ INSERT INTO `disease` (name)
 VALUES ('аллергия'),
        ('ринит'),
        ('артроз');
+
+INSERT INTO `holiday` (name, day)
+VALUES ('New year', '2020-12-31'),
+       ('New year', '2021-01-1');

@@ -61,7 +61,7 @@ CREATE TABLE `holiday`
 (
     `id`   INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255),
-    `day`  DATE    NOT NULL,
+    `day`  DATE   UNIQUE NOT NULL,
     PRIMARY KEY (`id`)
 );
 
