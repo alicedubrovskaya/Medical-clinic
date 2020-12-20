@@ -25,5 +25,5 @@ public interface AppointmentService extends Service {
 
     List<Appointment> createAppointments(Date date, Doctor doctor) throws PersistentException;
 
-    Map<Date, List<Appointment>> createAppointmentsForDoctors(Date date, int countOfDays) throws PersistentException;
+    void createAppointmentsForDoctors(Date date, int countOfDays) throws PersistentException;
 }

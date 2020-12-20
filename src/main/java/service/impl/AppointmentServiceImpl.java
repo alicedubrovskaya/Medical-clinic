@@ -76,40 +76,35 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
     @Override
     public List<Appointment> createAppointments(Date date, Doctor doctor) throws PersistentException {
         AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
-        List<Appointment> appointments = appointmentDao.createAppointments(date, doctor);
-        for (Appointment appointment : appointments) {
-            saveGenerated(appointment);
+        VacationDao vacationDao = transaction.createDao(VacationDao.class);
+        List<Appointment> appointments = new ArrayList<>();
+
+        if (defineDayOfWeek(date) != 1 && defineDayOfWeek(date) != 7 && vacationDao.readBySpecifiedDate(date) == null) {
+            appointments = appointmentDao.createAppointments(date, doctor);
+            for (Appointment appointment : appointments) {
+                saveGenerated(appointment);
+            }
         }
         return appointments;
     }
 
     @Override
-    public Map<Date, List<Appointment>> createAppointmentsForDoctors(Date date, int countOfDays) throws PersistentException {
+    public void createAppointmentsForDoctors(Date date, int countOfDays) throws PersistentException {
         long currentDate = date.getTime();
         long lastDate = date.getTime() + TimeUnit.DAYS.toMillis(countOfDays);
 
         DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
-        VacationDao vacationDao = transaction.createDao(VacationDao.class);
-        List<Doctor> doctors = new ArrayList<>();
-        List<Appointment> appointments = new ArrayList<>();
-        Date appointmentDate = null;
-        Map<Date, List<Appointment>> createdAppointments = new HashMap();
-
+        List<Doctor> doctors;
+        Date appointmentDate;
         while (currentDate <= lastDate) {
             appointmentDate = new Date(currentDate);
-            if (defineDayOfWeek(appointmentDate) != 1 && defineDayOfWeek(appointmentDate) != 7 &&
-                    vacationDao.readBySpecifiedDate(appointmentDate) == null) {
-                doctors = doctorDao.readWithoutVacation(appointmentDate);
-                for (Doctor doctor : doctors) {
-                    appointments = createAppointments(appointmentDate, doctor);
-                }
-                createdAppointments.put(appointmentDate, appointments);
-                doctors.clear();
-                appointments.clear();
+            doctors = doctorDao.readWithoutVacation(appointmentDate);
+            for (Doctor doctor : doctors) {
+                createAppointments(appointmentDate, doctor);
             }
+            doctors.clear();
             currentDate += TimeUnit.DAYS.toMillis(1);
         }
-        return createdAppointments;
     }
 
     private void buildAppointment(List<Appointment> appointments) throws PersistentException {
