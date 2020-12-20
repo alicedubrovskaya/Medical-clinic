@@ -28,16 +28,14 @@ public class Runner {
 
             TransactionFactory transactionFactory = new TransactionFactoryImpl();
             ServiceFactory serviceFactory = new ServiceFactoryImpl(transactionFactory);
-            AppointmentService appointmentService = serviceFactory.getService(AppointmentService.class);
-            DoctorService doctorService = serviceFactory.getService(DoctorService.class);
-            Calendar calendar = new GregorianCalendar(2020, 11 , 20);
-            appointmentService.createAppointmentsForDoctors(calendar.getTime(), 30);
+//            AppointmentService appointmentService = serviceFactory.getService(AppointmentService.class);
+//            DoctorService doctorService = serviceFactory.getService(DoctorService.class);
+//            Calendar calendar = new GregorianCalendar(2020, 11 , 20);
+//            appointmentService.createAppointmentsForDoctors(calendar.getTime(), 30);
 
-//            Calendar calendar = new GregorianCalendar(2020, 0 , 1, 12,0,0);
-//            appointmentService.findByTime(calendar.getTime());
+            PatientService patientService = serviceFactory.getService(PatientService.class);
+            patientService.findById(1);
 
-//            PatientService patientService = serviceFactory.getService(PatientService.class);
-//            patientService.findById(1);
         } catch (PersistentException e) {
             e.printStackTrace();
         }

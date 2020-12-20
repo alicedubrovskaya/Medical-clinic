@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 public class VacationServiceImpl extends ServiceImpl implements VacationService {
+    //TODO
+
     @Override
     public void save(Vacation vacation) throws PersistentException {
 

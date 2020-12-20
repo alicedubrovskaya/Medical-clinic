@@ -4,8 +4,12 @@ import dao.PatientDao;
 import dao.UserDao;
 import domain.Patient;
 import domain.User;
+import domain.enumeration.Role;
 import exception.PersistentException;
 import service.PatientService;
+
+import java.util.Collections;
+import java.util.List;
 
 public class PatientServiceImpl extends ServiceImpl implements PatientService {
 
@@ -18,8 +22,7 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
             User user = userDao.read(patient.getLogin(), patient.getPassword());
             patient.setId(user.getId());
             patientDao.create(patient);
-        }
-        else {
+        } else {
             patientDao.update(patient);
         }
     }
@@ -33,12 +36,36 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
     @Override
     public Patient findByEmail(String email) throws PersistentException {
         PatientDao patientDao = transaction.createDao(PatientDao.class);
-        return patientDao.readByEmail(email);
+        Patient patient = patientDao.readByEmail(email);
+        if (patient != null) {
+            buildPatient(Collections.singletonList(patient));
+        }
+        return patient;
     }
 
     @Override
     public Patient findById(Integer id) throws PersistentException {
         PatientDao patientDao = transaction.createDao(PatientDao.class);
-        return patientDao.read(id);
+        Patient patient = patientDao.read(id);
+        if (patient != null) {
+            buildPatient(Collections.singletonList(patient));
+        }
+        return patient;
+    }
+
+    private void buildPatient(List<Patient> patients) throws PersistentException {
+        UserDao userDao = transaction.createDao(UserDao.class);
+
+        for (Patient patient : patients) {
+            if (patient.getId() != null) {
+                User user = userDao.read(patient.getId());
+                if (user != null) {
+                    patient.setLogin(user.getLogin());
+                    //TODO encoding
+                    patient.setPassword(user.getPassword());
+                    patient.setRole(Role.PATIENT);
+                }
+            }
+        }
     }
 }
