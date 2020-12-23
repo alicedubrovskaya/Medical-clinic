@@ -1,7 +1,6 @@
 package service.impl;
 
 import dao.VacationDao;
-import domain.Patient;
 import domain.Vacation;
 import exception.PersistentException;
 import service.VacationService;
@@ -10,11 +9,15 @@ import java.util.Date;
 import java.util.List;
 
 public class VacationServiceImpl extends ServiceImpl implements VacationService {
-    //TODO
 
     @Override
     public void save(Vacation vacation) throws PersistentException {
-
+        VacationDao vacationDao = transaction.createDao(VacationDao.class);
+        if (vacation.getId() != null) {
+            vacationDao.update(vacation);
+        } else {
+            vacation.setId(vacationDao.create(vacation));
+        }
     }
 
     @Override
@@ -25,11 +28,13 @@ public class VacationServiceImpl extends ServiceImpl implements VacationService 
 
     @Override
     public Vacation findById(Integer id) throws PersistentException {
-        return null;
+        VacationDao vacationDao = transaction.createDao(VacationDao.class);
+        return vacationDao.read(id);
     }
 
     @Override
     public void delete(Integer id) throws PersistentException {
-
+        VacationDao vacationDao= transaction.createDao(VacationDao.class);
+        vacationDao.delete(id);
     }
 }
