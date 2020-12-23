@@ -7,6 +7,7 @@ import domain.User;
 import domain.enumeration.Role;
 import exception.PersistentException;
 import service.DoctorService;
+import service.PasswordEncryption;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +19,7 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
         DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
 
         if (doctor.getId() == null) {
-            User user = userDao.read(doctor.getLogin(), doctor.getPassword());
+            User user = userDao.read(doctor.getLogin(), PasswordEncryption.encrypt(doctor.getPassword()));
             doctor.setId(user.getId());
             doctorDao.create(doctor);
         } else {
@@ -29,8 +30,8 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
     @Override
     public Doctor findById(Integer id) throws PersistentException {
         DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
-        Doctor doctor =  doctorDao.read(id);
-        if (doctor!= null){
+        Doctor doctor = doctorDao.read(id);
+        if (doctor != null) {
             buildDoctor(Collections.singletonList(doctor));
         }
         return doctor;
@@ -39,7 +40,7 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
     @Override
     public List<Doctor> findBySpecializationType(String specialization) throws PersistentException {
         DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
-        List<Doctor> doctors =  doctorDao.readBySpecializationType(specialization);
+        List<Doctor> doctors = doctorDao.readBySpecializationType(specialization);
         buildDoctor(doctors);
         return doctors;
     }
@@ -47,7 +48,7 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
     @Override
     public List<Doctor> findAll() throws PersistentException {
         DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
-        List<Doctor> doctors =  doctorDao.read();
+        List<Doctor> doctors = doctorDao.read();
         buildDoctor(doctors);
         return doctors;
     }
@@ -66,7 +67,6 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
                 User user = userDao.read(doctor.getId());
                 if (user != null) {
                     doctor.setLogin(user.getLogin());
-                    //TODO encoding
                     doctor.setPassword(user.getPassword());
                     doctor.setRole(Role.DOCTOR);
                 }

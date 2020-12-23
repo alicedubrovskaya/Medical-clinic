@@ -6,6 +6,7 @@ import domain.Patient;
 import domain.User;
 import domain.enumeration.Role;
 import exception.PersistentException;
+import service.PasswordEncryption;
 import service.PatientService;
 
 import java.util.Collections;
@@ -19,7 +20,7 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
         PatientDao patientDao = transaction.createDao(PatientDao.class);
 
         if (patient.getId() == null) {
-            User user = userDao.read(patient.getLogin(), patient.getPassword());
+            User user = userDao.read(patient.getLogin(), PasswordEncryption.encrypt(patient.getPassword()));
             patient.setId(user.getId());
             patientDao.create(patient);
         } else {
@@ -61,7 +62,6 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
                 User user = userDao.read(patient.getId());
                 if (user != null) {
                     patient.setLogin(user.getLogin());
-                    //TODO encoding
                     patient.setPassword(user.getPassword());
                     patient.setRole(Role.PATIENT);
                 }
