@@ -1,9 +1,9 @@
 package dao;
 
-import exception.PersistentException;
+import dao.database.TransactionImpl;
 
 public interface TransactionFactory {
-	Transaction createTransaction() throws PersistentException;
+    TransactionImpl createTransaction();
 
-	void close();
+    void close();
 }

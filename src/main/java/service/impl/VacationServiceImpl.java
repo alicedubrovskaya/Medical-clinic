@@ -12,7 +12,7 @@ public class VacationServiceImpl extends ServiceImpl implements VacationService 
 
     @Override
     public void save(Vacation vacation) throws PersistentException {
-        VacationDao vacationDao = transaction.createDao(VacationDao.class);
+        VacationDao vacationDao = transaction.createVacationDao();
         if (vacation.getId() != null) {
             vacationDao.update(vacation);
         } else {
@@ -22,19 +22,19 @@ public class VacationServiceImpl extends ServiceImpl implements VacationService 
 
     @Override
     public List<Vacation> findByTime(Date date) throws PersistentException {
-        VacationDao vacationDao = transaction.createDao(VacationDao.class);
+        VacationDao vacationDao = transaction.createVacationDao();
         return vacationDao.readByTime(date);
     }
 
     @Override
     public Vacation findById(Integer id) throws PersistentException {
-        VacationDao vacationDao = transaction.createDao(VacationDao.class);
+        VacationDao vacationDao = transaction.createVacationDao();
         return vacationDao.read(id);
     }
 
     @Override
     public void delete(Integer id) throws PersistentException {
-        VacationDao vacationDao= transaction.createDao(VacationDao.class);
+        VacationDao vacationDao= transaction.createVacationDao();
         vacationDao.delete(id);
     }
 }

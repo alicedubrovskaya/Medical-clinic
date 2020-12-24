@@ -6,6 +6,8 @@ public class Doctor extends Person {
     private String specialization;
     private Shift workingShift;
 
+    //TODO
+
     public String getSpecialization() {
         return specialization;
     }

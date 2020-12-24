@@ -10,7 +10,7 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
 
     @Override
     public void save(User user) throws PersistentException {
-        UserDao userDao = transaction.createDao(UserDao.class);
+        UserDao userDao = transaction.createUserDao();
         if (user.getId() == null) {
             user.setPassword(PasswordEncryption.encrypt(user.getPassword()));
             user.setId(userDao.create(user));
@@ -27,19 +27,19 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
 
     @Override
     public void delete(Integer id) throws PersistentException {
-        UserDao userDao = transaction.createDao(UserDao.class);
+        UserDao userDao = transaction.createUserDao();
         userDao.delete(id);
     }
 
     @Override
     public User findByLoginAndPassword(String login, String password) throws PersistentException {
-        UserDao userDao = transaction.createDao(UserDao.class);
+        UserDao userDao = transaction.createUserDao();
         return userDao.read(login, PasswordEncryption.encrypt(password));
     }
 
     @Override
     public User findById(Integer id) throws PersistentException {
-        UserDao userDao = transaction.createDao(UserDao.class);
+        UserDao userDao = transaction.createUserDao();
         return userDao.read(id);
     }
 

@@ -16,8 +16,8 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
 
     @Override
     public void save(Patient patient) throws PersistentException {
-        UserDao userDao = transaction.createDao(UserDao.class);
-        PatientDao patientDao = transaction.createDao(PatientDao.class);
+        UserDao userDao = transaction.createUserDao();
+        PatientDao patientDao = transaction.createPatientDao();
 
         if (patient.getId() == null) {
             User user = userDao.read(patient.getLogin(), PasswordEncryption.encrypt(patient.getPassword()));
@@ -30,13 +30,13 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
 
     @Override
     public void delete(Integer id) throws PersistentException {
-        PatientDao patientDao = transaction.createDao(PatientDao.class);
+        PatientDao patientDao = transaction.createPatientDao();
         patientDao.delete(id);
     }
 
     @Override
     public Patient findByEmail(String email) throws PersistentException {
-        PatientDao patientDao = transaction.createDao(PatientDao.class);
+        PatientDao patientDao = transaction.createPatientDao();
         Patient patient = patientDao.readByEmail(email);
         if (patient != null) {
             buildPatient(Collections.singletonList(patient));
@@ -46,7 +46,7 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
 
     @Override
     public Patient findById(Integer id) throws PersistentException {
-        PatientDao patientDao = transaction.createDao(PatientDao.class);
+        PatientDao patientDao = transaction.createPatientDao();
         Patient patient = patientDao.read(id);
         if (patient != null) {
             buildPatient(Collections.singletonList(patient));
@@ -55,7 +55,7 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
     }
 
     private void buildPatient(List<Patient> patients) throws PersistentException {
-        UserDao userDao = transaction.createDao(UserDao.class);
+        UserDao userDao = transaction.createUserDao();
 
         for (Patient patient : patients) {
             if (patient.getId() != null) {

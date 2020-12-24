@@ -3,7 +3,15 @@ package dao;
 import exception.PersistentException;
 
 public interface Transaction {
-	<Type extends Dao<?>> Type createDao(Class<Type> key) throws PersistentException;
+	UserDao createUserDao();
+
+	DoctorDao createDoctorDao();
+
+	PatientDao createPatientDao();
+
+	AppointmentDao createAppointmentDao();
+
+	VacationDao createVacationDao();
 
 	void commit() throws PersistentException;
 

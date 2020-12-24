@@ -1,9 +1,15 @@
 package service;
 
-import exception.PersistentException;
-
 public interface ServiceFactory {
-	<Type extends Service> Type getService(Class<Type> key) throws PersistentException;
+    UserService getUserService();
 
-	void close();
+    PatientService getPatientService();
+
+    DoctorService getDoctorService();
+
+    AppointmentService getAppointmentService();
+
+    VacationService getVacationService();
+
+    void close();
 }

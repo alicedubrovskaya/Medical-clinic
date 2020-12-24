@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class AppointmentServiceImpl extends ServiceImpl implements AppointmentService {
     @Override
     public void save(Appointment appointment) throws PersistentException {
-        AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
+        AppointmentDao appointmentDao = transaction.createAppointmentDao();
         if (appointment.getId() != null) {
             appointmentDao.update(appointment);
         } else {
@@ -26,7 +26,7 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
 
     @Override
     public void saveGenerated(Appointment appointment) throws PersistentException {
-        AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
+        AppointmentDao appointmentDao = transaction.createAppointmentDao();
         Appointment existingAppointment = findByTimeAndDoctor(appointment.getTime(), appointment.getDoctor());
         if (existingAppointment == null) {
             appointment.setId(appointmentDao.create(appointment));
@@ -35,7 +35,7 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
 
     @Override
     public Appointment findById(Integer id) throws PersistentException {
-        AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
+        AppointmentDao appointmentDao = transaction.createAppointmentDao();
         Appointment appointment = appointmentDao.read(id);
         if (appointment != null) {
             buildAppointment(Arrays.asList(appointment));
@@ -45,7 +45,7 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
 
     @Override
     public List<Appointment> findByTime(Date date) throws PersistentException {
-        AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
+        AppointmentDao appointmentDao = transaction.createAppointmentDao();
         List<Appointment> appointments = appointmentDao.readByTime(date);
         buildAppointment(appointments);
         return appointments;
@@ -53,7 +53,7 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
 
     @Override
     public Appointment findByTimeAndDoctor(Date date, Doctor doctor) throws PersistentException {
-        AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
+        AppointmentDao appointmentDao = transaction.createAppointmentDao();
         Appointment appointment = appointmentDao.readByTimeAndDoctor(date, doctor);
         if (appointment != null) {
             buildAppointment(Arrays.asList(appointment));
@@ -63,20 +63,20 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
 
     @Override
     public Appointment findByPatientAndDisease(Integer patientId, String diseaseName) throws PersistentException {
-        AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
+        AppointmentDao appointmentDao = transaction.createAppointmentDao();
         return appointmentDao.readByPatientAndDisease(patientId, diseaseName);
     }
 
     @Override
     public void delete(Integer id) throws PersistentException {
-        AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
+        AppointmentDao appointmentDao = transaction.createAppointmentDao();
         appointmentDao.delete(id);
     }
 
     @Override
     public List<Appointment> createAppointments(Date date, Doctor doctor) throws PersistentException {
-        AppointmentDao appointmentDao = transaction.createDao(AppointmentDao.class);
-        VacationDao vacationDao = transaction.createDao(VacationDao.class);
+        AppointmentDao appointmentDao = transaction.createAppointmentDao();
+        VacationDao vacationDao = transaction.createVacationDao();
         List<Appointment> appointments = new ArrayList<>();
 
         if (defineDayOfWeek(date) != 1 && defineDayOfWeek(date) != 7 && vacationDao.readBySpecifiedDate(date) == null) {
@@ -93,7 +93,7 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         long currentDate = date.getTime();
         long lastDate = date.getTime() + TimeUnit.DAYS.toMillis(countOfDays);
 
-        DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
+        DoctorDao doctorDao = transaction.createDoctorDao();
         List<Doctor> doctors;
         Date appointmentDate;
         while (currentDate <= lastDate) {
@@ -108,8 +108,8 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
     }
 
     private void buildAppointment(List<Appointment> appointments) throws PersistentException {
-        DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
-        PatientDao patientDao = transaction.createDao(PatientDao.class);
+        DoctorDao doctorDao = transaction.createDoctorDao();
+        PatientDao patientDao = transaction.createPatientDao();
 
         Map<Integer, Doctor> doctors = new HashMap<>();
         Map<Integer, Patient> patients = new HashMap<>();

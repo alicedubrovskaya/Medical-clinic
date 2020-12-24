@@ -1,10 +1,10 @@
 package service;
 
-import org.apache.commons.codec.digest.DigestUtils;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class PasswordEncryption {
 
     public static String encrypt(String password) {
-        return DigestUtils.md5Hex(password);
+        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 }

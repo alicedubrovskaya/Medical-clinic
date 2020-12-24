@@ -15,8 +15,8 @@ import java.util.List;
 public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
     @Override
     public void save(Doctor doctor) throws PersistentException {
-        UserDao userDao = transaction.createDao(UserDao.class);
-        DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
+        UserDao userDao = transaction.createUserDao();
+        DoctorDao doctorDao = transaction.createDoctorDao();
 
         if (doctor.getId() == null) {
             User user = userDao.read(doctor.getLogin(), PasswordEncryption.encrypt(doctor.getPassword()));
@@ -29,7 +29,7 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
 
     @Override
     public Doctor findById(Integer id) throws PersistentException {
-        DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
+        DoctorDao doctorDao = transaction.createDoctorDao();
         Doctor doctor = doctorDao.read(id);
         if (doctor != null) {
             buildDoctor(Collections.singletonList(doctor));
@@ -39,7 +39,7 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
 
     @Override
     public List<Doctor> findBySpecializationType(String specialization) throws PersistentException {
-        DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
+        DoctorDao doctorDao = transaction.createDoctorDao();
         List<Doctor> doctors = doctorDao.readBySpecializationType(specialization);
         buildDoctor(doctors);
         return doctors;
@@ -47,7 +47,7 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
 
     @Override
     public List<Doctor> findAll() throws PersistentException {
-        DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
+        DoctorDao doctorDao = transaction.createDoctorDao();
         List<Doctor> doctors = doctorDao.read();
         buildDoctor(doctors);
         return doctors;
@@ -55,12 +55,12 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
 
     @Override
     public void delete(Integer id) throws PersistentException {
-        DoctorDao doctorDao = transaction.createDao(DoctorDao.class);
+        DoctorDao doctorDao = transaction.createDoctorDao();
         doctorDao.delete(id);
     }
 
     private void buildDoctor(List<Doctor> doctors) throws PersistentException {
-        UserDao userDao = transaction.createDao(UserDao.class);
+        UserDao userDao = transaction.createUserDao();
 
         for (Doctor doctor : doctors) {
             if (doctor.getId() != null) {

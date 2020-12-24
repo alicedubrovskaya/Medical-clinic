@@ -2,60 +2,60 @@ package service.impl;
 
 import dao.Transaction;
 import dao.TransactionFactory;
-import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.*;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 public class ServiceFactoryImpl implements ServiceFactory {
-	private final Logger logger = LogManager.getLogger(getClass().getName());
+    private final TransactionFactory factory;
+    private final Logger logger = LogManager.getLogger(getClass().getName());
 
-	private static final Map<Class<? extends Service>, Class<? extends ServiceImpl>> SERVICES = new ConcurrentHashMap<>();
+    public ServiceFactoryImpl(TransactionFactory factory) {
+        this.factory = factory;
+    }
 
-	static {
-		SERVICES.put(UserService.class, UserServiceImpl.class);
-		SERVICES.put(PatientService.class, PatientServiceImpl.class);
-		SERVICES.put(DoctorService.class, DoctorServiceImpl.class);
-		SERVICES.put(AppointmentService.class, AppointmentServiceImpl.class);
-		SERVICES.put(VacationService.class, VacationServiceImpl.class);
-	}
+    @Override
+    public UserService getUserService() {
+        Transaction transaction = factory.createTransaction();
+        ServiceImpl service = new UserServiceImpl();
+        service.setTransaction(transaction);
+        return (UserService) service;
+    }
 
-	private TransactionFactory factory;
+    @Override
+    public PatientService getPatientService() {
+        Transaction transaction = factory.createTransaction();
+        ServiceImpl service = new PatientServiceImpl();
+        service.setTransaction(transaction);
+        return (PatientService) service;
+    }
 
-	public ServiceFactoryImpl(TransactionFactory factory) throws PersistentException {
-		this.factory = factory;
-	}
+    @Override
+    public DoctorService getDoctorService() {
+        Transaction transaction = factory.createTransaction();
+        ServiceImpl service = new DoctorServiceImpl();
+        service.setTransaction(transaction);
+        return (DoctorService) service;
+    }
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public <Type extends Service> Type getService(Class<Type> key) throws PersistentException {
-		Class<? extends ServiceImpl> value = SERVICES.get(key);
-		if(value != null) {
-			try {
-				ClassLoader classLoader = value.getClassLoader();
-				Class<?>[] interfaces = {key};
-				Transaction transaction = factory.createTransaction();
-				ServiceImpl service = value.newInstance();
-				service.setTransaction(transaction);
-				InvocationHandler handler = new ServiceInvocationHandlerImpl(service);
-				return (Type)Proxy.newProxyInstance(classLoader, interfaces, handler);
-			} catch(PersistentException e) {
-				throw e;
-			} catch(InstantiationException | IllegalAccessException e) {
-				logger.error("It is impossible to instance service class", e);
-				throw new PersistentException(e);
-			}
-		}
-		return null;
-	}
+    @Override
+    public AppointmentService getAppointmentService() {
+        Transaction transaction = factory.createTransaction();
+        ServiceImpl service = new AppointmentServiceImpl();
+        service.setTransaction(transaction);
+        return (AppointmentService) service;
+    }
 
-	@Override
-	public void close() {
-		factory.close();
-	}
+    @Override
+    public VacationService getVacationService() {
+        Transaction transaction = factory.createTransaction();
+        ServiceImpl service = new VacationServiceImpl();
+        service.setTransaction(transaction);
+        return (VacationService) service;
+    }
+
+    @Override
+    public void close() {
+        factory.close();
+    }
 }

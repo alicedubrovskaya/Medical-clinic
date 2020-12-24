@@ -7,44 +7,50 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class TransactionImpl implements Transaction {
-    private final Logger logger = LogManager.getLogger(getClass().getName());
-
-    private static final Map<Class<? extends Dao<?>>, Class<? extends BaseDaoImpl>> classes = new ConcurrentHashMap<>();
-
-    static {
-        classes.put(UserDao.class, UserDaoImpl.class);
-        classes.put(PatientDao.class, PatientDaoImpl.class);
-        classes.put(DoctorDao.class, DoctorDaoImpl.class);
-        classes.put(AppointmentDao.class, AppointmentDaoImpl.class);
-        classes.put(VacationDao.class, VacationDaoImpl.class);
-    }
-
     private final Connection connection;
+    private final Logger logger = LogManager.getLogger(getClass().getName());
 
     public TransactionImpl(Connection connection) {
         this.connection = connection;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <Type extends Dao<?>> Type createDao(Class<Type> key) throws PersistentException {
-        Class<? extends BaseDaoImpl> value = classes.get(key);
-        if (value != null) {
-            try {
-                BaseDaoImpl dao = value.newInstance();
-                dao.setConnection(connection);
-                return (Type) dao;
-            } catch (InstantiationException | IllegalAccessException e) {
-                logger.error("It is impossible to create data access object", e);
-                throw new PersistentException(e);
-            }
-        }
-        return null;
+    public UserDao createUserDao() {
+        BaseDaoImpl dao = new UserDaoImpl();
+        dao.setConnection(connection);
+        return (UserDao) dao;
     }
+
+    @Override
+    public DoctorDao createDoctorDao() {
+        BaseDaoImpl dao = new DoctorDaoImpl();
+        dao.setConnection(connection);
+        return (DoctorDao) dao;
+    }
+
+    @Override
+    public PatientDao createPatientDao() {
+        BaseDaoImpl dao = new PatientDaoImpl();
+        dao.setConnection(connection);
+        return (PatientDao) dao;
+    }
+
+    @Override
+    public AppointmentDao createAppointmentDao() {
+        BaseDaoImpl dao = new AppointmentDaoImpl();
+        dao.setConnection(connection);
+        return (AppointmentDao) dao;
+    }
+
+    @Override
+    public VacationDao createVacationDao() {
+        BaseDaoImpl dao = new VacationDaoImpl();
+        dao.setConnection(connection);
+        return (VacationDao) dao;
+    }
+
 
     @Override
     public void commit() throws PersistentException {

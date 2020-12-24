@@ -4,12 +4,9 @@ import dao.TransactionFactory;
 import dao.database.TransactionFactoryImpl;
 import dao.pool.ConnectionPool;
 import exception.PersistentException;
-import service.*;
+import service.PatientService;
+import service.ServiceFactory;
 import service.impl.ServiceFactoryImpl;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class Runner {
     public static void main(String[] args) {
@@ -33,7 +30,7 @@ public class Runner {
 //            Calendar calendar = new GregorianCalendar(2020, 11 , 20);
 //            appointmentService.createAppointmentsForDoctors(calendar.getTime(), 30);
 
-            PatientService patientService = serviceFactory.getService(PatientService.class);
+            PatientService patientService = serviceFactory.getPatientService();
             patientService.findById(1);
 
         } catch (PersistentException e) {
