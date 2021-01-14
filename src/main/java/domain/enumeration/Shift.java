@@ -1,8 +1,8 @@
 package domain.enumeration;
 
 public enum Shift {
-    FIRST("первая"),
-    SECOND("вторая");
+    FIRST("Первая"),
+    SECOND("Вторая");
 
     private String name;
 

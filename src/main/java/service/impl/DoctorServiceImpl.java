@@ -15,20 +15,29 @@ import java.util.List;
 public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
     @Override
     public void save(Doctor doctor) throws PersistentException {
+        transaction.setWithoutAutoCommit();
         UserDao userDao = transaction.createUserDao();
         DoctorDao doctorDao = transaction.createDoctorDao();
 
-        if (doctor.getId() == null) {
-            User user = userDao.read(doctor.getLogin(), PasswordEncryption.encrypt(doctor.getPassword()));
-            doctor.setId(user.getId());
-            doctorDao.create(doctor);
-        } else {
-            doctorDao.update(doctor);
+        try {
+            if (doctor.getId() == null) {
+                User user = userDao.read(doctor.getLogin(), PasswordEncryption.encrypt(doctor.getPassword()));
+                doctor.setId(user.getId());
+                doctorDao.create(doctor);
+            } else {
+                doctorDao.update(doctor);
+            }
+            transaction.commit();
+        } catch (PersistentException e) {
+            transaction.rollback();
+            //TODO service exception
+            throw new PersistentException();
         }
     }
 
     @Override
     public Doctor findById(Integer id) throws PersistentException {
+        transaction.setAutoCommit();
         DoctorDao doctorDao = transaction.createDoctorDao();
         Doctor doctor = doctorDao.read(id);
         if (doctor != null) {
@@ -39,6 +48,7 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
 
     @Override
     public List<Doctor> findBySpecializationType(String specialization) throws PersistentException {
+        transaction.setAutoCommit();
         DoctorDao doctorDao = transaction.createDoctorDao();
         List<Doctor> doctors = doctorDao.readBySpecializationType(specialization);
         buildDoctor(doctors);
@@ -47,6 +57,7 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
 
     @Override
     public List<Doctor> findAll() throws PersistentException {
+        transaction.setAutoCommit();
         DoctorDao doctorDao = transaction.createDoctorDao();
         List<Doctor> doctors = doctorDao.read();
         buildDoctor(doctors);
@@ -55,13 +66,13 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
 
     @Override
     public void delete(Integer id) throws PersistentException {
+        //TODO
         DoctorDao doctorDao = transaction.createDoctorDao();
         doctorDao.delete(id);
     }
 
     private void buildDoctor(List<Doctor> doctors) throws PersistentException {
         UserDao userDao = transaction.createUserDao();
-
         for (Doctor doctor : doctors) {
             if (doctor.getId() != null) {
                 User user = userDao.read(doctor.getId());

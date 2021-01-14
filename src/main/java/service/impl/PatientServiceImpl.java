@@ -16,26 +16,35 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
 
     @Override
     public void save(Patient patient) throws PersistentException {
+        transaction.setWithoutAutoCommit();
         UserDao userDao = transaction.createUserDao();
         PatientDao patientDao = transaction.createPatientDao();
 
-        if (patient.getId() == null) {
-            User user = userDao.read(patient.getLogin(), PasswordEncryption.encrypt(patient.getPassword()));
-            patient.setId(user.getId());
-            patientDao.create(patient);
-        } else {
-            patientDao.update(patient);
+        try {
+            if (patient.getId() == null) {
+                User user = userDao.read(patient.getLogin(), PasswordEncryption.encrypt(patient.getPassword()));
+                patient.setId(user.getId());
+                patientDao.create(patient);
+            } else {
+                patientDao.update(patient);
+            }
+            transaction.commit();
+        } catch (PersistentException e) {
+            transaction.rollback();
+            throw new PersistentException(e);
         }
     }
 
     @Override
     public void delete(Integer id) throws PersistentException {
+        //TODO
         PatientDao patientDao = transaction.createPatientDao();
         patientDao.delete(id);
     }
 
     @Override
     public Patient findByEmail(String email) throws PersistentException {
+        transaction.setAutoCommit();
         PatientDao patientDao = transaction.createPatientDao();
         Patient patient = patientDao.readByEmail(email);
         if (patient != null) {
@@ -46,6 +55,7 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
 
     @Override
     public Patient findById(Integer id) throws PersistentException {
+        transaction.setAutoCommit();
         PatientDao patientDao = transaction.createPatientDao();
         Patient patient = patientDao.read(id);
         if (patient != null) {

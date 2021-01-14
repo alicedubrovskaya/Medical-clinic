@@ -71,4 +71,22 @@ public class TransactionImpl implements Transaction {
             throw new PersistentException(e);
         }
     }
+
+    @Override
+    public void setWithoutAutoCommit() {
+        try {
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    @Override
+    public void setAutoCommit() {
+        try {
+            connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+    }
 }

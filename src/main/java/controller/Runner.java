@@ -30,8 +30,8 @@ public class Runner {
 //            Calendar calendar = new GregorianCalendar(2020, 11 , 20);
 //            appointmentService.createAppointmentsForDoctors(calendar.getTime(), 30);
 
-            PatientService patientService = serviceFactory.getPatientService();
-            patientService.findById(1);
+//            PatientService patientService = serviceFactory.getPatientService();
+//            patientService.findById(1);
 
         } catch (PersistentException e) {
             e.printStackTrace();
