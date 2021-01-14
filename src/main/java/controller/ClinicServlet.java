@@ -54,15 +54,25 @@ public class ClinicServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html");
 
-        DoctorService doctorService = serviceFactory.getDoctorService();
-        try {
-            List<Doctor> doctors = doctorService.findAll();
-            request.setAttribute("doctors", doctors);
-
-            RequestDispatcher view = getServletContext().getRequestDispatcher("/WEB-INF/jsp/doctor/list.jsp");
-            view.forward(request, response);
-        } catch (PersistentException e) {
-            e.printStackTrace();
-        }
+        RequestDispatcher view = getServletContext().getRequestDispatcher("/WEB-INF/jsp/doctor/edit.jsp");
+        view.forward(request, response);
     }
+
+//    @Override
+// Doctors list
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        response.setCharacterEncoding("UTF-8");
+//        response.setContentType("text/html");
+//
+//        DoctorService doctorService = serviceFactory.getDoctorService();
+//        try {
+//            List<Doctor> doctors = doctorService.findAll();
+//            request.setAttribute("doctors", doctors);
+//
+//            RequestDispatcher view = getServletContext().getRequestDispatcher("/WEB-INF/jsp/doctor/list.jsp");
+//            view.forward(request, response);
+//        } catch (PersistentException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
