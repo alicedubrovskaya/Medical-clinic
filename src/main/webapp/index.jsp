@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: alice
@@ -11,9 +12,6 @@
     <title>Начальная страница</title>
 </head>
 <body>
-<form action="clinic" method="post">
-    <button type="submit">Получить список</button>
-</form>
-
+<jsp:forward page="WEB-INF/jsp/doctor/edit.jsp"/>
 </body>
 </html>

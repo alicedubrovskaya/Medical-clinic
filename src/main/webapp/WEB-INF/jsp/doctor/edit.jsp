@@ -25,7 +25,7 @@
     <title>"${title}"</title>
 </head>
 <body>
-<form action="clinic" method="post">
+<form action="/doctor/save.html" method="post">
     <label for="surname">Фамилия:</label>
     <input type="text" id="surname" name="surname" value="${surname}">
 
@@ -35,11 +35,20 @@
     <label for="specialization">Специализация:</label>
     <input type="text" id="specialization" name="specialization" value="${specialization}">
 
-    <label for="workingShift">Специализация:</label>
-    <input type="text" id="workingShift" name="working_shift" value="${workingShift}">
+    <label for="workingShift">Рабочая смена:</label>
+    <input type="text" id="workingShift" name="workingShift" value="${workingShift}">
 
     <button type="submit">Сохранить</button>
+    <c:if test="${not empty doctor}">
+        <button type="button" onclick="submitFormById('form-delete')" >Удалить</button>
+    </c:if>
+    <button type="reset">Сбросить</button>
 </form>
 
+<c:if test="${not empty doctor}">
+    <form action="clinic" method="post" id="form-delete" onsubmit="return confirmation(this, 'Вы уверены, что хотите удалить врача?')">
+        <input type="hidden" name="id" value="${method.id}">
+    </form>
+</c:if>
 </body>
 </html>
