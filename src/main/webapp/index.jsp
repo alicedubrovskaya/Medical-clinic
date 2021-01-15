@@ -13,5 +13,6 @@
 </head>
 <body>
 <jsp:forward page="WEB-INF/jsp/main.jsp"/>
+<%--<jsp:forward page="WEB-INF/jsp/doctor/edit.jsp"/>--%>
 </body>
 </html>

@@ -7,6 +7,15 @@
         <welcome-file>controller</welcome-file>
     </welcome-file-list>
 
+    <servlet>
+        <servlet-name>DispatcherServlet</servlet-name>
+        <servlet-class>controller.DispatcherServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DispatcherServlet</servlet-name>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
+
     <filter>
         <filter-name>EncodingFilter</filter-name>
         <filter-class>controller.EncodingFilter</filter-class>

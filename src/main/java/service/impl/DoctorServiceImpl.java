@@ -23,9 +23,9 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
             if (doctor.getId() == null) {
                 User user = userDao.read(doctor.getLogin(), PasswordEncryption.encrypt(doctor.getPassword()));
                 doctor.setId(user.getId());
-                doctorDao.create(doctor);
+            //    doctorDao.create(doctor);
             } else {
-                doctorDao.update(doctor);
+            //    doctorDao.update(doctor);
             }
             transaction.commit();
         } catch (PersistentException e) {
@@ -67,6 +67,7 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
     @Override
     public void delete(Integer id) throws PersistentException {
         //TODO
+        transaction.setAutoCommit();
         DoctorDao doctorDao = transaction.createDoctorDao();
         doctorDao.delete(id);
     }

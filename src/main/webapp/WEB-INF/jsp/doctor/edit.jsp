@@ -23,32 +23,40 @@
 <html>
 <head>
     <title>"${title}"</title>
+    <script type="text/javascript" src="/js/test.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/validator.js"></script>
+    <script type="text/javascript" src="/js/validator-of-edit-doctor-form.js"></script>
+
 </head>
 <body>
-<form action="/doctor/save.html" method="post">
-    <label for="surname">Фамилия:</label>
-    <input type="text" id="surname" name="surname" value="${surname}">
 
-    <label for="name">Имя:</label>
-    <input type="text" id="name" name="name" value="${name}">
+    <H2>${title}</H2>
+    <form action="/doctor/save.html" method="post" onsubmit="return validateEditDoctor(this)">
+        <c:if test="${not empty doctor}">
+            <input type="hidden" name="id" value="${doctor.id}">
+        </c:if>
+        <label for="surname">Фамилия:</label>
+        <input type="text" id="surname" name="surname" value="${surname}">
 
-    <label for="specialization">Специализация:</label>
-    <input type="text" id="specialization" name="specialization" value="${specialization}">
+        <label for="name">Имя:</label>
+        <input type="text" id="name" name="name" value="${name}">
 
-    <label for="workingShift">Рабочая смена:</label>
-    <input type="text" id="workingShift" name="workingShift" value="${workingShift}">
+        <label for="specialization">Специализация:</label>
+        <input type="text" id="specialization" name="specialization" value="${specialization}">
 
-    <button type="submit">Сохранить</button>
-    <c:if test="${not empty doctor}">
-        <button type="button" onclick="submitFormById('form-delete')" >Удалить</button>
-    </c:if>
-    <button type="reset">Сбросить</button>
-</form>
+        <label for="workingShift">Рабочая смена:</label>
+        <input type="text" id="workingShift" name="workingShift" value="${workingShift}">
 
-<c:if test="${not empty doctor}">
-    <form action="clinic" method="post" id="form-delete" onsubmit="return confirmation(this, 'Вы уверены, что хотите удалить врача?')">
-        <input type="hidden" name="id" value="${method.id}">
+        <button type="submit">Сохранить</button>
+        <button type="reset">Сбросить</button>
     </form>
-</c:if>
+
+    <c:if test="${not empty doctor}">
+        <form action="/doctor/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">
+            <input type="hidden" name="id" value="${doctor.id}">
+            <input type="submit" value="Удалить">
+        </form>
+    </c:if>
 </body>
 </html>

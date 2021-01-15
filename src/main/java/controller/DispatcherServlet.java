@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "DispatcherServlet", urlPatterns = {"/"})
+//@WebServlet(name = "DispatcherServlet", urlPatterns = {"/"})
 public class DispatcherServlet extends HttpServlet {
     public static final String DB_DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
     public static final String DB_URL = "jdbc:mysql://localhost:3306/clinic_db?serverTimezone=Europe/Minsk";

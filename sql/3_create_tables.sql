@@ -44,7 +44,7 @@ CREATE TABLE `doctor`
     `working_shift`     TINYINT CHECK (`working_shift` IN (0, 1)),
 
     FOREIGN KEY (`specialization_id`) REFERENCES `specialization` (id),
-    FOREIGN KEY (`id`) REFERENCES `user` (id),
+    FOREIGN KEY (`id`) REFERENCES `user` (id) ON DELETE CASCADE,
     PRIMARY KEY (`id`)
 );
 
@@ -53,7 +53,7 @@ CREATE TABLE `vacation`
     `doctor_id` INTEGER NOT NULL,
     `start`     DATE    NOT NULL,
     `end`       DATE    NOT NULL,
-    FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`),
+    FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE ,
     PRIMARY KEY (`doctor_id`)
 );
 
@@ -80,7 +80,7 @@ CREATE TABLE `appointment`
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`patient_id`) REFERENCES `patient` (id),
-    FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (id)
+    FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (id) ON DELETE CASCADE
 );
 
 CREATE TABLE `patient_disease`
@@ -90,7 +90,7 @@ CREATE TABLE `patient_disease`
     `appointment_id` INTEGER,
     FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`),
     FOREIGN KEY (`disease_id`) REFERENCES `disease` (`id`),
-    FOREIGN KEY (`appointment_id`) REFERENCES `appointment` (`id`),
+    FOREIGN KEY (`appointment_id`) REFERENCES `appointment` (`id`) ON DELETE CASCADE,
     PRIMARY KEY (`patient_id`, `disease_id`)
 );
 

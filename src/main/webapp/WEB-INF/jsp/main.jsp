@@ -16,9 +16,12 @@
     <button type="submit">Получить список врачей</button>
 </form>
 
-<%--<form action="WEB-INF/jsp/doctor/edit.jsp" method="post">--%>
-<%--    <button type="submit">Врач</button>--%>
-<%--</form>--%>
+<%--reader.id--%>
+<form id="form-3" action="/doctor/edit.html" method="post">
+    <input type="hidden" name="id" value="3">
+    <button type="submit">Редактирование врача</button>
+</form>
+
 
 </body>
 </html>

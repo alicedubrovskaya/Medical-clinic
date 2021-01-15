@@ -6,13 +6,15 @@
   Time: 13:58
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
     <title>Врачи</title>
+    <script type="text/javascript" src="/js/test.js"></script>
 </head>
 <body>
 <h2>Список врачей</h2>
+
 <table border="1">
     <tr>
         <th>Фамилия</th>
