@@ -2,6 +2,7 @@ package controller;
 
 import controller.action.Action;
 import controller.action.admin.AdministratorAction;
+import controller.action.admin.DoctorListAction;
 import controller.action.admin.DoctorSaveAction;
 import exception.PersistentException;
 
@@ -18,6 +19,7 @@ public class ActionFromUriFilter implements Filter {
 
     static {
         actions.put("/doctor/save", DoctorSaveAction.class);
+        actions.put("/doctor/list", DoctorListAction.class);
     }
 
     @Override

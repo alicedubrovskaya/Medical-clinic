@@ -1,6 +1,5 @@
 package controller.action.admin;
 
-import controller.action.Action;
 import domain.Doctor;
 import exception.IncorrectFormDataException;
 import exception.PersistentException;

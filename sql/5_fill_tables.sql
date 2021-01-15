@@ -5,8 +5,8 @@ VALUES (1, 'alisa', 'dubrovskaya', 'alicedubrovskaya@gmail.com', '123', 'Pr-t'),
 
 INSERT INTO `doctor`
     (`id`, `name`, `surname`, `specialization_id`, `working_shift`)
-VALUES (3, 'dasha', 'denis', 1, 0),
-       (4, 'victoria', 'monet', 1, 1);
+VALUES (3, 'Алиса', 'Дубровская', 1, 0),
+       (4, 'Виктория', 'Монетина', 1, 1);
 
 INSERT INTO `appointment`
     (`time`, `status`, `patient_id`, `doctor_id`)
