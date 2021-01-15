@@ -15,6 +15,11 @@
 <body>
 <h2>Список врачей</h2>
 
+<%--<form action="/doctor/find.html" method="post">--%>
+<%--    <p><input type=search placeholder="Введите информацию для поиска">--%>
+<%--        <input type="submit" value="Искать"></p>--%>
+<%--</form>--%>
+
 <table border="1">
     <tr>
         <th>Фамилия</th>
@@ -29,8 +34,19 @@
             <td>${doctor.name}</td>
             <td>${doctor.specialization}</td>
             <td>${doctor.workingShift.name}</td>
+            <td>
+                <form id="form" action="/doctor/edit.html" method="post">
+                    <input type="hidden" name="id" value="${doctor.id}">
+                    <button type="submit">редактировать</button>
+                </form>
+            </td>
         </tr>
     </c:forEach>
 </table>
+
+<form action="/doctor/edit.html" >
+    <button type="submit">Добавить врача</button>
+</form>
+
 </body>
 </html>
