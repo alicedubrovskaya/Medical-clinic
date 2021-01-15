@@ -19,6 +19,7 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
         UserDao userDao = transaction.createUserDao();
         DoctorDao doctorDao = transaction.createDoctorDao();
 
+        //TODO
         try {
             if (doctor.getId() == null) {
                 User user = userDao.read(doctor.getLogin(), PasswordEncryption.encrypt(doctor.getPassword()));
