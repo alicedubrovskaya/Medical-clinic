@@ -26,7 +26,8 @@ public class ActionFromUriFilter implements Filter {
         actions.put("/user/list", UserListAction.class);
         actions.put("/user/delete", UserDeleteAction.class);
 
-
+        actions.put("/vacation/save", VacationSaveAction.class);
+        actions.put("/vacation/edit", VacationEditAction.class);
     }
 
     @Override

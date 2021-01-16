@@ -5,6 +5,7 @@ import java.sql.Date;
 public class Vacation extends Entity {
     private Date start;
     private Date end;
+    private Doctor doctor;
 
     public Date getStart() {
         return start;
@@ -12,6 +13,14 @@ public class Vacation extends Entity {
 
     public Date getEnd() {
         return end;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 
     public void setStart(Date start) {

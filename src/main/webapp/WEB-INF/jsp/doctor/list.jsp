@@ -6,7 +6,7 @@
   Time: 13:58
   To change this template use File | Settings | File Templates.
 --%>
-<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <html>
 <head>
     <title>Врачи</title>
@@ -29,22 +29,23 @@
         <th>Смена рабочая</th>
     </tr>
 
+    <c:url value="/doctor/edit.html" var="doctorEditUrl"/>
     <c:forEach var="doctor" items="${doctors}" varStatus="status">
         <tr onclick="submitFormById('form-${doctor.id}')">
-            <td>${doctor.surname}</td>
-            <td>${doctor.name}</td>
-            <td>${doctor.specialization}</td>
-            <td>${doctor.workingShift.name}</td>
             <td>
-                <form id="form" action="/doctor/edit.html" method="post">
+                    ${doctor.surname}
+                <form id="form-${doctor.id}" action="${doctorEditUrl}" method="post">
                     <input type="hidden" name="id" value="${doctor.id}">
                 </form>
             </td>
+            <td>${doctor.name}</td>
+            <td>${doctor.specialization}</td>
+            <td>${doctor.workingShift.name}</td>
         </tr>
     </c:forEach>
 </table>
 
-<form action="/doctor/edit.html" >
+<form action="/doctor/edit.html">
     <button type="submit">Добавить врача</button>
 </form>
 
