@@ -39,6 +39,15 @@ public class VacationServiceImpl extends ServiceImpl implements VacationService 
     }
 
     @Override
+    public List<Vacation> findAll() throws PersistentException {
+        transaction.setAutoCommit();
+        VacationDao vacationDao = transaction.createVacationDao();
+        List<Vacation> vacations = vacationDao.read();
+        buildVacation(vacations);
+        return vacations;
+    }
+
+    @Override
     public Vacation findById(Integer id) throws PersistentException {
         transaction.setAutoCommit();
         VacationDao vacationDao = transaction.createVacationDao();

@@ -39,5 +39,9 @@
 <form action="/user/list.html" method="get">
     <button type="submit">Список пользователей</button>
 </form>
+
+<form action="/vacation/list.html" method="get">
+    <button type="submit">Список отпусков </button>
+</form>
 </body>
 </html>

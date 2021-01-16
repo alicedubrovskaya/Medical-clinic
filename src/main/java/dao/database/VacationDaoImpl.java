@@ -17,6 +17,9 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
 
     private static final String READ_VACATION = "SELECT `start`, `end` FROM vacation WHERE `doctor_id`=?";
 
+    private static final String READ_VACATIONS = "SELECT `doctor_id`, `start`, `end` FROM vacation";
+
+
     private static final String READ_VACATION_BY_TIME = "SELECT * FROM vacation WHERE ? BETWEEN `start` and `end`";
 
     private static final String READ_VACATION_FOR_ALL = "SELECT * FROM holiday WHERE `day` = ? ";
@@ -111,6 +114,37 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
         } catch (SQLException e) {
             throw new PersistentException(e);
         } finally {
+            try {
+                statement.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+        }
+    }
+
+    @Override
+    public List<Vacation> read() throws PersistentException {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            List<Vacation> vacations = new ArrayList<>();
+            statement = connection.prepareStatement(READ_VACATIONS);
+            resultSet = statement.executeQuery();
+            Vacation vacation = null;
+            while (resultSet.next()) {
+                vacation = new Vacation();
+                vacation.setId(resultSet.getInt("doctor_id"));
+                vacation.setStart(resultSet.getDate("start"));
+                vacation.setEnd(resultSet.getDate("end"));
+                vacations.add(vacation);
+            }
+            return vacations;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException | NullPointerException e) {
+            }
             try {
                 statement.close();
             } catch (SQLException | NullPointerException e) {

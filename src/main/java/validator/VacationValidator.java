@@ -23,7 +23,6 @@ public class VacationValidator implements Validator<Vacation> {
         }
 
         parameter = request.getParameter("vacation-start");
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-M-dd");
         if (parameter != null) {
             try {
                 vacation.setStart(java.sql.Date.valueOf(parameter));

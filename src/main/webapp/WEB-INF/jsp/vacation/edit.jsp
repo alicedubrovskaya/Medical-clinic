@@ -49,5 +49,13 @@
     <button type="reset">Сбросить</button>
 </form>
 
+
+
+<c:if test="${not empty vacation}">
+    <form action="/vacation/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">
+        <input type="hidden" name="id" value="${id}">
+        <input type="submit" value="Удалить">
+    </form>
+</c:if>
 </body>
 </html>
