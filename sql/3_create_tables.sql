@@ -17,7 +17,7 @@ CREATE TABLE `patient`
     `email`        VARCHAR(255) UNIQUE NOT NULL,
     `phone_number` VARCHAR(255)        NOT NULL,
     `address`      VARCHAR(255),
-    FOREIGN KEY (`id`) REFERENCES `user` (`id`),
+    FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ,
     PRIMARY KEY (`id`)
 );
 
@@ -79,7 +79,7 @@ CREATE TABLE `appointment`
     `doctor_id`      INTEGER NOT NULL,
 
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`patient_id`) REFERENCES `patient` (id),
+    FOREIGN KEY (`patient_id`) REFERENCES `patient` (id) ON DELETE CASCADE ,
     FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (id) ON DELETE CASCADE
 );
 

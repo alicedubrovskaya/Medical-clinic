@@ -24,6 +24,8 @@ public class ActionFromUriFilter implements Filter {
         actions.put("/user/save", UserSaveAction.class);
         actions.put("/user/edit", UserEditAction.class);
         actions.put("/user/list", UserListAction.class);
+        actions.put("/user/delete", UserDeleteAction.class);
+
 
     }
 

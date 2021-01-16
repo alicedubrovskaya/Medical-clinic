@@ -31,7 +31,7 @@
 
 <H2>${title}</H2>
 
-<form action="/doctor/save.html" method="post" onsubmit="return validateEditUser(this)">
+<form action="/user/save.html" method="post" onsubmit="return validateEditUser(this)">
     <c:if test="${not empty user}">
         <input type="hidden" name="id" value="${user.id}">
     </c:if>
