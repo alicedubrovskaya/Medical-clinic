@@ -11,6 +11,7 @@
 <head>
     <title>Врачи</title>
     <script type="text/javascript" src="/js/test.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
 </head>
 <body>
 <h2>Список врачей</h2>
@@ -29,7 +30,7 @@
     </tr>
 
     <c:forEach var="doctor" items="${doctors}" varStatus="status">
-        <tr>
+        <tr onclick="submitFormById('form-${doctor.id}')">
             <td>${doctor.surname}</td>
             <td>${doctor.name}</td>
             <td>${doctor.specialization}</td>
@@ -37,7 +38,6 @@
             <td>
                 <form id="form" action="/doctor/edit.html" method="post">
                     <input type="hidden" name="id" value="${doctor.id}">
-                    <button type="submit">редактировать</button>
                 </form>
             </td>
         </tr>

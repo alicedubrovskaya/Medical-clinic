@@ -36,5 +36,8 @@
     <button type="submit">Редактирование пользователя</button>
 </form>
 
+<form action="/user/list.html" method="get">
+    <button type="submit">Список пользователей</button>
+</form>
 </body>
 </html>

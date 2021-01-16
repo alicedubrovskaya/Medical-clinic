@@ -1,10 +1,14 @@
 package service.impl;
 
+import dao.DoctorDao;
 import dao.UserDao;
+import domain.Doctor;
 import domain.User;
 import exception.PersistentException;
 import service.PasswordEncryption;
 import service.UserService;
+
+import java.util.List;
 
 public class UserServiceImpl extends ServiceImpl implements UserService {
 
@@ -44,5 +48,12 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
         transaction.setAutoCommit();
         UserDao userDao = transaction.createUserDao();
         return userDao.read(id);
+    }
+
+    @Override
+    public List<User> findAll() throws PersistentException {
+        transaction.setAutoCommit();
+        UserDao userDao = transaction.createUserDao();
+        return userDao.read();
     }
 }
