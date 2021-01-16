@@ -45,5 +45,4 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
         UserDao userDao = transaction.createUserDao();
         return userDao.read(id);
     }
-
 }

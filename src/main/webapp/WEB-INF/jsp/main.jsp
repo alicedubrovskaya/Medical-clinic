@@ -31,5 +31,10 @@
     <button type="submit">Действия с пользователем</button>
 </form>
 
+<form id="form-3" action="/user/edit.html" method="post">
+    <input type="hidden" name="id" value="1">
+    <button type="submit">Редактирование пользователя</button>
+</form>
+
 </body>
 </html>

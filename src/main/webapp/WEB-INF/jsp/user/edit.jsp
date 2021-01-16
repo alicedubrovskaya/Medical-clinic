@@ -10,8 +10,8 @@
 <c:choose>
     <c:when test="${not empty user}">
         <c:set var="login" value="${user.login}"/>
-        <c:set var="password" value="${user.password}"/>
-        <c:set var="role" value="${user.role.name}"/>
+        <c:set var="password" value="скрыт"/>
+        <c:set var="roleId" value="${user.role.id}"/>
         <c:set var="title" value="${user.role.name}"/>
     </c:when>
     <c:otherwise>
@@ -24,15 +24,14 @@
     <script type="text/javascript" src="/js/test.js"></script>
     <script type="text/javascript" src="/js/main.js"></script>
     <script type="text/javascript" src="/js/validator.js"></script>
-    <%--    <script type="text/javascript" src="/js/validator-of-edit-user-form.js"></script>--%>
+        <script type="text/javascript" src="/js/validator-of-edit-user-form.js"></script>
 
 </head>
 <body>
 
 <H2>${title}</H2>
-<%--<form action="/doctor/save.html" method="post" onsubmit="return validateEditDoctor(this)">--%>
 
-<form action="/user/save.html" method="post">
+<form action="/doctor/save.html" method="post" onsubmit="return validateEditUser(this)">
     <c:if test="${not empty user}">
         <input type="hidden" name="id" value="${user.id}">
     </c:if>
@@ -45,7 +44,11 @@
     <label for="role">Роль:</label>
     <select id="role" name="role">
         <c:forEach items="${roles}" var="role">
-            <option value="${role.id}">${role.name}</option>
+            <c:remove var="selected"/>
+            <c:if test="${not empty roleId and roleId eq role.id}">
+                <c:set var="selected" value="selected"/>
+            </c:if>
+            <option value="${role.id}" ${selected}>${role.name}</option>
         </c:forEach>
     </select>
 
