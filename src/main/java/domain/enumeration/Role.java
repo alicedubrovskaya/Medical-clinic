@@ -1,9 +1,9 @@
 package domain.enumeration;
 
 public enum Role {
-    ADMINISTRATOR("администратор"),
-    DOCTOR("врач"),
-    PATIENT("пациент");
+    ADMINISTRATOR("Администратор"),
+    DOCTOR("Врач"),
+    PATIENT("Пациент");
 
     private String name;
 
@@ -21,5 +21,14 @@ public enum Role {
 
     public static Role getById(Integer id) {
         return Role.values()[id];
+    }
+
+    public static Role getEnum(String type) {
+        for (Role info : values()) {
+            if (info.getName().equals(type)) {
+                return info;
+            }
+        }
+        throw new IllegalArgumentException("No enum found with type: [" + type + "]");
     }
 }

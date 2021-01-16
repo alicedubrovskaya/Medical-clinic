@@ -20,6 +20,9 @@ public class ActionFromUriFilter implements Filter {
         actions.put("/doctor/list", DoctorListAction.class);
         actions.put("/doctor/edit", DoctorEditAction.class);
         actions.put("/doctor/delete", DoctorDeleteAction.class);
+
+        actions.put("/user/save", UserSaveAction.class);
+        actions.put("/user/edit", UserEditAction.class);
     }
 
     @Override

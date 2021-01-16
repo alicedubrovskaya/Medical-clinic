@@ -26,5 +26,10 @@
     <button type="submit">Добавить врача</button>
 </form>
 
+
+<form action="/user/edit.html" >
+    <button type="submit">Действия с пользователем</button>
+</form>
+
 </body>
 </html>

@@ -4,7 +4,7 @@ CREATE TABLE `user`
 (
     `id`       INTEGER      NOT NULL AUTO_INCREMENT,
     `login`    VARCHAR(255) NOT NULL UNIQUE,
-    `password` CHAR(32)     NOT NULL,
+    `password` CHAR(60)     NOT NULL,
     `role`     TINYINT CHECK (`role` IN (0, 1, 2)),
     PRIMARY KEY (`id`)
 );
