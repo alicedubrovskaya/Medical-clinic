@@ -1,6 +1,6 @@
 package domain;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Vacation extends Entity {
     private Date start;

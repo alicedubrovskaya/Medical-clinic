@@ -11,6 +11,8 @@ import java.util.List;
 public interface AppointmentDao extends Dao<Appointment> {
     List<Appointment> createAppointments(Date date, Doctor doctor) throws PersistentException;
 
+    List<Appointment> readAll() throws PersistentException;
+
     List<Appointment> readByTime(Date date) throws PersistentException;
 
     Appointment readByTimeAndDoctor(Date date, Doctor doctor) throws PersistentException;

@@ -35,6 +35,15 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
     }
 
     @Override
+    public List<Appointment> findAll() throws PersistentException {
+        transaction.setAutoCommit();
+        AppointmentDao appointmentDao = transaction.createAppointmentDao();
+        List<Appointment> appointments = appointmentDao.readAll();
+        buildAppointment(appointments);
+        return appointments;
+    }
+
+    @Override
     public Appointment findById(Integer id) throws PersistentException {
         transaction.setAutoCommit();
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
@@ -80,30 +89,24 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
 
     @Override
     public List<Appointment> createAppointments(Date date, Doctor doctor) throws PersistentException {
-        transaction.setWithoutAutoCommit();
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
         VacationDao vacationDao = transaction.createVacationDao();
         List<Appointment> appointments = new ArrayList<>();
 
-        try {
-            if (defineDayOfWeek(date) != 1 && defineDayOfWeek(date) != 7 && vacationDao.readBySpecifiedDate(date) == null) {
-                appointments = appointmentDao.createAppointments(date, doctor);
-                for (Appointment appointment : appointments) {
-                    saveGenerated(appointment);
-                }
+
+        if (defineDayOfWeek(date) != 1 && defineDayOfWeek(date) != 7 && vacationDao.readBySpecifiedDate(date) == null) {
+            appointments = appointmentDao.createAppointments(date, doctor);
+            for (Appointment appointment : appointments) {
+                saveGenerated(appointment);
             }
-            transaction.commit();
-            return appointments;
-        } catch (PersistentException e) {
-            transaction.rollback();
-            throw new PersistentException();
         }
+        return appointments;
     }
 
     @Override
     public void createAppointmentsForDoctors(Date date, int countOfDays) throws PersistentException {
         //TODO right transaction without autocommit for appointments creation
-        transaction.setWithoutAutoCommit();
+        transaction.setAutoCommit();
         long currentDate = date.getTime();
         long lastDate = date.getTime() + TimeUnit.DAYS.toMillis(countOfDays);
 

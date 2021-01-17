@@ -1,13 +1,9 @@
 package service.impl;
 
 import dao.DoctorDao;
-import dao.UserDao;
 import dao.VacationDao;
 import domain.Doctor;
-import domain.Patient;
-import domain.User;
 import domain.Vacation;
-import domain.enumeration.Role;
 import exception.PersistentException;
 import service.VacationService;
 

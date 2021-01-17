@@ -15,6 +15,8 @@ public interface AppointmentService extends Service {
 
     Appointment findById(Integer id) throws PersistentException;
 
+    List<Appointment> findAll() throws PersistentException;
+
     List<Appointment> findByTime(Date date) throws PersistentException;
 
     Appointment findByTimeAndDoctor(Date date, Doctor doctor) throws PersistentException;

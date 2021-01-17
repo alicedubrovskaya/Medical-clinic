@@ -28,5 +28,10 @@
     <button type="submit">Список пациентов</button>
 </form>
 
+
+<%--<form action="/appointment/generate.html" method="post" onsubmit="deleteConfirmation(this);return false;">--%>
+<form action="/appointment/generate.html" method="post">
+    <input type="submit" value="Сгенерировать расписание врачей">
+</form>
 </body>
 </html>

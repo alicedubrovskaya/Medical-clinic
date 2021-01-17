@@ -1,6 +1,8 @@
 package controller;
 
 import controller.action.Action;
+import controller.action.admin.AppointmentListAction;
+import controller.action.admin.GenerateAppointmentsAction;
 import controller.action.admin.doctor.DoctorDeleteAction;
 import controller.action.admin.doctor.DoctorEditAction;
 import controller.action.admin.doctor.DoctorListAction;
@@ -46,6 +48,9 @@ public class ActionFromUriFilter implements Filter {
         actions.put("/patient/save", PatientSaveAction.class);
         actions.put("/patient/list", PatientListAction.class);
         actions.put("/patient/edit", PatientEditAction.class);
+
+        actions.put("/appointment/list", AppointmentListAction.class);
+        actions.put("/appointment/generate", GenerateAppointmentsAction.class);
     }
 
     @Override
