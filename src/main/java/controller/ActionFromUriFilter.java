@@ -1,8 +1,9 @@
 package controller;
 
 import controller.action.Action;
-import controller.action.admin.AppointmentListAction;
-import controller.action.admin.GenerateAppointmentsAction;
+import controller.action.admin.appointment.AppointmentChoiceAction;
+import controller.action.admin.appointment.AppointmentListAction;
+import controller.action.admin.appointment.GenerateAppointmentsAction;
 import controller.action.admin.doctor.DoctorDeleteAction;
 import controller.action.admin.doctor.DoctorEditAction;
 import controller.action.admin.doctor.DoctorListAction;
@@ -51,6 +52,8 @@ public class ActionFromUriFilter implements Filter {
 
         actions.put("/appointment/list", AppointmentListAction.class);
         actions.put("/appointment/generate", GenerateAppointmentsAction.class);
+        actions.put("/appointment/choice", AppointmentChoiceAction.class);
+
     }
 
     @Override

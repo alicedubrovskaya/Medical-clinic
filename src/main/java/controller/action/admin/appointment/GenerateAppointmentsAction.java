@@ -1,6 +1,7 @@
-package controller.action.admin;
+package controller.action.admin.appointment;
 
 import controller.action.Action;
+import controller.action.admin.AdministratorAction;
 import exception.IncorrectFormDataException;
 import exception.PersistentException;
 import service.AppointmentService;
@@ -8,7 +9,6 @@ import validator.DateValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Calendar;
 import java.util.Date;
 
 public class GenerateAppointmentsAction extends AdministratorAction {

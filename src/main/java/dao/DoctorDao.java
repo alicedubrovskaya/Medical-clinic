@@ -12,4 +12,6 @@ public interface DoctorDao extends Dao<Doctor> {
     List<Doctor> readBySpecializationType(String specialization) throws PersistentException;
 
     List<Doctor> readWithoutVacation(Date date) throws PersistentException;
+
+    List<String> readSpecializations() throws PersistentException;
 }

@@ -35,8 +35,8 @@
     <label for="days">Количество дней:</label>
     <input type="text" id="days" name="days">
 
-    <label for="start">Начальная дата генерации:</label>
-    <input type="date" id="start" name="start" value="2021-01-01">
+    <label for="date">Начальная дата генерации:</label>
+    <input type="date" id="date" name="date" value="2021-01-01">
 
     <input type="submit" value="Сгенерировать расписание врачей">
 </form>

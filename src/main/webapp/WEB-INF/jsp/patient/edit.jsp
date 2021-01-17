@@ -53,5 +53,14 @@
     <button type="reset">Сбросить</button>
 </form>
 
+
+
+<c:if test="${not empty patient}">
+    <form action="/appointment/choice.html" method="post">
+        <input type="hidden" name="id" value="${patient.id}">
+        <input type="submit" value="Записаться к врачу">
+    </form>
+</c:if>
+
 </body>
 </html>

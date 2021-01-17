@@ -30,15 +30,22 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     private static final String READ_APPOINTMENT_BY_TIME = "SELECT `id`, `approved`, `status`, `complaints`," +
             " `medical_report`, `recommendation`, `patient_id`, `doctor_id` " +
             " FROM `appointment` WHERE `time`=?";
+
     private static final String READ_APPOINTMENT_BY_TIME_AND_DOCTOR = "SELECT `id`, `approved`, `status`, `complaints`," +
             " `medical_report`, `recommendation`, `patient_id` " +
             " FROM `appointment` WHERE `time`=? AND `doctor_id`=?";
+
+    private static final String READ_APPOINTMENTS_BY_TIME_AND_SPECIALIZATION = "SELECT appointment.id, `approved`, `status`," +
+            " `complaints`, `medical_report`, `recommendation`, `patient_id`, `doctor_id`, `time` FROM `appointment`" +
+            "JOIN doctor d on d.id = appointment.doctor_id WHERE d.specialization_id=? AND `time` BETWEEN ? and ?";
 
     private static final String READ_APPOINTMENT_BY_PATIENT_AND_DISEASE = "SELECT `time`, `complaints`, `medical_report`," +
             " `recommendation` FROM `appointment` JOIN patient_disease on appointment.id = patient_disease.appointment_id " +
             "WHERE patient_disease.patient_id = ? AND disease_id=?";
 
     private static final String READ_DISEASE_BY_NAME = "SELECT `id` FROM `disease` WHERE `name` =?";
+    private static final String READ_SPECIALIZATION_BY_NAME = "SELECT `id` FROM `specialization` WHERE `type` =?";
+
 
     private static final String UPDATE_APPOINTMENT = "UPDATE `appointment` SET `time` =?,`approved`=?," +
             " `status`=?, `complaints`=?, `medical_report`=?, `recommendation`=?, `patient_id`=?," +
@@ -360,6 +367,63 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             }
         }
     }
+
+    @Override
+    public List<Appointment> readByTimeAndSpecialization(Date date, String specialization) throws PersistentException {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(READ_SPECIALIZATION_BY_NAME);
+            statement.setString(1, specialization);
+            resultSet = statement.executeQuery();
+
+            Integer specializationId = null;
+            List<Appointment> appointments = new ArrayList<>();
+            if (resultSet.next()) {
+                specializationId = resultSet.getInt("id");
+
+                statement = connection.prepareStatement(READ_APPOINTMENTS_BY_TIME_AND_SPECIALIZATION);
+                statement.setInt(1, specializationId);
+                statement.setTimestamp(2, new Timestamp(date.getTime()));
+                statement.setTimestamp(3, new Timestamp(date.getTime() + TimeUnit.DAYS.toMillis(1)));
+                resultSet = statement.executeQuery();
+                Appointment appointment = null;
+                while (resultSet.next()) {
+                    appointment = new Appointment();
+                    appointment.setId(resultSet.getInt("id"));
+                    appointment.setTime(resultSet.getTimestamp("time"));
+                    appointment.setApproved(resultSet.getBoolean("approved"));
+                    appointment.setStatus(Status.getById(resultSet.getInt("status")));
+                    appointment.setComplaints(resultSet.getString("complaints"));
+                    appointment.setMedicalReport(resultSet.getString("medical_report"));
+                    appointment.setRecommendation(resultSet.getString("recommendation"));
+                    Integer patientId = resultSet.getInt("patient_id");
+                    Integer doctorId = resultSet.getInt("doctor_id");
+                    if (!resultSet.wasNull()) {
+                        Doctor doctor = new Doctor();
+                        doctor.setId(doctorId);
+                        appointment.setDoctor(doctor);
+                    }
+                    if (patientId == 0) {
+                        appointments.add(appointment);
+                    }
+                }
+            }
+            return appointments;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+            try {
+                statement.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+        }
+    }
+
 
     @Override
     public Appointment readByPatientAndDisease(Integer patientId, String diseaseName) throws PersistentException {

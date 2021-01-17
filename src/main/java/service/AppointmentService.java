@@ -21,6 +21,9 @@ public interface AppointmentService extends Service {
 
     Appointment findByTimeAndDoctor(Date date, Doctor doctor) throws PersistentException;
 
+    List<Appointment> findByTimeAndSpecialization(Date date, String specialization) throws PersistentException;
+
+
     Appointment findByPatientAndDisease(Integer patientId, String diseaseName) throws PersistentException;
 
     void delete(Integer id) throws PersistentException;

@@ -43,7 +43,7 @@
                     <td>${appointment.patient.surname} ${appointment.patient.name}</td>
                 </c:when>
                 <c:otherwise>
-                    <td>-</td>
+                    <td>Свободно</td>
                 </c:otherwise>
             </c:choose>
         </tr>

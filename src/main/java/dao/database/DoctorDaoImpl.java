@@ -38,6 +38,8 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
     private static final String READ_SPECIALIZATION_BY_ID = "SELECT `type` FROM `specialization` " +
             "WHERE `id`=?";
 
+    private static final String READ_SPECIALIZATIONS = "SELECT `type` FROM specialization";
+
     private static final String UPDATE_DOCTOR = "UPDATE `doctor` " +
             "SET `name`=?, `surname`=?, `specialization_id`=?, `working_shift`=? WHERE `id` = ?";
 
@@ -266,6 +268,33 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
         }
     }
 
+
+    @Override
+    public List<String> readSpecializations() throws PersistentException {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(READ_SPECIALIZATIONS);
+            resultSet = statement.executeQuery();
+            List<String> specializations = new ArrayList<>();
+            while (resultSet.next()) {
+                specializations.add(resultSet.getString("type"));
+            }
+            return specializations;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+            try {
+                statement.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+        }
+    }
+
     @Override
     public List<Doctor> readBySpecializationType(String specialization) throws PersistentException {
         PreparedStatement statement = null;
@@ -284,7 +313,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             resultSet = statement.executeQuery();
             List<Doctor> doctors = new ArrayList<>();
             Doctor doctor;
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 doctor = new Doctor();
                 doctor.setId(resultSet.getInt("id"));
                 doctor.setName(resultSet.getString("name"));
