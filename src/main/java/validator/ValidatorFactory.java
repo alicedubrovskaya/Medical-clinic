@@ -1,6 +1,7 @@
 package validator;
 
 import domain.Doctor;
+import domain.Patient;
 import domain.User;
 import domain.Vacation;
 
@@ -24,5 +25,9 @@ public class ValidatorFactory {
 
     public Validator<Vacation> createVacationValidator() {
         return new VacationValidator();
+    }
+
+    public Validator<Patient> createPatientValidator() {
+        return new PatientValidator();
     }
 }

@@ -10,6 +10,9 @@
 <html>
 <head>
     <title>Список пациентов</title>
+
+    <script type="text/javascript" src="/js/test.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
 </head>
 <body>
 
@@ -22,31 +25,28 @@
         <th>Адрес проживания</th>
     </tr>
 
+    <c:url value="/patient/edit.html" var="patientEditUrl"/>
     <c:forEach var="patient" items="${patients}" varStatus="status">
-    <tr>
-        <td>${patient.surname}</td>
-        <td>${patient.name}</td>
-        <td>${patient.email}</td>
-        <td>${patient.phoneNumber}</td>
-        <td>${patient.address}</td>
-    </tr>
+        <tr onclick="submitFormById('form-${patient.id}')">
+            <td>
+                    ${patient.surname}
+                <form id="form-${patient.id}" action="${patientEditUrl}" method="post">
+                    <input type="hidden" name="id" value="${patient.id}">
+                </form>
+            </td>
+            <td>${patient.name}</td>
+            <td>${patient.email}</td>
+            <td>${patient.phoneNumber}</td>
+            <td>${patient.address}</td>
+        </tr>
     </c:forEach>
 
-<%--    <c:url value="/doctor/edit.html" var="doctorEditUrl"/>--%>
-<%--    <c:forEach var="doctor" items="${doctors}" varStatus="status">--%>
-<%--        <tr onclick="submitFormById('form-${doctor.id}')">--%>
-<%--            <td>--%>
-<%--                    ${doctor.surname}--%>
-<%--                <form id="form-${doctor.id}" action="${doctorEditUrl}" method="post">--%>
-<%--                    <input type="hidden" name="id" value="${doctor.id}">--%>
-<%--                </form>--%>
-<%--            </td>--%>
-<%--            <td>${doctor.name}</td>--%>
-<%--            <td>${doctor.specialization}</td>--%>
-<%--            <td>${doctor.workingShift.name}</td>--%>
-<%--        </tr>--%>
-<%--    </c:forEach>--%>
 </table>
+
+
+<form action="/patient/edit.html">
+    <button type="submit">Добавить пациента</button>
+</form>
 
 </body>
 </html>

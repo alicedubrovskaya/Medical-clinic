@@ -82,6 +82,7 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
                 patient.setPhoneNumber(resultSet.getString("phone_number"));
                 patient.setAddress(resultSet.getString("address"));
 
+                //TODO
                 diseasesStatement = connection.prepareStatement(READ_DISEASES_BY_PATIENT);
                 diseasesStatement.setInt(1, patient.getId());
                 diseaseResultSet = diseasesStatement.executeQuery();
