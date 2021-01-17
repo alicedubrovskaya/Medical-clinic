@@ -1,6 +1,7 @@
-package controller.action.admin;
+package controller.action.admin.user;
 
 import controller.action.Action;
+import controller.action.admin.AdministratorAction;
 import domain.User;
 import exception.IncorrectFormDataException;
 import exception.PersistentException;

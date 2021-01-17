@@ -1,5 +1,6 @@
-package controller.action.admin;
+package controller.action.admin.doctor;
 
+import controller.action.admin.AdministratorAction;
 import exception.PersistentException;
 import service.DoctorService;
 

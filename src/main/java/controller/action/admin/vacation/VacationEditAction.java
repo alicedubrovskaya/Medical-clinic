@@ -1,14 +1,14 @@
-package controller.action.admin;
+package controller.action.admin.vacation;
 
-import domain.Doctor;
+import controller.action.admin.AdministratorAction;
+import domain.Vacation;
 import exception.PersistentException;
-import service.DoctorService;
+import service.VacationService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class DoctorEditAction extends AdministratorAction {
-
+public class VacationEditAction extends AdministratorAction {
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         try {
@@ -16,11 +16,12 @@ public class DoctorEditAction extends AdministratorAction {
             if (id == null) {
                 id = Integer.parseInt(request.getParameter("id"));
             }
-            DoctorService service = serviceFactory.getDoctorService();
-            Doctor doctor = service.findById(id);
-            if (doctor != null) {
-                request.setAttribute("doctor", doctor);
+            VacationService service = serviceFactory.getVacationService();
+            Vacation vacation = service.findById(id);
+            if (vacation != null) {
+                request.setAttribute("vacation", vacation);
             }
+            request.setAttribute("id", id);
         } catch (NumberFormatException e) {
         }
         return null;

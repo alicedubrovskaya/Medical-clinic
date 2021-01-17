@@ -1,27 +1,26 @@
-package controller.action.admin;
+package controller.action.admin.doctor;
 
-import domain.User;
-import domain.enumeration.Role;
+import controller.action.admin.AdministratorAction;
+import domain.Doctor;
 import exception.PersistentException;
-import service.UserService;
+import service.DoctorService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class UserEditAction extends AdministratorAction {
+public class DoctorEditAction extends AdministratorAction {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
-        request.setAttribute("roles", Role.values());
         try {
             Integer id = (Integer) request.getAttribute("id");
             if (id == null) {
                 id = Integer.parseInt(request.getParameter("id"));
             }
-            UserService service = serviceFactory.getUserService();
-            User user = service.findById(id);
-            if (user != null) {
-                request.setAttribute("user", user);
+            DoctorService service = serviceFactory.getDoctorService();
+            Doctor doctor = service.findById(id);
+            if (doctor != null) {
+                request.setAttribute("doctor", doctor);
             }
         } catch (NumberFormatException e) {
         }

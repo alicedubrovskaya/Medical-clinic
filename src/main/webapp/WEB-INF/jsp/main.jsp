@@ -13,27 +13,7 @@
 <body>
 
 <form action="/doctor/list.html" method="get">
-    <button type="submit">Получить список врачей</button>
-</form>
-
-<%--reader.id--%>
-<form id="form-3" action="/doctor/edit.html" method="post">
-    <input type="hidden" name="id" value="3">
-    <button type="submit">Редактирование врача</button>
-</form>
-
-<form action="/doctor/edit.html" >
-    <button type="submit">Добавить врача</button>
-</form>
-
-
-<form action="/user/edit.html" >
-    <button type="submit">Действия с пользователем</button>
-</form>
-
-<form id="form-3" action="/user/edit.html" method="post">
-    <input type="hidden" name="id" value="1">
-    <button type="submit">Редактирование пользователя</button>
+    <button type="submit">Список врачей</button>
 </form>
 
 <form action="/user/list.html" method="get">
@@ -43,5 +23,10 @@
 <form action="/vacation/list.html" method="get">
     <button type="submit">Список отпусков </button>
 </form>
+
+<form action="/patient/list.html" method="get">
+    <button type="submit">Список пациентов</button>
+</form>
+
 </body>
 </html>

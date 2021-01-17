@@ -1,7 +1,9 @@
 package service.impl;
 
+import dao.DoctorDao;
 import dao.PatientDao;
 import dao.UserDao;
+import domain.Doctor;
 import domain.Patient;
 import domain.User;
 import domain.enumeration.Role;
@@ -40,6 +42,15 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
         //TODO
         PatientDao patientDao = transaction.createPatientDao();
         patientDao.delete(id);
+    }
+
+    @Override
+    public List<Patient> findAll() throws PersistentException {
+        transaction.setAutoCommit();
+        PatientDao patientDao = transaction.createPatientDao();
+        List<Patient> patients = patientDao.read();
+        buildPatient(patients);
+        return patients;
     }
 
     @Override

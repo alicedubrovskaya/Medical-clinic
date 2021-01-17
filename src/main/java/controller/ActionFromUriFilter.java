@@ -1,12 +1,22 @@
 package controller;
 
 import controller.action.Action;
-import controller.action.admin.*;
-import exception.PersistentException;
+import controller.action.admin.doctor.DoctorDeleteAction;
+import controller.action.admin.doctor.DoctorEditAction;
+import controller.action.admin.doctor.DoctorListAction;
+import controller.action.admin.doctor.DoctorSaveAction;
+import controller.action.admin.patient.PatientListAction;
+import controller.action.admin.user.UserDeleteAction;
+import controller.action.admin.user.UserEditAction;
+import controller.action.admin.user.UserListAction;
+import controller.action.admin.user.UserSaveAction;
+import controller.action.admin.vacation.VacationDeleteAction;
+import controller.action.admin.vacation.VacationEditAction;
+import controller.action.admin.vacation.VacationListAction;
+import controller.action.admin.vacation.VacationSaveAction;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,6 +40,8 @@ public class ActionFromUriFilter implements Filter {
         actions.put("/vacation/list", VacationListAction.class);
         actions.put("/vacation/edit", VacationEditAction.class);
         actions.put("/vacation/delete", VacationDeleteAction.class);
+
+        actions.put("/patient/list", PatientListAction.class);
 
     }
 
