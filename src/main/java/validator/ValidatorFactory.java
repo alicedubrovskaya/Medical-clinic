@@ -1,9 +1,6 @@
 package validator;
 
-import domain.Doctor;
-import domain.Patient;
-import domain.User;
-import domain.Vacation;
+import domain.*;
 
 public class ValidatorFactory {
     private static final ValidatorFactory INSTANCE = new ValidatorFactory();
@@ -29,5 +26,9 @@ public class ValidatorFactory {
 
     public Validator<Patient> createPatientValidator() {
         return new PatientValidator();
+    }
+
+    public DateValidator createDateValidator(){
+        return new DateValidator();
     }
 }
