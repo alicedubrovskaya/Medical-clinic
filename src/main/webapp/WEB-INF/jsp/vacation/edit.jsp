@@ -22,13 +22,17 @@
 <html>
 <head>
     <title>Отпуска</title>
+
+    <script type="text/javascript" src="/js/test.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/validator.js"></script>
+    <script type="text/javascript" src="/js/validator-of-edit-vacation-form.js"></script>
 </head>
 <body>
 
 <H2>${title}</H2>
 
-<%--<form action="/vacation/save.html" method="post" onsubmit="return validateEditVacation(this)">--%>
-<form action="/vacation/save.html" method="post">
+<form action="/vacation/save.html" method="post" onsubmit="return validateEditVacation(this)">
     <c:if test="${not empty id}">
         <input type="hidden" name="id" value="${id}">
     </c:if>

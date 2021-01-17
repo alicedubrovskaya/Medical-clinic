@@ -39,6 +39,10 @@ function checkWorkingShift(value){
 	return workingShift.includes(value)
 }
 
+function checkDate(value){
+	return checkRegexp(value, "^\\d{4}-\\d{2}-\\d{2}$");
+}
+
 function errorMessage(element, message) {
 	show(message, function() {element.focus()});
 }
