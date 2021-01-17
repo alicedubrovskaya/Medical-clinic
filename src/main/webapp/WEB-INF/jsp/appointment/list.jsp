@@ -25,14 +25,14 @@
         <th>Пациент</th>
     </tr>
 
-    <c:url value="/appointment/edit.html" var="appointmentEditUrl"/>
+    <c:url value="/appointment/info.html" var="appointmentInfoUrl"/>
     <c:forEach var="appointment" items="${appointments}" varStatus="status">
         <tr onclick="submitFormById('form-${appointment.id}')">
             <td>
                 <c:remove var="dateFormat"/>
-                <fmt:formatDate value="${appointment.time}" var="dateFormat" pattern="yyyy-MM-dd hh:mm:ss"/>
+                <fmt:formatDate value="${appointment.time}" var="dateFormat" pattern="yyyy-MM-dd HH:mm:ss"/>
                     ${dateFormat}
-                <form id="form-${appointment.id}" action="${appointmentEditUrl}" method="post">
+                <form id="form-${appointment.id}" action="${appointmentInfoUrl}" method="post">
                     <input type="hidden" name="id" value="${appointment.id}">
                 </form>
             </td>

@@ -111,7 +111,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             if (resultSet.next()) {
                 appointment = new Appointment();
                 appointment.setId(id);
-                appointment.setTime(resultSet.getDate("time"));
+                appointment.setTime(resultSet.getTimestamp("time"));
                 appointment.setApproved(resultSet.getBoolean("approved"));
                 appointment.setStatus(Status.getById(resultSet.getInt("status")));
                 appointment.setComplaints(resultSet.getString("complaints"));
