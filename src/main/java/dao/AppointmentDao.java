@@ -15,6 +15,8 @@ public interface AppointmentDao extends Dao<Appointment> {
 
     List<Appointment> readByTime(Date date) throws PersistentException;
 
+    List<Appointment> readByPatient(Integer patientId) throws PersistentException;
+
     Appointment readByTimeAndDoctor(Date date, Doctor doctor) throws PersistentException;
 
     List<Appointment> readByTimeAndSpecialization(Date date, String specialization) throws PersistentException;

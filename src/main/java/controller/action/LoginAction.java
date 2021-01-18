@@ -28,7 +28,9 @@ public class LoginAction extends Action {
 
         menu.put(Role.PATIENT, new ArrayList<>(Arrays.asList(
                 new MenuItem("/appointment/choice.html", "Записаться к врачу"),
+                new MenuItem("/appointment/medicalCard.html", "История посещений врачей"),
                 new MenuItem("/patient/edit.html", "Мой профиль")
+
         )));
     }
 

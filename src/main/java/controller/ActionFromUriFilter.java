@@ -1,6 +1,7 @@
 package controller;
 
 import controller.action.Action;
+import controller.action.admin.patient.MedicalCardAction;
 import controller.action.authorized.AppointmentInfoAction;
 import controller.action.authorized.AppointmentListAction;
 import controller.action.LoginAction;
@@ -62,6 +63,7 @@ public class ActionFromUriFilter implements Filter {
         actions.put("/appointment/list", AppointmentListAction.class);
         actions.put("/appointment/generate", GenerateAppointmentsAction.class);
         actions.put("/appointment/choice", AppointmentChoiceAction.class);
+        actions.put("/appointment/medicalCard", MedicalCardAction.class);
 
     }
 
