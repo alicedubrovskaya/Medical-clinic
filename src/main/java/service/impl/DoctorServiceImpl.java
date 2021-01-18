@@ -22,7 +22,7 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
         //TODO
         try {
             if (doctor.getId() == null) {
-                User user = userDao.read(doctor.getLogin(), PasswordEncryption.encrypt(doctor.getPassword()));
+                User user = userDao.read(doctor.getLogin(), PasswordEncryption.md5(doctor.getPassword()));
                 doctor.setId(user.getId());
                 //    doctorDao.create(doctor);
             } else {

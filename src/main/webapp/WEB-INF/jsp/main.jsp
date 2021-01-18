@@ -40,5 +40,10 @@
 
     <input type="submit" value="Сгенерировать расписание врачей">
 </form>
+
+<form action="/login.html" method="post">
+    <button type="submit">Войти в систему</button>
+</form>
+
 </body>
 </html>

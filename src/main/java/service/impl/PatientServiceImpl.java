@@ -24,7 +24,7 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
 
         try {
             if (patient.getId() == null) {
-                User user = userDao.read(patient.getLogin(), PasswordEncryption.encrypt(patient.getPassword()));
+                User user = userDao.read(patient.getLogin(), PasswordEncryption.md5(patient.getPassword()));
                 patient.setId(user.getId());
                 patientDao.create(patient);
             } else {

@@ -14,7 +14,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Map;
 
 //@WebServlet(name = "DispatcherServlet", urlPatterns = {"/"})
 public class DispatcherServlet extends HttpServlet {
@@ -50,10 +52,25 @@ public class DispatcherServlet extends HttpServlet {
     private void process(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Action action = (Action) request.getAttribute("action");
         try {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> attributes = (Map<String, Object>) session.getAttribute("redirectedData");
+                if (attributes != null) {
+                    for (String key : attributes.keySet()) {
+                        request.setAttribute(key, attributes.get(key));
+                    }
+                    session.removeAttribute("redirectedData");
+                }
+            }
+
             ActionManager actionManager = ActionManagerFactory.getManager(getFactory());
             Action.Forward forward = actionManager.execute(action, request, response);
             actionManager.close();
 
+            if (session != null && forward != null && !forward.getAttributes().isEmpty()) {
+                session.setAttribute("redirectedData", forward.getAttributes());
+            }
             if (forward != null && forward.isRedirect()) {
                 String redirectedUri = request.getContextPath() + forward.getForward();
                 // Request for URI \"%s\" id redirected to URI \"%s\"", requestedUri, redirectedUri));

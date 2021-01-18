@@ -1,6 +1,7 @@
 package controller;
 
 import controller.action.Action;
+import controller.action.LoginAction;
 import controller.action.admin.appointment.*;
 import controller.action.admin.doctor.DoctorDeleteAction;
 import controller.action.admin.doctor.DoctorEditAction;
@@ -29,6 +30,8 @@ public class ActionFromUriFilter implements Filter {
     private static Map<String, Class<? extends Action>> actions = new ConcurrentHashMap<>();
 
     static {
+        actions.put("/login", LoginAction.class);
+
         actions.put("/doctor/save", DoctorSaveAction.class);
         actions.put("/doctor/list", DoctorListAction.class);
         actions.put("/doctor/edit", DoctorEditAction.class);

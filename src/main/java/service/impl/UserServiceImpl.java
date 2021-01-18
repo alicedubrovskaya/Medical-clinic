@@ -17,11 +17,11 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
         transaction.setAutoCommit();
         UserDao userDao = transaction.createUserDao();
         if (user.getId() == null) {
-            user.setPassword(PasswordEncryption.encrypt(user.getPassword()));
+            user.setPassword(PasswordEncryption.md5(user.getPassword()));
             user.setId(userDao.create(user));
         } else {
             if (user.getPassword() != null) {
-                user.setPassword(PasswordEncryption.encrypt(user.getPassword()));
+                user.setPassword(PasswordEncryption.md5(user.getPassword()));
             } else {
                 User existingUser = userDao.read(user.getId());
                 user.setPassword(existingUser.getPassword());
@@ -40,7 +40,7 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
     public User findByLoginAndPassword(String login, String password) throws PersistentException {
         transaction.setAutoCommit();
         UserDao userDao = transaction.createUserDao();
-        return userDao.read(login, PasswordEncryption.encrypt(password));
+        return userDao.read(login, PasswordEncryption.md5(password));
     }
 
     @Override

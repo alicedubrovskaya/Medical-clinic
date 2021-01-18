@@ -30,7 +30,16 @@
         <filter-class>controller.ActionFromUriFilter</filter-class>
     </filter>
     <filter-mapping>
-    <filter-name>ActionFromUriFilter</filter-name>
-    <url-pattern>*.html</url-pattern>
+        <filter-name>ActionFromUriFilter</filter-name>
+        <url-pattern>*.html</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>SecurityFilter</filter-name>
+        <filter-class>controller.SecurityFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SecurityFilter</filter-name>
+        <url-pattern>*.html</url-pattern>
     </filter-mapping>
 </web-app>
