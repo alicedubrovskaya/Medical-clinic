@@ -44,9 +44,9 @@
 </table>
 
 
-<form action="/patient/edit.html">
-    <button type="submit">Добавить пациента</button>
-</form>
+<%--<form action="/patient/edit.html">--%>
+<%--    <button type="submit">Добавить пациента</button>--%>
+<%--</form>--%>
 
 </body>
 </html>

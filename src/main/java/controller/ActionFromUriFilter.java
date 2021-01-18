@@ -1,13 +1,17 @@
 package controller;
 
 import controller.action.Action;
+import controller.action.authorized.AppointmentInfoAction;
+import controller.action.authorized.AppointmentListAction;
 import controller.action.LoginAction;
+import controller.action.authorized.MainAction;
 import controller.action.admin.appointment.*;
 import controller.action.admin.doctor.DoctorDeleteAction;
 import controller.action.admin.doctor.DoctorEditAction;
 import controller.action.admin.doctor.DoctorListAction;
 import controller.action.admin.doctor.DoctorSaveAction;
-import controller.action.admin.patient.PatientEditAction;
+import controller.action.authorized.AppointmentSaveAction;
+import controller.action.patient.PatientEditAction;
 import controller.action.admin.patient.PatientListAction;
 import controller.action.admin.patient.PatientSaveAction;
 import controller.action.admin.user.UserDeleteAction;
@@ -18,6 +22,7 @@ import controller.action.admin.vacation.VacationDeleteAction;
 import controller.action.admin.vacation.VacationEditAction;
 import controller.action.admin.vacation.VacationListAction;
 import controller.action.admin.vacation.VacationSaveAction;
+import controller.action.patient.AppointmentChoiceAction;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +35,7 @@ public class ActionFromUriFilter implements Filter {
     private static Map<String, Class<? extends Action>> actions = new ConcurrentHashMap<>();
 
     static {
+        actions.put("/main", MainAction.class);
         actions.put("/login", LoginAction.class);
 
         actions.put("/doctor/save", DoctorSaveAction.class);

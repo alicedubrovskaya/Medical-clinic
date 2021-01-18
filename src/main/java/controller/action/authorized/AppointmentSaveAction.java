@@ -1,20 +1,15 @@
-package controller.action.admin.appointment;
+package controller.action.authorized;
 
-import controller.action.admin.AdministratorAction;
 import domain.Appointment;
-import domain.Doctor;
 import domain.Patient;
-import exception.IncorrectFormDataException;
 import exception.PersistentException;
 import service.AppointmentService;
-import service.DoctorService;
 import service.PatientService;
-import validator.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AppointmentSaveAction extends AdministratorAction {
+public class AppointmentSaveAction extends AuthorizedUserAction {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
@@ -22,7 +17,13 @@ public class AppointmentSaveAction extends AdministratorAction {
 
         Integer patientId = (Integer) request.getAttribute("patientId");
         if (patientId == null) {
-            patientId = Integer.parseInt(request.getParameter("patientId"));
+            String parameter = request.getParameter("patientId");
+            if (parameter != null) {
+                patientId = Integer.parseInt(parameter);
+            }
+        }
+        if (patientId == null) {
+            patientId = getAuthorizedUser().getId();
         }
 
         Integer appointmentId = (Integer) request.getAttribute("appointmentId");
@@ -37,7 +38,7 @@ public class AppointmentSaveAction extends AdministratorAction {
         appointment.setPatient(patient);
 
         appointmentService.save(appointment);
-        forward.getAttributes().put("message", "Запись к врачу успешно выполнена");
+        forward.getAttributes().put("message", "Запись к врачу успешно сохранена");
 
         return forward;
     }

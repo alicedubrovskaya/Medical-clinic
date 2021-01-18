@@ -17,10 +17,9 @@ public class LoginAction extends Action {
 
     static {
         menu.put(Role.ADMINISTRATOR, new ArrayList<>(Arrays.asList(
-                new MenuItem("/doctor/list.html", "врачи"),
-                new MenuItem("/patient/list.html", "пациенты"),
-                new MenuItem("/appointment/list.html", "приемы")
-
+                new MenuItem("/doctor/list.html", "Врачи"),
+                new MenuItem("/patient/list.html", "Пациенты"),
+                new MenuItem("/appointment/generate.html", "Управление расписанием приемов врачей")
         )));
         menu.put(Role.DOCTOR, new ArrayList<>(Arrays.asList(
                 new MenuItem("/appointment/list.html", "приемы"),
@@ -28,7 +27,8 @@ public class LoginAction extends Action {
         )));
 
         menu.put(Role.PATIENT, new ArrayList<>(Arrays.asList(
-                new MenuItem("/appointment/choice", "запись")
+                new MenuItem("/appointment/choice.html", "Записаться к врачу"),
+                new MenuItem("/patient/edit.html", "Мой профиль")
         )));
     }
 

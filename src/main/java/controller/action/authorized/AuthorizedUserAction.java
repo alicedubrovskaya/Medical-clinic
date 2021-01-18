@@ -1,5 +1,6 @@
-package controller.action;
+package controller.action.authorized;
 
+import controller.action.Action;
 import domain.enumeration.Role;
 
 import java.util.Arrays;

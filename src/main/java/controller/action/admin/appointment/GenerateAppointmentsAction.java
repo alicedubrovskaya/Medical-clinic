@@ -15,10 +15,8 @@ public class GenerateAppointmentsAction extends AdministratorAction {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
-        Action.Forward forward = new Action.Forward("/appointment/list.html");
+        Action.Forward forward;
         AppointmentService service = serviceFactory.getAppointmentService();
-
-
         DateValidator validator = validatorFactory.createDateValidator();
         Date calendar = null;
         int countOfDays = 0;
@@ -29,8 +27,13 @@ public class GenerateAppointmentsAction extends AdministratorAction {
             e.printStackTrace();
         }
 
-        service.createAppointmentsForDoctors(calendar, countOfDays);
-        forward.getAttributes().put("message", "Расписание врачей успешно сгенерировано");
+        if (calendar != null && countOfDays != 0) {
+            forward = new Action.Forward("/appointment/list.html");
+            service.createAppointmentsForDoctors(calendar, countOfDays);
+            forward.getAttributes().put("message", "Расписание врачей успешно сгенерировано");
+        } else {
+            return null;
+        }
         return forward;
     }
 }

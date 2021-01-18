@@ -1,16 +1,14 @@
-package controller.action.admin.appointment;
+package controller.action.authorized;
 
 import controller.action.admin.AdministratorAction;
 import domain.Appointment;
-import domain.Doctor;
 import exception.PersistentException;
 import service.AppointmentService;
-import service.DoctorService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AppointmentInfoAction extends AdministratorAction {
+public class AppointmentInfoAction extends AuthorizedUserAction {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {

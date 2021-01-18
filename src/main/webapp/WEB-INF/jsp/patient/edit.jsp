@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib tagdir="/WEB-INF/tags" prefix="u"%>
 <%--
   Created by IntelliJ IDEA.
   User: Алиса
@@ -21,12 +22,8 @@
         <c:set var="title" value="Новый пациент"/>
     </c:otherwise>
 </c:choose>
-<html>
-<head>
-    <title>"${title}"</title>
-</head>
-<body>
 
+<u:html title="${title}" message="${message}">
 <H2>${title}</H2>
 <%--<form action="/patient/save.html" method="post" onsubmit="return validateEditDoctor(this)">--%>
 <form action="/patient/save.html" method="post">
@@ -53,14 +50,4 @@
     <button type="reset">Сбросить</button>
 </form>
 
-
-
-<c:if test="${not empty patient}">
-    <form action="/appointment/choice.html" method="post">
-        <input type="hidden" name="id" value="${patient.id}">
-        <input type="submit" value="Записаться к врачу">
-    </form>
-</c:if>
-
-</body>
-</html>
+</u:html>

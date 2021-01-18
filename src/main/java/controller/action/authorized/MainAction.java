@@ -1,5 +1,6 @@
-package controller.action;
+package controller.action.authorized;
 
+import controller.action.MenuItem;
 import exception.PersistentException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,8 +9,8 @@ import java.util.List;
 
 public class MainAction extends AuthorizedUserAction {
 	@Override
-	public Action.Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+	public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
 		List<MenuItem> menu = (List<MenuItem>)request.getSession(false).getAttribute("menu");
-		return new Action.Forward(menu.get(0).getUrl());
+		return new Forward(menu.get(0).getUrl());
 	}
 }

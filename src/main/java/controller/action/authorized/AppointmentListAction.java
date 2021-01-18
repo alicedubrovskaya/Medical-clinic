@@ -1,6 +1,6 @@
-package controller.action.admin.appointment;
+package controller.action.authorized;
 
-import controller.action.admin.AdministratorAction;
+import controller.action.Action;
 import domain.Appointment;
 import exception.IncorrectFormDataException;
 import exception.PersistentException;
@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
-public class AppointmentListAction extends AdministratorAction {
+public class AppointmentListAction extends AuthorizedUserAction {
     @Override
-    public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+    public Action.Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         DateValidator validator = validatorFactory.createDateValidator();
         Date date = null;
         String specialization = null;

@@ -16,13 +16,14 @@
     <script type="text/javascript" src="/js/main.js"></script>
 </head>
 <body>
-<h2>Список приемов</h2>
+<h2>Приемы врачей</h2>
 
 <table border="1">
     <tr>
         <th>Время</th>
         <th>Врач</th>
         <th>Пациент</th>
+        <th>Специализация</th>
     </tr>
 
     <c:url value="/appointment/info.html" var="appointmentInfoUrl"/>
@@ -46,8 +47,11 @@
                     <td>Свободно</td>
                 </c:otherwise>
             </c:choose>
+
+            <td>${appointment.doctor.specialization}</td>
         </tr>
     </c:forEach>
 </table>
+
 </body>
 </html>
