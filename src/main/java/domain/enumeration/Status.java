@@ -23,4 +23,13 @@ public enum Status {
         return Status.values()[id];
     }
 
+    public static Status getEnum(String type) {
+        for (Status info : values()) {
+            if (info.getName().equals(type)) {
+                return info;
+            }
+        }
+        throw new IllegalArgumentException("No enum found with type: [" + type + "]");
+    }
+
 }

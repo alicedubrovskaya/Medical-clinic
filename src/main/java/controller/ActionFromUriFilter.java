@@ -18,6 +18,7 @@ import controller.action.admin.vacation.VacationEditAction;
 import controller.action.admin.vacation.VacationListAction;
 import controller.action.admin.vacation.VacationSaveAction;
 import controller.action.authorized.*;
+import controller.action.doctor.AppointmentEditAction;
 import controller.action.doctor.AppointmentsChoiceAction;
 import controller.action.patient.AppointmentChoiceAction;
 import controller.action.patient.PatientEditAction;
@@ -56,6 +57,7 @@ public class ActionFromUriFilter implements Filter {
         actions.put("/patient/edit", PatientEditAction.class);
 
         actions.put("/appointment/save", AppointmentSaveAction.class);
+        actions.put("/appointment/edit", AppointmentEditAction.class);
         actions.put("/appointment/info", AppointmentInfoAction.class);
         actions.put("/appointment/list", AppointmentListAction.class);
         actions.put("/appointment/generate", GenerateAppointmentsAction.class);

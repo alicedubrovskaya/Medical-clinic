@@ -28,7 +28,11 @@ public class ValidatorFactory {
         return new PatientValidator();
     }
 
-    public DateValidator createDateValidator(){
+    public DateValidator createDateValidator() {
         return new DateValidator();
+    }
+
+    public AppointmentValidator createAppointmentValidator() {
+        return new AppointmentValidator();
     }
 }
