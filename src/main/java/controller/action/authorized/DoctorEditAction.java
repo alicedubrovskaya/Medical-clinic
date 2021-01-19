@@ -1,6 +1,5 @@
-package controller.action.admin.doctor;
+package controller.action.authorized;
 
-import controller.action.admin.AdministratorAction;
 import domain.Doctor;
 import exception.PersistentException;
 import service.DoctorService;
@@ -8,14 +7,20 @@ import service.DoctorService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class DoctorEditAction extends AdministratorAction {
+public class DoctorEditAction extends AuthorizedUserAction {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         try {
             Integer id = (Integer) request.getAttribute("id");
             if (id == null) {
-                id = Integer.parseInt(request.getParameter("id"));
+                String parameter = request.getParameter("id");
+                if (parameter != null) {
+                    id = Integer.parseInt(parameter);
+                }
+            }
+            if (id == null) {
+                id = getAuthorizedUser().getId();
             }
             DoctorService service = serviceFactory.getDoctorService();
             Doctor doctor = service.findById(id);

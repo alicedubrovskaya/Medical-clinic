@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib tagdir="/WEB-INF/tags" prefix="u" %>
 <%--
   Created by IntelliJ IDEA.
   User: Алиса
@@ -20,17 +21,18 @@
         <c:set var="title" value="Новый врач"/>
     </c:otherwise>
 </c:choose>
-<html>
-<head>
-    <title>"${title}"</title>
-    <script type="text/javascript" src="/js/test.js"></script>
-    <script type="text/javascript" src="/js/main.js"></script>
-    <script type="text/javascript" src="/js/validator.js"></script>
-    <script type="text/javascript" src="/js/validator-of-edit-doctor-form.js"></script>
+<%--<html>--%>
+<%--<head>--%>
+<%--    <title>"${title}"</title>--%>
+<%--    <script type="text/javascript" src="/js/test.js"></script>--%>
+<%--    <script type="text/javascript" src="/js/main.js"></script>--%>
+<%--    <script type="text/javascript" src="/js/validator.js"></script>--%>
+<%--    <script type="text/javascript" src="/js/validator-of-edit-doctor-form.js"></script>--%>
 
-</head>
-<body>
+<%--</head>--%>
+<%--<body>--%>
 
+<u:html title="${title}" message="${message}" validator="validator-of-edit-doctor-form.js">
     <H2>${title}</H2>
     <form action="/doctor/save.html" method="post" onsubmit="return validateEditDoctor(this)">
         <c:if test="${not empty doctor}">
@@ -52,6 +54,7 @@
         <button type="reset">Сбросить</button>
     </form>
 
+    <%--    TODO js--%>
     <c:if test="${not empty doctor}">
         <form action="/doctor/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">
             <input type="hidden" name="id" value="${doctor.id}">
@@ -59,11 +62,11 @@
         </form>
     </c:if>
 
-    <c:if test="${not empty doctor}">
-        <form action="/vacation/edit.html" method="post">
-            <input type="hidden" name="id" value="${doctor.id}">
-            <button type="submit">Добавить отпуск</button>
-        </form>
-    </c:if>
-</body>
-</html>
+<%--    <c:if test="${not empty doctor}">--%>
+<%--        <form action="/vacation/edit.html" method="post">--%>
+<%--            <input type="hidden" name="id" value="${doctor.id}">--%>
+<%--            <button type="submit">Добавить отпуск</button>--%>
+<%--        </form>--%>
+<%--    </c:if>--%>
+
+</u:html>
