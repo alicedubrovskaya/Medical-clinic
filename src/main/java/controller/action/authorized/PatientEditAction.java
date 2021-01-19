@@ -1,4 +1,4 @@
-package controller.action.patient;
+package controller.action.authorized;
 
 import domain.Patient;
 import exception.PersistentException;
@@ -7,7 +7,7 @@ import service.PatientService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class PatientEditAction extends PatientAction {
+public class PatientEditAction extends AuthorizedUserAction {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {

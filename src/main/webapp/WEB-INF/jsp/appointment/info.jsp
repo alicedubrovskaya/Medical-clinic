@@ -20,6 +20,23 @@
         <output name="doctor">${appointment.doctor.surname} ${appointment.doctor.name}</output>
     </p>
 
+    <p>
+    <c:choose>
+        <c:when test="${not empty appointment.patient}">
+            <output name="patient" onclick="submitFormById('form-${appointment.patient.id}')">
+                Пациент:${appointment.patient.surname} ${appointment.patient.name}
+
+                <form id="form-${appointment.patient.id}" action="/patient/edit.html" method="post">
+                    <input type="hidden" name="id" value="${appointment.patient.id}">
+                </form>
+            </output>
+        </c:when>
+        <c:otherwise>
+            <p>Пациент не записан</p>
+        </c:otherwise>
+    </c:choose>
+    </p>
+
     <c:if test="${authorizedUser.role.name =='Пациент'}">
         <form action="/appointment/save.html" method="post">
             <input type="hidden" name="appointmentId" value="${appointment.id}">

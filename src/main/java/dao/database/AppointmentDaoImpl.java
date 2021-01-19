@@ -45,7 +45,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
 
     private static final String READ_APPOINTMENTS_BY_TIME_AND_STATUS = "SELECT `id`, `approved`, `complaints`," +
             " `medical_report`, `time`,`recommendation`, `doctor_id`,  `patient_id` " +
-            " FROM `appointment` WHERE `status`= ? AND `time` BETWEEN ? and ?";
+            " FROM `appointment` WHERE `status`= ? AND `time` BETWEEN ? and ? AND `doctor_id`=?";
 
     private static final String READ_APPOINTMENT_BY_PATIENT_AND_DISEASE = "SELECT `time`, `complaints`, `medical_report`," +
             " `recommendation` FROM `appointment` JOIN patient_disease on appointment.id = patient_disease.appointment_id " +
@@ -481,7 +481,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     }
 
 
-    public List<Appointment> readByDateAndStatus(Date date, String status) throws PersistentException {
+    public List<Appointment> readByDateAndStatusAndDoctor(Date date, String status, Integer doctorId) throws PersistentException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -496,6 +496,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             statement.setInt(1, statusId);
             statement.setTimestamp(2, new Timestamp(date.getTime()));
             statement.setTimestamp(3, new Timestamp(date.getTime() + TimeUnit.DAYS.toMillis(1)));
+            statement.setInt(4, doctorId);
             resultSet = statement.executeQuery();
             Appointment appointment = null;
             List<Appointment> appointments = new ArrayList<>();
@@ -514,7 +515,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                     patient.setId(patientId);
                     appointment.setPatient(patient);
                 }
-                Integer doctorId = resultSet.getInt("doctor_id");
+                doctorId = resultSet.getInt("doctor_id");
                 if (!resultSet.wasNull()) {
                     Doctor doctor = new Doctor();
                     doctor.setId(doctorId);

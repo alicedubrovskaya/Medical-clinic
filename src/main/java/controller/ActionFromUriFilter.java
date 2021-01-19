@@ -21,7 +21,7 @@ import controller.action.authorized.*;
 import controller.action.doctor.AppointmentEditAction;
 import controller.action.doctor.AppointmentsChoiceAction;
 import controller.action.patient.AppointmentChoiceAction;
-import controller.action.patient.PatientEditAction;
+import controller.action.authorized.PatientEditAction;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

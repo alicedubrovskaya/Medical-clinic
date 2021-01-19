@@ -24,27 +24,36 @@
             <output name="doctor">${dateFormat}</output>
         </p>
 
-        <p>Пациент:
-            <output name="patient">${appointment.patient.surname} ${appointment.patient.name}</output>
-        </p>
+        <c:choose>
+            <c:when test="${not empty appointment.patient}">
+                <p>Пациент:
+                    <output name="patient">${appointment.patient.surname} ${appointment.patient.name}</output>
+                </p>
 
-        <select id="status" name="status">
-            <c:forEach items="${statuses}" var="status">
-                <option value="${status}">${status}</option>
-            </c:forEach>
-        </select>
+                <select id="status" name="status">
+                    <c:forEach items="${statuses}" var="status">
+                        <option value="${status}">${status}</option>
+                    </c:forEach>
+                </select>
 
-        <label for="complaints">Жалобы:</label>
-        <input type="text" id="complaints" name="complaints" value="${appointment.complaints}">
+                <label for="complaints">Жалобы:</label>
+                <input type="text" id="complaints" name="complaints" value="${appointment.complaints}">
 
-        <label for="medicalReport">Заключение:</label>
-        <input type="text" id="medicalReport" name="medicalReport" value="${appointment.medicalReport}">
+                <label for="medicalReport">Заключение:</label>
+                <input type="text" id="medicalReport" name="medicalReport" value="${appointment.medicalReport}">
 
-        <label for="recommendation">Рекоммендации:</label>
-        <input type="text" id="recommendation" name="recommendation" value="${appointment.recommendation}">
+                <label for="recommendation">Рекоммендации:</label>
+                <input type="text" id="recommendation" name="recommendation" value="${appointment.recommendation}">
 
-        <button type="submit">Сохранить</button>
-        <button type="reset">Сбросить</button>
+                <button type="submit">Сохранить</button>
+                <button type="reset">Сбросить</button>
+            </c:when>
+
+            <c:otherwise>
+                <p>Пациент на данное время не записан </p>
+            </c:otherwise>
+        </c:choose>
+    </form>
     </form>
 
 </u:html>

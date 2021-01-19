@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib tagdir="/WEB-INF/tags" prefix="u"%>
+<%@taglib tagdir="/WEB-INF/tags" prefix="u" %>
 <%--
   Created by IntelliJ IDEA.
   User: Алиса
@@ -24,30 +24,32 @@
 </c:choose>
 
 <u:html title="${title}" message="${message}">
-<H2>${title}</H2>
-<%--<form action="/patient/save.html" method="post" onsubmit="return validateEditDoctor(this)">--%>
-<form action="/patient/save.html" method="post">
+    <H2>${title}</H2>
+    <%--<form action="/patient/save.html" method="post" onsubmit="return validateEditDoctor(this)">--%>
+    <form action="/patient/save.html" method="post">
 
-    <c:if test="${not empty patient}">
-        <input type="hidden" name="id" value="${patient.id}">
-    </c:if>
-    <label for="surname">Фамилия:</label>
-    <input type="text" id="surname" name="surname" value="${surname}">
+        <c:if test="${not empty patient}">
+            <input type="hidden" name="id" value="${patient.id}">
+        </c:if>
+        <label for="surname">Фамилия:</label>
+        <input type="text" id="surname" name="surname" value="${surname}">
 
-    <label for="name">Имя:</label>
-    <input type="text" id="name" name="name" value="${name}">
+        <label for="name">Имя:</label>
+        <input type="text" id="name" name="name" value="${name}">
 
-    <label for="email">Почта:</label>
-    <input type="text" id="email" name="email" value="${email}">
+        <label for="email">Почта:</label>
+        <input type="text" id="email" name="email" value="${email}">
 
-    <label for="phoneNumber">Номер телефона:</label>
-    <input type="text" id="phoneNumber" name="phoneNumber" value="${phoneNumber}">
+        <label for="phoneNumber">Номер телефона:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" value="${phoneNumber}">
 
-    <label for="address">Адрес проживания:</label>
-    <input type="text" id="address" name="address" value="${address}">
+        <label for="address">Адрес проживания:</label>
+        <input type="text" id="address" name="address" value="${address}">
 
-    <button type="submit">Сохранить</button>
-    <button type="reset">Сбросить</button>
-</form>
+        <c:if test="${authorizedUser.role.name =='Пациент'}">
+            <button type="submit">Сохранить</button>
+            <button type="reset">Сбросить</button>
+        </c:if>
+    </form>
 
 </u:html>

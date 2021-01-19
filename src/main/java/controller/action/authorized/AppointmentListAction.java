@@ -15,14 +15,22 @@ import java.util.List;
 public class AppointmentListAction extends AuthorizedUserAction {
     @Override
     public Action.Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+
         DateValidator validator = validatorFactory.createDateValidator();
         Date date = null;
         String specialization = null;
         String status = null;
+        Integer doctorId = null;
         try {
             date = validator.validateDate(request);
             specialization = request.getParameter("specialization");
             status = request.getParameter("status");
+            if (request.getParameter("doctorId") != null) {
+                doctorId = Integer.valueOf(request.getParameter("doctorId"));
+            } else {
+                doctorId = getAuthorizedUser().getId();
+            }
+
         } catch (IncorrectFormDataException e) {
             e.printStackTrace();
         }
@@ -31,8 +39,8 @@ public class AppointmentListAction extends AuthorizedUserAction {
         List<Appointment> appointments;
         if (date != null && specialization != null) {
             appointments = service.findByTimeAndSpecialization(date, specialization);
-        } else if (date != null && status != null) {
-            appointments = service.findByDateAndStatus(date, status);
+        } else if (date != null && status != null && doctorId != 0) {
+            appointments = service.findByDateAndStatusAndDoctor(date, status, doctorId);
         } else {
             appointments = service.findAll();
         }
