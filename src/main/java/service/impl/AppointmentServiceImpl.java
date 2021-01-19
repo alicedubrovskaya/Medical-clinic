@@ -85,6 +85,16 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         return appointments;
     }
 
+    public List<Appointment> findByDateAndStatus(Date date, String status) throws PersistentException {
+        transaction.setAutoCommit();
+        AppointmentDao appointmentDao = transaction.createAppointmentDao();
+        List<Appointment> appointments = appointmentDao.readByDateAndStatus(date, status);
+        if (appointments != null) {
+            buildAppointment(appointments);
+        }
+        return appointments;
+    }
+
     @Override
     public Appointment findByPatientAndDisease(Integer patientId, String diseaseName) throws PersistentException {
         transaction.setAutoCommit();

@@ -23,6 +23,8 @@ public interface AppointmentService extends Service {
 
     List<Appointment> findByTimeAndSpecialization(Date date, String specialization) throws PersistentException;
 
+    public List<Appointment> findByDateAndStatus(Date date, String status) throws PersistentException;
+
     Appointment findByPatientAndDisease(Integer patientId, String diseaseName) throws PersistentException;
 
     List<Appointment> findByPatient(Integer patientId) throws PersistentException;

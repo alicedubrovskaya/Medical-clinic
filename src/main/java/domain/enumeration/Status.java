@@ -1,8 +1,9 @@
 package domain.enumeration;
 
 public enum Status {
-    WAS("был"),
-    MISSED("пропустил");
+    WAS("Был"),
+    MISSED("Не был");
+    //TODO пропустил
 
     private String name;
 

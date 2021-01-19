@@ -18,9 +18,11 @@ public class AppointmentListAction extends AuthorizedUserAction {
         DateValidator validator = validatorFactory.createDateValidator();
         Date date = null;
         String specialization = null;
+        String status = null;
         try {
             date = validator.validateDate(request);
             specialization = request.getParameter("specialization");
+            status = request.getParameter("status");
         } catch (IncorrectFormDataException e) {
             e.printStackTrace();
         }
@@ -29,6 +31,8 @@ public class AppointmentListAction extends AuthorizedUserAction {
         List<Appointment> appointments;
         if (date != null && specialization != null) {
             appointments = service.findByTimeAndSpecialization(date, specialization);
+        } else if (date != null && status != null) {
+            appointments = service.findByDateAndStatus(date, status);
         } else {
             appointments = service.findAll();
         }

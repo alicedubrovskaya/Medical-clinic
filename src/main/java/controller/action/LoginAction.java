@@ -23,7 +23,8 @@ public class LoginAction extends Action {
                 new MenuItem("/vacation/list.html", "Управление отпусками")
         )));
         menu.put(Role.DOCTOR, new ArrayList<>(Arrays.asList(
-                new MenuItem("/doctor/edit.html", "Мой профиль")
+                new MenuItem("/doctor/edit.html", "Мой профиль"),
+                new MenuItem("/appointment/doctor/choice.html", "Прием пациентов")
         )));
 
         menu.put(Role.PATIENT, new ArrayList<>(Arrays.asList(
