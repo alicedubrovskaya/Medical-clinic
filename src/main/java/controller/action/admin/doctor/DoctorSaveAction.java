@@ -24,7 +24,7 @@ public class DoctorSaveAction extends AdministratorAction {
 
             if (doctor.getId() != null) {
                 service.save(doctor);
-                forward = new Forward("/doctor/edit.html");
+                forward = new Forward("/doctor/list.html");
                 forward.getAttributes().put("id", doctor.getId());
                 forward.getAttributes().put("message", "Данные врача успешно обновлены");
             } else {

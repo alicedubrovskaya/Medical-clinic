@@ -7,11 +7,13 @@ import service.DoctorService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 
 public class DoctorEditAction extends AuthorizedUserAction {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        DoctorService service = serviceFactory.getDoctorService();
         try {
             User user = (User) request.getAttribute("user");
             if (user == null) {
@@ -22,12 +24,13 @@ public class DoctorEditAction extends AuthorizedUserAction {
                 } else {
                     id = getAuthorizedUser().getId();
                 }
-                DoctorService service = serviceFactory.getDoctorService();
                 Doctor doctor = service.findById(id);
                 request.setAttribute("doctor", doctor);
             } else {
                 request.setAttribute("user", user);
             }
+            request.setAttribute("specializations", service.findAllSpecializations());
+            request.setAttribute("workingShifts", Arrays.asList("Первая", "Вторая"));
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }

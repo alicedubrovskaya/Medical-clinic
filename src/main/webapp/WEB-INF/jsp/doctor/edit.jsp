@@ -21,16 +21,6 @@
         <c:set var="title" value="Новый врач"/>
     </c:otherwise>
 </c:choose>
-<%--<html>--%>
-<%--<head>--%>
-<%--    <title>"${title}"</title>--%>
-<%--    <script type="text/javascript" src="/js/test.js"></script>--%>
-<%--    <script type="text/javascript" src="/js/main.js"></script>--%>
-<%--    <script type="text/javascript" src="/js/validator.js"></script>--%>
-<%--    <script type="text/javascript" src="/js/validator-of-edit-doctor-form.js"></script>--%>
-
-<%--</head>--%>
-<%--<body>--%>
 
 <u:html title="${title}" message="${message}" validator="validator-of-edit-doctor-form.js">
     <H2>${title}</H2>
@@ -50,11 +40,44 @@
         <label for="name">Имя:</label>
         <input type="text" id="name" name="name" value="${name}">
 
+
         <label for="specialization">Специализация:</label>
-        <input type="text" id="specialization" name="specialization" value="${specialization}">
+        <c:if test="${not empty specialization}">
+            <c:set var="selectedSpecialization" value="${specialization}"/>
+        </c:if>
+
+        <select id="specialization" name="specialization">
+            <c:forEach items="${specializations}" var="specializationSelection">
+                <c:choose>
+                    <c:when test="${selectedSpecialization == specializationSelection}">
+                        <option selected value="${specializationSelection}">${specializationSelection}</option>
+                    </c:when>
+                    <c:otherwise>
+                        <option value="${specializationSelection}">${specializationSelection}</option>
+                    </c:otherwise>
+                </c:choose>
+
+            </c:forEach>
+        </select>
 
         <label for="workingShift">Рабочая смена:</label>
-        <input type="text" id="workingShift" name="workingShift" value="${workingShift}">
+        <c:if test="${not empty workingShift}">
+            <c:set var="selectedWorkingShift" value="${workingShift}"/>
+        </c:if>
+
+        <select id="workingShift" name="workingShift">
+            <c:forEach items="${workingShifts}" var="workingShiftSelection">
+                <c:choose>
+                    <c:when test="${selectedWorkingShift == workingShiftSelection}">
+                        <option selected value="${workingShiftSelection}">${workingShiftSelection}</option>
+                    </c:when>
+                    <c:otherwise>
+                        <option value="${workingShiftSelection}">${workingShiftSelection}</option>
+                    </c:otherwise>
+                </c:choose>
+
+            </c:forEach>
+        </select>
 
         <button type="submit">Сохранить</button>
         <button type="reset">Сбросить</button>
