@@ -37,6 +37,7 @@ public class PatientEditAction extends Action {
                 request.setAttribute("user", user);
             }
         } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
         return null;
     }

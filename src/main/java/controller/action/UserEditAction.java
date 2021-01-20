@@ -1,9 +1,7 @@
 package controller.action;
 
-import domain.User;
 import domain.enumeration.Role;
 import exception.PersistentException;
-import service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,10 +17,15 @@ public class UserEditAction extends Action {
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         try {
-
-            if (getAuthorizedUser() == null) {
-                request.setAttribute("role", Role.PATIENT.getId());
+            String parameter = request.getParameter("role");
+            if (parameter != null) {
+                request.setAttribute("role", Role.getEnum(parameter).getId());
             }
+
+
+//            if (getAuthorizedUser() == null) {
+//                request.setAttribute("role", Role.PATIENT.getId());
+//            }
 
 //            Integer id = (Integer) request.getAttribute("id");
 //            if (id == null) {

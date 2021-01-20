@@ -6,7 +6,6 @@ import domain.enumeration.Role;
 import exception.IncorrectFormDataException;
 import exception.PersistentException;
 import service.PatientService;
-import service.UserService;
 import validator.Validator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +23,6 @@ public class PatientSaveAction extends Action {
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Forward forward = null;
-
         try {
             PatientService service = serviceFactory.getPatientService();
 
@@ -35,7 +33,7 @@ public class PatientSaveAction extends Action {
                 service.save(patient);
                 forward = new Forward("/patient/edit.html");
                 forward.getAttributes().put("id", patient.getId());
-                forward.getAttributes().put("message", "Данные пациента успешно сохранены");
+                forward.getAttributes().put("message", "Данные пациента успешно обновлены");
             } else {
                 Validator<User> userValidator = validatorFactory.createUserValidator();
                 User user = userValidator.validate(request);

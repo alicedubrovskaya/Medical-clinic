@@ -38,6 +38,12 @@
         <c:if test="${not empty doctor}">
             <input type="hidden" name="id" value="${doctor.id}">
         </c:if>
+
+        <c:if test="${not empty user}">
+            <input type="hidden" name="password" value="${user.password}">
+            <input type="hidden" name="login" value="${user.login}">
+        </c:if>
+
         <label for="surname">Фамилия:</label>
         <input type="text" id="surname" name="surname" value="${surname}">
 
