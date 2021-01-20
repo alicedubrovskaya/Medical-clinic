@@ -20,4 +20,10 @@
 
         <input type="submit" value="Сгенерировать приемы врачей">
     </form>
+
+    <form action="/appointment/list.html" method="get">
+        <button type="submit">Приемы врачей</button>
+    </form>
+
+
 </u:html>

@@ -62,11 +62,4 @@
         </form>
     </c:if>
 
-<%--    <c:if test="${not empty doctor}">--%>
-<%--        <form action="/vacation/edit.html" method="post">--%>
-<%--            <input type="hidden" name="id" value="${doctor.id}">--%>
-<%--            <button type="submit">Добавить отпуск</button>--%>
-<%--        </form>--%>
-<%--    </c:if>--%>
-
 </u:html>

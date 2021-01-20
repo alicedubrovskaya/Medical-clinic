@@ -52,4 +52,11 @@
         </c:if>
     </form>
 
+    <c:if test="${not empty patient}">
+        <form action="/appointment/medicalCard.html" method="get">
+            <input type="hidden" name="id" value="${patient.id}">
+            <button type="submit">История посещений врачей</button>
+        </form>
+    </c:if>
+
 </u:html>

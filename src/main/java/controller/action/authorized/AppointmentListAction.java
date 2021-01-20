@@ -41,6 +41,8 @@ public class AppointmentListAction extends AuthorizedUserAction {
             appointments = service.findByTimeAndSpecialization(date, specialization);
         } else if (date != null && status != null && doctorId != 0) {
             appointments = service.findByDateAndStatusAndDoctor(date, status, doctorId);
+        } else if (date != null) {
+            appointments = service.findByTime(date);
         } else {
             appointments = service.findAll();
         }

@@ -29,7 +29,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
 
     private static final String READ_APPOINTMENT_BY_TIME = "SELECT `id`, `approved`, `status`, `complaints`," +
             " `medical_report`, `recommendation`, `patient_id`, `doctor_id` " +
-            " FROM `appointment` WHERE `time`=?";
+            " FROM `appointment` WHERE `time` BETWEEN ? and ?";
 
     private static final String READ_APPOINTMENT_BY_PATIENT = "SELECT `id`, `approved`, `complaints`," +
             " `medical_report`, `time`,`recommendation`, `doctor_id` " +
@@ -41,7 +41,8 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
 
     private static final String READ_APPOINTMENTS_BY_TIME_AND_SPECIALIZATION = "SELECT appointment.id, `approved`, `status`," +
             " `complaints`, `medical_report`, `recommendation`, `patient_id`, `doctor_id`, `time` FROM `appointment`" +
-            "JOIN doctor d on d.id = appointment.doctor_id WHERE d.specialization_id=? AND `time` BETWEEN ? and ?";
+            "JOIN doctor d on d.id = appointment.doctor_id WHERE d.specialization_id=? AND" +
+            "`time` BETWEEN ? and ?";
 
     private static final String READ_APPOINTMENTS_BY_TIME_AND_STATUS = "SELECT `id`, `approved`, `complaints`," +
             " `medical_report`, `time`,`recommendation`, `doctor_id`,  `patient_id` " +
@@ -290,6 +291,8 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
         try {
             statement = connection.prepareStatement(READ_APPOINTMENT_BY_TIME);
             statement.setTimestamp(1, new Timestamp(date.getTime()));
+            statement.setTimestamp(2, new Timestamp(date.getTime() + TimeUnit.DAYS.toMillis(1)));
+
             resultSet = statement.executeQuery();
             Appointment appointment = null;
             List<Appointment> appointments = new ArrayList<>();

@@ -6,7 +6,6 @@ import exception.PersistentException;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public interface AppointmentService extends Service {
     void save(Appointment appointment) throws PersistentException;

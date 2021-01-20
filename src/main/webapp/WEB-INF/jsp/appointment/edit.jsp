@@ -15,21 +15,29 @@
 <u:html title="Редактирование приема" message="${message}">
     <h2>Редактирование приема</h2>
 
+    <fmt:formatDate value="${appointment.time}" var="dateFormat" pattern="yyyy-MM-dd HH:mm:ss"/>
+    <p>Время:
+        <output name="doctor">${dateFormat}</output>
+    </p>
+
+    <input type="hidden" name="appointmentId" value="${appointment.id}">
+
+    <c:choose>
+        <c:when test="${not empty appointment.patient}">
+            <output name="patient" onclick="submitFormById('form-${appointment.patient.id}')">
+                Пациент: ${appointment.patient.surname} ${appointment.patient.name}
+                <form id="form-${appointment.patient.id}" action="/patient/edit.html" method="post">
+                    <input type="hidden" name="id" value="${appointment.patient.id}">
+                </form>
+            </output>
+
+        </c:when>
+    </c:choose>
+
     <form action="/appointment/save.html" method="post">
-
-        <input type="hidden" name="appointmentId" value="${appointment.id}">
-
-        <fmt:formatDate value="${appointment.time}" var="dateFormat" pattern="yyyy-MM-dd HH:mm:ss"/>
-        <p>Время:
-            <output name="doctor">${dateFormat}</output>
-        </p>
 
         <c:choose>
             <c:when test="${not empty appointment.patient}">
-                <p>Пациент:
-                    <output name="patient">${appointment.patient.surname} ${appointment.patient.name}</output>
-                </p>
-
                 <select id="status" name="status">
                     <c:forEach items="${statuses}" var="status">
                         <option value="${status}">${status}</option>
@@ -52,8 +60,8 @@
             <c:otherwise>
                 <p>Пациент на данное время не записан </p>
             </c:otherwise>
+
         </c:choose>
-    </form>
     </form>
 
 </u:html>

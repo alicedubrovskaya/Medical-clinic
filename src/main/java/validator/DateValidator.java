@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 public class DateValidator {
     public Date validateDate(HttpServletRequest request) throws IncorrectFormDataException {
         String parameter = request.getParameter("date");
-        Date calendar = new GregorianCalendar(2021, 01, 01).getTime();
+        Date calendar = null;
         if (parameter != null) {
             try {
                 calendar = java.sql.Date.valueOf(parameter);

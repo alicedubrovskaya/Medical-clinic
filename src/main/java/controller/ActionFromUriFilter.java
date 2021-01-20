@@ -6,7 +6,7 @@ import controller.action.admin.appointment.GenerateAppointmentsAction;
 import controller.action.admin.doctor.DoctorDeleteAction;
 import controller.action.admin.doctor.DoctorListAction;
 import controller.action.admin.doctor.DoctorSaveAction;
-import controller.action.admin.patient.MedicalCardAction;
+import controller.action.authorized.MedicalCardAction;
 import controller.action.admin.patient.PatientListAction;
 import controller.action.admin.patient.PatientSaveAction;
 import controller.action.admin.user.UserDeleteAction;

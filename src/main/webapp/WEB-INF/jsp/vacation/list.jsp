@@ -53,4 +53,8 @@
         </c:forEach>
     </table>
 
+    <%--    <form action="/vacation/edit.html" method="post">--%>
+    <%--        <button type="submit">Добавить отпуск</button>--%>
+    <%--    </form>--%>
+
 </u:html>
