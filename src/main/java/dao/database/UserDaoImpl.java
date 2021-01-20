@@ -28,6 +28,9 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     private static final String READ_USER_BY_PASSWORD_AND_LOGIN =
             "SELECT `id`, `role` FROM `user` WHERE `login` = ? AND `password` = ?";
 
+    private static final String READ_USER_BY_LOGIN =
+            "SELECT `id`, `role`, `password` FROM `user` WHERE `login` = ?";
+
     private static final String UPDATE_USER = "UPDATE `user` SET `login` = ?, `password` = ?," +
             " `role` = ? WHERE `id` = ?";
 
@@ -184,6 +187,37 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
                 user.setId(resultSet.getInt("id"));
                 user.setLogin(login);
                 user.setPassword(password);
+                user.setRole(Role.getById(resultSet.getInt("role")));
+            }
+            return user;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+            try {
+                statement.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+        }
+    }
+
+    @Override
+    public User read(String login) throws PersistentException {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(READ_USER_BY_LOGIN);
+            statement.setString(1, login);
+            resultSet = statement.executeQuery();
+            User user = null;
+            if (resultSet.next()) {
+                user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setLogin(login);
+                user.setPassword(resultSet.getString("password"));
                 user.setRole(Role.getById(resultSet.getInt("role")));
             }
             return user;

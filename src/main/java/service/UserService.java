@@ -12,6 +12,8 @@ public interface UserService extends Service {
 
     User findByLoginAndPassword(String login, String password) throws PersistentException;
 
+    User findByLogin(String login) throws PersistentException;
+
     User findById(Integer id) throws PersistentException;
 
     List<User> findAll() throws PersistentException;

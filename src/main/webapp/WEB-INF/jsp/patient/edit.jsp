@@ -31,6 +31,12 @@
         <c:if test="${not empty patient}">
             <input type="hidden" name="id" value="${patient.id}">
         </c:if>
+
+        <c:if test="${not empty user}">
+            <input type="hidden" name="password" value="${user.password}">
+            <input type="hidden" name="login" value="${user.login}">
+        </c:if>
+
         <label for="surname">Фамилия:</label>
         <input type="text" id="surname" name="surname" value="${surname}">
 
@@ -46,10 +52,8 @@
         <label for="address">Адрес проживания:</label>
         <input type="text" id="address" name="address" value="${address}">
 
-        <c:if test="${authorizedUser.role.name =='Пациент'}">
-            <button type="submit">Сохранить</button>
-            <button type="reset">Сбросить</button>
-        </c:if>
+        <button type="submit">Сохранить</button>
+        <button type="reset">Сбросить</button>
     </form>
 
     <c:if test="${not empty patient}">

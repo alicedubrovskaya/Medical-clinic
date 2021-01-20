@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib tagdir="/WEB-INF/tags" prefix="u" %>
 <%--
   Created by IntelliJ IDEA.
   User: Алиса
@@ -24,7 +25,7 @@
     <script type="text/javascript" src="/js/test.js"></script>
     <script type="text/javascript" src="/js/main.js"></script>
     <script type="text/javascript" src="/js/validator.js"></script>
-        <script type="text/javascript" src="/js/validator-of-edit-user-form.js"></script>
+    <script type="text/javascript" src="/js/validator-of-edit-user-form.js"></script>
 
 </head>
 <body>
@@ -41,18 +42,10 @@
     <label for="password">Пароль:</label>
     <input type="text" id="password" name="password" value="${password}">
 
-    <label for="role">Роль:</label>
-    <select id="role" name="role">
-        <c:forEach items="${roles}" var="role">
-            <c:remove var="selected"/>
-            <c:if test="${not empty roleId and roleId eq role.id}">
-                <c:set var="selected" value="selected"/>
-            </c:if>
-            <option value="${role.id}" ${selected}>${role.name}</option>
-        </c:forEach>
-    </select>
+    <%--    TODO--%>
+    <input type="hidden" id="role" name="role" value="${role}">
 
-    <button type="submit">Сохранить</button>
+    <button type="submit">Продолжить</button>
     <button type="reset">Сбросить</button>
 </form>
 

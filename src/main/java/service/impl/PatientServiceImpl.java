@@ -1,9 +1,7 @@
 package service.impl;
 
-import dao.DoctorDao;
 import dao.PatientDao;
 import dao.UserDao;
-import domain.Doctor;
 import domain.Patient;
 import domain.User;
 import domain.enumeration.Role;
@@ -24,8 +22,10 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
 
         try {
             if (patient.getId() == null) {
-                User user = userDao.read(patient.getLogin(), PasswordEncryption.md5(patient.getPassword()));
-                patient.setId(user.getId());
+                Integer userId = userDao.create(new User(patient.getLogin(),
+                        PasswordEncryption.md5(patient.getPassword()), Role.PATIENT)
+                );
+                patient.setId(userId);
                 patientDao.create(patient);
             } else {
                 patientDao.update(patient);
@@ -33,7 +33,8 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
             transaction.commit();
         } catch (PersistentException e) {
             transaction.rollback();
-            throw new PersistentException(e);
+            //TODO service exception
+            throw new PersistentException();
         }
     }
 

@@ -44,6 +44,13 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
     }
 
     @Override
+    public User findByLogin(String login) throws PersistentException {
+        transaction.setAutoCommit();
+        UserDao userDao = transaction.createUserDao();
+        return userDao.read(login);
+    }
+
+    @Override
     public User findById(Integer id) throws PersistentException {
         transaction.setAutoCommit();
         UserDao userDao = transaction.createUserDao();

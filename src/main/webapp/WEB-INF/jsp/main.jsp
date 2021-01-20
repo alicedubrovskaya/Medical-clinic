@@ -12,6 +12,11 @@
         <button type="submit">Войти в систему</button>
     </form>
 
+    <form action="/user/edit.html" method="post">
+        <input type="hidden" name="role" value="Пациент">
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+
 </u:html>
 
 
