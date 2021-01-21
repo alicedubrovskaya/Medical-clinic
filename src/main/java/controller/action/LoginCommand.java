@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class LoginAction extends Action {
+public class LoginCommand extends Command {
 
     private static Map<Role, List<MenuItem>> menu = new ConcurrentHashMap<>();
 

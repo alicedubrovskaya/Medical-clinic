@@ -1,10 +1,10 @@
 package controller.action.doctor;
 
-import controller.action.Action;
+import controller.action.Command;
 import domain.enumeration.Role;
 
-abstract public class DoctorAction extends Action {
-    public DoctorAction() {
+abstract public class DoctorCommand extends Command {
+    public DoctorCommand() {
         getAllowRoles().add(Role.DOCTOR);
     }
 }

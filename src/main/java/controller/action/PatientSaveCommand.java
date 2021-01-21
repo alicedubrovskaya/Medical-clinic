@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
-public class PatientSaveAction extends Action {
+public class PatientSaveCommand extends Command {
 
     @Override
     public Set<Role> getAllowRoles() {

@@ -1,22 +1,21 @@
-package controller.action.admin.user;
+package controller.action.admin.vacation;
 
-import controller.action.admin.AdministratorAction;
+import controller.action.admin.AdministratorCommand;
 import exception.PersistentException;
-import service.DoctorService;
-import service.UserService;
+import service.VacationService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class UserDeleteAction extends AdministratorAction {
+public class VacationDeleteCommand extends AdministratorCommand {
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
-        Forward forward = new Forward("/user/list.html");
+        Forward forward = new Forward("/vacation/list.html");
         try {
-            UserService service = serviceFactory.getUserService();
+            VacationService service = serviceFactory.getVacationService();
             Integer id= Integer.parseInt(request.getParameter("id"));
             service.delete(id);
-            forward.getAttributes().put("message", "Пользователь успешно удалён");
+            forward.getAttributes().put("message", "Отпуск врача успешно удалён");
         } catch (NumberFormatException e) {
         }
         return forward;

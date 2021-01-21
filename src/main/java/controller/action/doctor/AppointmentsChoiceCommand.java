@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
 
-public class AppointmentsChoiceAction extends DoctorAction {
+public class AppointmentsChoiceCommand extends DoctorCommand {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {

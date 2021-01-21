@@ -1,60 +1,59 @@
 package controller.action.factory;
 
 import controller.action.*;
-import controller.action.admin.appointment.GenerateAppointmentsAction;
-import controller.action.admin.doctor.DoctorDeleteAction;
-import controller.action.admin.doctor.DoctorListAction;
-import controller.action.admin.doctor.DoctorSaveAction;
-import controller.action.admin.patient.PatientListAction;
-import controller.action.admin.user.UserDeleteAction;
-import controller.action.admin.user.UserListAction;
-import controller.action.admin.vacation.VacationDeleteAction;
-import controller.action.admin.vacation.VacationEditAction;
-import controller.action.admin.vacation.VacationListAction;
-import controller.action.admin.vacation.VacationSaveAction;
+import controller.action.admin.appointment.GenerateAppointmentsCommand;
+import controller.action.admin.doctor.DoctorDeleteCommand;
+import controller.action.admin.doctor.DoctorListCommand;
+import controller.action.admin.doctor.DoctorSaveCommand;
+import controller.action.admin.patient.PatientListCommand;
+import controller.action.admin.user.UserDeleteCommand;
+import controller.action.admin.user.UserListCommand;
+import controller.action.admin.vacation.*;
+import controller.action.admin.vacation.VacationEditCommand;
+import controller.action.admin.vacation.VacationListCommand;
 import controller.action.authorized.*;
-import controller.action.doctor.AppointmentEditAction;
-import controller.action.doctor.AppointmentsChoiceAction;
-import controller.action.patient.AppointmentChoiceAction;
+import controller.action.doctor.AppointmentEditCommand;
+import controller.action.doctor.AppointmentsChoiceCommand;
+import controller.action.patient.AppointmentChoiceCommand;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandFactory {
     private static final CommandFactory instance = new CommandFactory();
-    private final Map<CommandType, Action> commands = new HashMap<>();
+    private final Map<CommandType, Command> commands = new HashMap<>();
 
     private CommandFactory() {
-        commands.put(CommandType.MAIN, new MainAction());
-        commands.put(CommandType.LOGIN, new LoginAction());
+        commands.put(CommandType.MAIN, new MainCommand());
+        commands.put(CommandType.LOGIN, new LoginCommand());
 
-        commands.put(CommandType.DOCTOR_SAVE, new DoctorSaveAction());
-        commands.put(CommandType.DOCTOR_LIST, new DoctorListAction());
-        commands.put(CommandType.DOCTOR_EDIT, new DoctorEditAction());
-        commands.put(CommandType.DOCTOR_DELETE, new DoctorDeleteAction());
+        commands.put(CommandType.DOCTOR_SAVE, new DoctorSaveCommand());
+        commands.put(CommandType.DOCTOR_LIST, new DoctorListCommand());
+        commands.put(CommandType.DOCTOR_EDIT, new DoctorEditCommand());
+        commands.put(CommandType.DOCTOR_DELETE, new DoctorDeleteCommand());
 
-        commands.put(CommandType.USER_SAVE, new UserSaveAction());
-        commands.put(CommandType.USER_EDIT, new UserEditAction());
-        commands.put(CommandType.USER_LIST, new UserListAction());
-        commands.put(CommandType.USER_DELETE, new UserDeleteAction());
+        commands.put(CommandType.USER_SAVE, new UserSaveCommand());
+        commands.put(CommandType.USER_EDIT, new UserEditCommand());
+        commands.put(CommandType.USER_LIST, new UserListCommand());
+        commands.put(CommandType.USER_DELETE, new UserDeleteCommand());
 
-        commands.put(CommandType.VACATION_SAVE, new VacationSaveAction());
-        commands.put(CommandType.VACATION_LIST, new VacationListAction());
-        commands.put(CommandType.VACATION_EDIT, new VacationEditAction());
-        commands.put(CommandType.VACATION_DELETE, new VacationDeleteAction());
+        commands.put(CommandType.VACATION_SAVE, new VacationSaveCommand());
+        commands.put(CommandType.VACATION_LIST, new VacationListCommand());
+        commands.put(CommandType.VACATION_EDIT, new VacationEditCommand());
+        commands.put(CommandType.VACATION_DELETE, new VacationDeleteCommand());
 
-        commands.put(CommandType.PATIENT_SAVE, new PatientSaveAction());
-        commands.put(CommandType.PATIENT_LIST, new PatientListAction());
-        commands.put(CommandType.PATIENT_EDIT, new PatientEditAction());
+        commands.put(CommandType.PATIENT_SAVE, new PatientSaveCommand());
+        commands.put(CommandType.PATIENT_LIST, new PatientListCommand());
+        commands.put(CommandType.PATIENT_EDIT, new PatientEditCommand());
 
-        commands.put(CommandType.APPOINTMENT_SAVE, new AppointmentSaveAction());
-        commands.put(CommandType.APPOINTMENT_EDIT, new AppointmentEditAction());
-        commands.put(CommandType.APPOINTMENT_INFO, new AppointmentInfoAction());
-        commands.put(CommandType.APPOINTMENT_LIST, new AppointmentListAction());
-        commands.put(CommandType.APPOINTMENT_GENERATE, new GenerateAppointmentsAction());
-        commands.put(CommandType.APPOINTMENT_CHOICE, new AppointmentChoiceAction());
-        commands.put(CommandType.APPOINTMENT_DOCTOR_CHOICE, new AppointmentsChoiceAction());
-        commands.put(CommandType.APPOINTMENT_MEDICAL_CARD, new MedicalCardAction());
+        commands.put(CommandType.APPOINTMENT_SAVE, new AppointmentSaveCommand());
+        commands.put(CommandType.APPOINTMENT_EDIT, new AppointmentEditCommand());
+        commands.put(CommandType.APPOINTMENT_INFO, new AppointmentInfoCommand());
+        commands.put(CommandType.APPOINTMENT_LIST, new AppointmentListCommand());
+        commands.put(CommandType.APPOINTMENT_GENERATE, new GenerateAppointmentsCommand());
+        commands.put(CommandType.APPOINTMENT_CHOICE, new AppointmentChoiceCommand());
+        commands.put(CommandType.APPOINTMENT_DOCTOR_CHOICE, new AppointmentsChoiceCommand());
+        commands.put(CommandType.APPOINTMENT_MEDICAL_CARD, new MedicalCardCommand());
     }
 
     //TODO
@@ -65,7 +64,7 @@ public class CommandFactory {
         return instance;
     }
 
-    public Action getCommand(String name) throws IllegalArgumentException{
+    public Command getCommand(String name) throws IllegalArgumentException{
         CommandType commandType = CommandType.getEnum(name);
         return commands.get(commandType);
     }

@@ -7,7 +7,7 @@ import service.AppointmentService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AppointmentInfoAction extends AuthorizedUserAction {
+public class AppointmentInfoCommand extends AuthorizedUserCommand {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {

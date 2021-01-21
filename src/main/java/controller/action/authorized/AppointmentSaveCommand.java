@@ -1,7 +1,6 @@
 package controller.action.authorized;
 
 import domain.Appointment;
-import domain.Doctor;
 import domain.Patient;
 import exception.IncorrectFormDataException;
 import exception.PersistentException;
@@ -12,7 +11,7 @@ import validator.Validator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AppointmentSaveAction extends AuthorizedUserAction {
+public class AppointmentSaveCommand extends AuthorizedUserCommand {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {

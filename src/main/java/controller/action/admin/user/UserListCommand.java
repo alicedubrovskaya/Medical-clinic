@@ -1,6 +1,6 @@
 package controller.action.admin.user;
 
-import controller.action.admin.AdministratorAction;
+import controller.action.admin.AdministratorCommand;
 import domain.User;
 import exception.PersistentException;
 import service.UserService;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-public class UserListAction extends AdministratorAction {
+public class UserListCommand extends AdministratorCommand {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {

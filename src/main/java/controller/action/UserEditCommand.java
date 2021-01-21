@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
-public class UserEditAction extends Action {
+public class UserEditCommand extends Command {
 
     @Override
     public Set<Role> getAllowRoles() {

@@ -1,7 +1,7 @@
 package controller;
 
-import controller.action.Action;
-import controller.action.authorized.MainAction;
+import controller.action.Command;
+import controller.action.authorized.MainCommand;
 import domain.User;
 import domain.enumeration.Role;
 
@@ -23,14 +23,14 @@ public class SecurityFilter implements Filter {
         if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
             HttpServletRequest httpRequest = (HttpServletRequest) request;
             HttpServletResponse httpResponse = (HttpServletResponse) response;
-            Action action = (Action) httpRequest.getAttribute("action");
-            Set<Role> allowRoles = action.getAllowRoles();
+            Command command = (Command) httpRequest.getAttribute("action");
+            Set<Role> allowRoles = command.getAllowRoles();
             String userName = "unauthorized user";
             HttpSession session = httpRequest.getSession(false);
             User user = null;
             if (session != null) {
                 user = (User) session.getAttribute("authorizedUser");
-                action.setAuthorizedUser(user);
+                command.setAuthorizedUser(user);
                 String errorMessage = (String) session.getAttribute("SecurityFilterMessage");
                 if (errorMessage != null) {
                     httpRequest.setAttribute("message", errorMessage);
@@ -45,7 +45,7 @@ public class SecurityFilter implements Filter {
             if (canExecute) {
                 chain.doFilter(request, response);
             } else {
-                if (session != null && action.getClass() != MainAction.class) {
+                if (session != null && command.getClass() != MainCommand.class) {
                     session.setAttribute("SecurityFilterMessage", "Доступ запрещён");
                 }
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.html");

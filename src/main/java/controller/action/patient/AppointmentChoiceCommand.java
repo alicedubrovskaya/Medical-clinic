@@ -1,7 +1,5 @@
-package controller.action.admin.doctor;
+package controller.action.patient;
 
-import controller.action.admin.AdministratorAction;
-import domain.Doctor;
 import exception.PersistentException;
 import service.DoctorService;
 
@@ -9,13 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-public class DoctorListAction extends AdministratorAction {
+public class AppointmentChoiceCommand extends PatientCommand {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         DoctorService service = serviceFactory.getDoctorService();
-        List<Doctor> doctors = service.findAll();
-        request.setAttribute("doctors", doctors);
+        List<String> specializations = service.findAllSpecializations();
+        request.setAttribute("specializations", specializations);
         return null;
     }
 }

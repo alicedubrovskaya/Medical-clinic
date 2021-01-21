@@ -1,6 +1,6 @@
 package controller.action.admin.vacation;
 
-import controller.action.admin.AdministratorAction;
+import controller.action.admin.AdministratorCommand;
 import domain.Vacation;
 import exception.PersistentException;
 import service.VacationService;
@@ -8,7 +8,7 @@ import service.VacationService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class VacationEditAction extends AdministratorAction {
+public class VacationEditCommand extends AdministratorCommand {
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         try {

@@ -1,10 +1,10 @@
 package controller.action.patient;
 
-import controller.action.Action;
+import controller.action.Command;
 import domain.enumeration.Role;
 
-abstract public class PatientAction extends Action {
-    public PatientAction() {
+abstract public class PatientCommand extends Command {
+    public PatientCommand() {
         getAllowRoles().add(Role.PATIENT);
     }
 }

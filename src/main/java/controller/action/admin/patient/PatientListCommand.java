@@ -1,17 +1,15 @@
 package controller.action.admin.patient;
 
-import controller.action.admin.AdministratorAction;
-import domain.Doctor;
+import controller.action.admin.AdministratorCommand;
 import domain.Patient;
 import exception.PersistentException;
-import service.DoctorService;
 import service.PatientService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-public class PatientListAction extends AdministratorAction {
+public class PatientListCommand extends AdministratorCommand {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {

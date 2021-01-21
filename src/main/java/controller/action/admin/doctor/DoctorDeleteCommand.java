@@ -1,13 +1,13 @@
 package controller.action.admin.doctor;
 
-import controller.action.admin.AdministratorAction;
+import controller.action.admin.AdministratorCommand;
 import exception.PersistentException;
 import service.DoctorService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class DoctorDeleteAction extends AdministratorAction {
+public class DoctorDeleteCommand extends AdministratorCommand {
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Forward forward = new Forward("/doctor/list.html");

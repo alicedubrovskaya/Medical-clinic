@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-abstract public class Action {
+abstract public class Command {
     private Set<Role> allowRoles = new HashSet<>();
     private User authorizedUser;
     private String name;
@@ -21,7 +21,7 @@ abstract public class Action {
     protected ServiceFactory serviceFactory;
     protected ValidatorFactory validatorFactory;
 
-    public Action() {
+    public Command() {
     }
 
     public String getName() {
@@ -49,7 +49,7 @@ abstract public class Action {
         this.name = name;
     }
 
-    abstract public Action.Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException;
+    abstract public Command.Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException;
 
     public static class Forward {
         private String forward;

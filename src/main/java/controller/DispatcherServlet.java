@@ -1,6 +1,6 @@
 package controller;
 
-import controller.action.Action;
+import controller.action.Command;
 import controller.action.ActionManager;
 import controller.action.ActionManagerFactory;
 import dao.database.TransactionFactoryImpl;
@@ -10,7 +10,6 @@ import service.ServiceFactory;
 import service.impl.ServiceFactoryImpl;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,7 +48,7 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void process(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        Action action = (Action) request.getAttribute("action");
+        Command command = (Command) request.getAttribute("action");
         try {
             HttpSession session = request.getSession(false);
             if (session != null) {
@@ -64,7 +63,7 @@ public class DispatcherServlet extends HttpServlet {
             }
 
             ActionManager actionManager = ActionManagerFactory.getManager(getFactory());
-            Action.Forward forward = actionManager.execute(action, request, response);
+            Command.Forward forward = actionManager.execute(command, request, response);
             actionManager.close();
 
             if (session != null && forward != null && !forward.getAttributes().isEmpty()) {
@@ -79,7 +78,7 @@ public class DispatcherServlet extends HttpServlet {
                 if (forward != null) {
                     jspPage = forward.getForward();
                 } else {
-                    jspPage = action.getName() + ".jsp";
+                    jspPage = command.getName() + ".jsp";
                 }
                 jspPage = "/WEB-INF/jsp" + jspPage;
                 //"Request for URI \"%s\" is forwarded to JSP \"%s\"", requestedUri, jspPage));

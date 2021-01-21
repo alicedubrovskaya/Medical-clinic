@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
-public class UserSaveAction extends Action {
+public class UserSaveCommand extends Command {
 
     @Override
     public Set<Role> getAllowRoles() {
@@ -19,8 +19,8 @@ public class UserSaveAction extends Action {
     }
 
     @Override
-    public Action.Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
-        Action.Forward forward = null;
+    public Command.Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        Command.Forward forward = null;
         try {
             Validator<User> validator = validatorFactory.createUserValidator();
             User user = validator.validate(request);
@@ -30,14 +30,14 @@ public class UserSaveAction extends Action {
             if (existingUser == null) {
 //                service.save(user);
                 if (user.getRole() == Role.PATIENT) {
-                    forward = new Action.Forward("/patient/edit.html");
+                    forward = new Command.Forward("/patient/edit.html");
                 } else {
-                    forward = new Action.Forward("/doctor/edit.html");
+                    forward = new Command.Forward("/doctor/edit.html");
                 }
                 forward.getAttributes().put("user", user);
 //                forward.getAttributes().put("message", "Данные пользователя успешно сохранены");
             } else {
-                forward = new Action.Forward("/user/edit.html");
+                forward = new Command.Forward("/user/edit.html");
                 forward.getAttributes().put("message", "Пользователь с данным логином уже существует");
             }
 

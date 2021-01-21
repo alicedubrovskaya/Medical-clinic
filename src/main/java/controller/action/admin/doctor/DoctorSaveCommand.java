@@ -1,6 +1,6 @@
 package controller.action.admin.doctor;
 
-import controller.action.admin.AdministratorAction;
+import controller.action.admin.AdministratorCommand;
 import domain.Doctor;
 import domain.User;
 import exception.IncorrectFormDataException;
@@ -11,7 +11,7 @@ import validator.Validator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class DoctorSaveAction extends AdministratorAction {
+public class DoctorSaveCommand extends AdministratorCommand {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {

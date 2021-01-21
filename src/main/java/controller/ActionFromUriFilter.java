@@ -1,6 +1,6 @@
 package controller;
 
-import controller.action.Action;
+import controller.action.Command;
 import controller.action.factory.CommandFactory;
 
 import javax.servlet.*;
@@ -31,9 +31,9 @@ public class ActionFromUriFilter implements Filter {
             }
 
             try {
-                Action action = commandFactory.getCommand(actionName);
-                action.setName(actionName);
-                httpRequest.setAttribute("action", action);
+                Command command = commandFactory.getCommand(actionName);
+                command.setName(actionName);
+                httpRequest.setAttribute("action", command);
                 chain.doFilter(request, response);
             } catch (IllegalArgumentException | NullPointerException e) {
                 httpRequest.setAttribute("error", String.format("Запрошенный адрес %s не может быть обработан сервером", uri));

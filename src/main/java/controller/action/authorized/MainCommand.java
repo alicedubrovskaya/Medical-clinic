@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-public class MainAction extends AuthorizedUserAction {
+public class MainCommand extends AuthorizedUserCommand {
 	@Override
 	public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
 		List<MenuItem> menu = (List<MenuItem>)request.getSession(false).getAttribute("menu");

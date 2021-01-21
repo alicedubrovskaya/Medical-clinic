@@ -1,6 +1,6 @@
 package controller.action.admin.vacation;
 
-import controller.action.admin.AdministratorAction;
+import controller.action.admin.AdministratorCommand;
 import domain.Doctor;
 import domain.Vacation;
 import exception.IncorrectFormDataException;
@@ -12,7 +12,7 @@ import validator.Validator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class VacationSaveAction extends AdministratorAction {
+public class VacationSaveCommand extends AdministratorCommand {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {

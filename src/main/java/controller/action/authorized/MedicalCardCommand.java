@@ -1,6 +1,5 @@
 package controller.action.authorized;
 
-import controller.action.authorized.AuthorizedUserAction;
 import domain.Appointment;
 import domain.enumeration.Role;
 import exception.PersistentException;
@@ -10,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-public class MedicalCardAction extends AuthorizedUserAction {
+public class MedicalCardCommand extends AuthorizedUserCommand {
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         AppointmentService service = serviceFactory.getAppointmentService();
