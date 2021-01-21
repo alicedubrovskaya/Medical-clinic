@@ -1,70 +1,14 @@
 package controller;
 
 import controller.action.Action;
-import controller.action.LoginAction;
-import controller.action.admin.appointment.GenerateAppointmentsAction;
-import controller.action.admin.doctor.DoctorDeleteAction;
-import controller.action.admin.doctor.DoctorListAction;
-import controller.action.admin.doctor.DoctorSaveAction;
-import controller.action.authorized.MedicalCardAction;
-import controller.action.admin.patient.PatientListAction;
-import controller.action.PatientSaveAction;
-import controller.action.admin.user.UserDeleteAction;
-import controller.action.UserEditAction;
-import controller.action.admin.user.UserListAction;
-import controller.action.UserSaveAction;
-import controller.action.admin.vacation.VacationDeleteAction;
-import controller.action.admin.vacation.VacationEditAction;
-import controller.action.admin.vacation.VacationListAction;
-import controller.action.admin.vacation.VacationSaveAction;
-import controller.action.authorized.*;
-import controller.action.doctor.AppointmentEditAction;
-import controller.action.doctor.AppointmentsChoiceAction;
-import controller.action.patient.AppointmentChoiceAction;
-import controller.action.PatientEditAction;
+import controller.action.factory.CommandFactory;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ActionFromUriFilter implements Filter {
-
-    private static Map<String, Class<? extends Action>> actions = new ConcurrentHashMap<>();
-
-    static {
-        actions.put("/main", MainAction.class);
-        actions.put("/login", LoginAction.class);
-
-        actions.put("/doctor/save", DoctorSaveAction.class);
-        actions.put("/doctor/list", DoctorListAction.class);
-        actions.put("/doctor/edit", DoctorEditAction.class);
-        actions.put("/doctor/delete", DoctorDeleteAction.class);
-
-        actions.put("/user/save", UserSaveAction.class);
-        actions.put("/user/edit", UserEditAction.class);
-        actions.put("/user/list", UserListAction.class);
-        actions.put("/user/delete", UserDeleteAction.class);
-
-        actions.put("/vacation/save", VacationSaveAction.class);
-        actions.put("/vacation/list", VacationListAction.class);
-        actions.put("/vacation/edit", VacationEditAction.class);
-        actions.put("/vacation/delete", VacationDeleteAction.class);
-
-        actions.put("/patient/save", PatientSaveAction.class);
-        actions.put("/patient/list", PatientListAction.class);
-        actions.put("/patient/edit", PatientEditAction.class);
-
-        actions.put("/appointment/save", AppointmentSaveAction.class);
-        actions.put("/appointment/edit", AppointmentEditAction.class);
-        actions.put("/appointment/info", AppointmentInfoAction.class);
-        actions.put("/appointment/list", AppointmentListAction.class);
-        actions.put("/appointment/generate", GenerateAppointmentsAction.class);
-        actions.put("/appointment/choice", AppointmentChoiceAction.class);
-        actions.put("/appointment/doctor/choice", AppointmentsChoiceAction.class);
-        actions.put("/appointment/medicalCard", MedicalCardAction.class);
-    }
+    private static final CommandFactory commandFactory = CommandFactory.getInstance();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -85,14 +29,13 @@ public class ActionFromUriFilter implements Filter {
             } else {
                 actionName = uri.substring(beginAction);
             }
-            Class<? extends Action> actionClass = actions.get(actionName);
+
             try {
-                //TODO
-                Action action = actionClass.newInstance();
+                Action action = commandFactory.getCommand(actionName);
                 action.setName(actionName);
                 httpRequest.setAttribute("action", action);
                 chain.doFilter(request, response);
-            } catch (InstantiationException | IllegalAccessException | NullPointerException e) {
+            } catch (IllegalArgumentException | NullPointerException e) {
                 httpRequest.setAttribute("error", String.format("Запрошенный адрес %s не может быть обработан сервером", uri));
                 httpRequest.getServletContext().getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
             }
