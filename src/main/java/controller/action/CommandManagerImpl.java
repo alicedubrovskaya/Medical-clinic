@@ -6,10 +6,10 @@ import service.ServiceFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ActionManagerImpl implements ActionManager {
-    private ServiceFactory serviceFactory;
+public class CommandManagerImpl implements CommandManager {
+    private final ServiceFactory serviceFactory;
 
-    public ActionManagerImpl(ServiceFactory factory){this.serviceFactory=factory;}
+    public CommandManagerImpl(ServiceFactory factory){this.serviceFactory=factory;}
 
     @Override
     public Command.Forward execute(Command command, HttpServletRequest request, HttpServletResponse response) throws PersistentException {

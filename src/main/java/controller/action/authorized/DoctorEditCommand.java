@@ -7,6 +7,7 @@ import service.DoctorService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 
 public class DoctorEditCommand extends AuthorizedUserCommand {
@@ -14,6 +15,8 @@ public class DoctorEditCommand extends AuthorizedUserCommand {
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         DoctorService service = serviceFactory.getDoctorService();
+        HttpSession session = request.getSession(false);
+        User authorizedUser = (User) session.getAttribute("authorizedUser");
         try {
             User user = (User) request.getAttribute("user");
             if (user == null) {
@@ -22,7 +25,7 @@ public class DoctorEditCommand extends AuthorizedUserCommand {
                 if (parameter != null) {
                     id = Integer.parseInt(parameter);
                 } else {
-                    id = getAuthorizedUser().getId();
+                    id = authorizedUser.getId();
                 }
                 Doctor doctor = service.findById(id);
                 request.setAttribute("doctor", doctor);

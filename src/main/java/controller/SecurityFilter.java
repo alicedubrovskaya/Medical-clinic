@@ -30,7 +30,6 @@ public class SecurityFilter implements Filter {
             User user = null;
             if (session != null) {
                 user = (User) session.getAttribute("authorizedUser");
-                command.setAuthorizedUser(user);
                 String errorMessage = (String) session.getAttribute("SecurityFilterMessage");
                 if (errorMessage != null) {
                     httpRequest.setAttribute("message", errorMessage);

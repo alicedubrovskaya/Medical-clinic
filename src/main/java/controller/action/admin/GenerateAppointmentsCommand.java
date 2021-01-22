@@ -1,4 +1,4 @@
-package controller.action.admin.appointment;
+package controller.action.admin;
 
 import controller.action.Command;
 import controller.action.admin.AdministratorCommand;

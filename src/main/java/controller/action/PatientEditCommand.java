@@ -8,6 +8,7 @@ import service.PatientService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Set;
 
 public class PatientEditCommand extends Command {
@@ -20,6 +21,8 @@ public class PatientEditCommand extends Command {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        HttpSession session = request.getSession(false);
+        User authorizedUser = (User) session.getAttribute("authorizedUser");
         try {
             User user = (User) request.getAttribute("user");
             if (user == null) {
@@ -28,7 +31,7 @@ public class PatientEditCommand extends Command {
                 if (parameter != null) {
                     id = Integer.parseInt(parameter);
                 } else {
-                    id = getAuthorizedUser().getId();
+                    id = authorizedUser.getId();
                 }
                 PatientService service = serviceFactory.getPatientService();
                 Patient patient = service.findById(id);

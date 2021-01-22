@@ -1,16 +1,7 @@
 package controller.action.factory;
 
 import controller.action.*;
-import controller.action.admin.appointment.GenerateAppointmentsCommand;
-import controller.action.admin.doctor.DoctorDeleteCommand;
-import controller.action.admin.doctor.DoctorListCommand;
-import controller.action.admin.doctor.DoctorSaveCommand;
-import controller.action.admin.patient.PatientListCommand;
-import controller.action.admin.user.UserDeleteCommand;
-import controller.action.admin.user.UserListCommand;
-import controller.action.admin.vacation.*;
-import controller.action.admin.vacation.VacationEditCommand;
-import controller.action.admin.vacation.VacationListCommand;
+import controller.action.admin.*;
 import controller.action.authorized.*;
 import controller.action.doctor.AppointmentEditCommand;
 import controller.action.doctor.AppointmentsChoiceCommand;

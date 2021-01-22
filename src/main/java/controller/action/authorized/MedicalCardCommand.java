@@ -1,12 +1,14 @@
 package controller.action.authorized;
 
 import domain.Appointment;
+import domain.User;
 import domain.enumeration.Role;
 import exception.PersistentException;
 import service.AppointmentService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public class MedicalCardCommand extends AuthorizedUserCommand {
@@ -16,8 +18,10 @@ public class MedicalCardCommand extends AuthorizedUserCommand {
         String parameter = request.getParameter("id");
         Integer id = null;
         if (parameter == null) {
-            if (getAuthorizedUser().getRole().equals(Role.PATIENT)) {
-                id = getAuthorizedUser().getId();
+            HttpSession session = request.getSession(false);
+            User authorizedUser = (User) session.getAttribute("authorizedUser");
+            if (authorizedUser.getRole().equals(Role.PATIENT)) {
+                id = authorizedUser.getId();
             }
         } else {
             id = Integer.parseInt(parameter);

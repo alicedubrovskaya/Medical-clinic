@@ -1,4 +1,4 @@
-package controller.action.admin.doctor;
+package controller.action.admin;
 
 import controller.action.admin.AdministratorCommand;
 import domain.Doctor;

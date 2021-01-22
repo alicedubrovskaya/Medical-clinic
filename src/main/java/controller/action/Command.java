@@ -1,6 +1,5 @@
 package controller.action;
 
-import domain.User;
 import domain.enumeration.Role;
 import exception.PersistentException;
 import service.ServiceFactory;
@@ -15,7 +14,6 @@ import java.util.Set;
 
 abstract public class Command {
     private Set<Role> allowRoles = new HashSet<>();
-    private User authorizedUser;
     private String name;
 
     protected ServiceFactory serviceFactory;
@@ -35,14 +33,6 @@ abstract public class Command {
     public void setFactory(ServiceFactory factory) {
         this.serviceFactory = factory;
         this.validatorFactory = ValidatorFactory.getINSTANCE();
-    }
-
-    public User getAuthorizedUser() {
-        return authorizedUser;
-    }
-
-    public void setAuthorizedUser(User authorizedUser) {
-        this.authorizedUser = authorizedUser;
     }
 
     public void setName(String name) {
@@ -68,7 +58,6 @@ abstract public class Command {
         public String getForward() {
             return forward;
         }
-
 
 
         public void setForward(String forward) {

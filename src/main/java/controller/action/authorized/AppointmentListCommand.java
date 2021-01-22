@@ -2,6 +2,7 @@ package controller.action.authorized;
 
 import controller.action.Command;
 import domain.Appointment;
+import domain.User;
 import exception.IncorrectFormDataException;
 import exception.PersistentException;
 import service.AppointmentService;
@@ -9,12 +10,15 @@ import validator.DateValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
 public class AppointmentListCommand extends AuthorizedUserCommand {
     @Override
     public Command.Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+        HttpSession session = request.getSession(false);
+        User authorizedUser = (User) session.getAttribute("authorizedUser");
 
         DateValidator validator = validatorFactory.createDateValidator();
         Date date = null;
@@ -28,7 +32,7 @@ public class AppointmentListCommand extends AuthorizedUserCommand {
             if (request.getParameter("doctorId") != null) {
                 doctorId = Integer.valueOf(request.getParameter("doctorId"));
             } else {
-                doctorId = getAuthorizedUser().getId();
+                doctorId = authorizedUser.getId();
             }
 
         } catch (IncorrectFormDataException e) {

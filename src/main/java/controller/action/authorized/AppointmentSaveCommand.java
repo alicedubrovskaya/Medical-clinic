@@ -2,6 +2,7 @@ package controller.action.authorized;
 
 import domain.Appointment;
 import domain.Patient;
+import domain.User;
 import exception.IncorrectFormDataException;
 import exception.PersistentException;
 import service.AppointmentService;
@@ -10,12 +11,15 @@ import validator.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class AppointmentSaveCommand extends AuthorizedUserCommand {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Forward forward = new Forward("/appointment/list.html");
+        HttpSession session = request.getSession(false);
+        User authorizedUser = (User) session.getAttribute("authorizedUser");
 
         Integer patientId = (Integer) request.getAttribute("patientId");
         if (patientId == null) {
@@ -25,7 +29,7 @@ public class AppointmentSaveCommand extends AuthorizedUserCommand {
             }
         }
         if (patientId == null) {
-            patientId = getAuthorizedUser().getId();
+            patientId = authorizedUser.getId();
         }
 
         Integer appointmentId = (Integer) request.getAttribute("appointmentId");

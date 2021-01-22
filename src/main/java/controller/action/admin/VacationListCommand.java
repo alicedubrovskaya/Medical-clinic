@@ -1,6 +1,5 @@
-package controller.action.admin.vacation;
+package controller.action.admin;
 
-import controller.action.admin.AdministratorCommand;
 import domain.Vacation;
 import exception.PersistentException;
 import service.VacationService;

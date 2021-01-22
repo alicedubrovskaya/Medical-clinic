@@ -1,8 +1,8 @@
 package controller;
 
 import controller.action.Command;
-import controller.action.ActionManager;
-import controller.action.ActionManagerFactory;
+import controller.action.CommandManager;
+import controller.action.CommandManagerFactory;
 import dao.database.TransactionFactoryImpl;
 import dao.pool.ConnectionPool;
 import exception.PersistentException;
@@ -62,9 +62,9 @@ public class DispatcherServlet extends HttpServlet {
                 }
             }
 
-            ActionManager actionManager = ActionManagerFactory.getManager(getFactory());
-            Command.Forward forward = actionManager.execute(command, request, response);
-            actionManager.close();
+            CommandManager commandManager = CommandManagerFactory.getManager(getFactory());
+            Command.Forward forward = commandManager.execute(command, request, response);
+            commandManager.close();
 
             if (session != null && forward != null && !forward.getAttributes().isEmpty()) {
                 session.setAttribute("redirectedData", forward.getAttributes());
