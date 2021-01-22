@@ -10,33 +10,39 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <u:html title="Список врачей" message="${message}">
-
-    <table border="1">
-        <tr>
-            <th>Фамилия</th>
-            <th>Имя</th>
-            <th>Специализация</th>
-            <th>Смена рабочая</th>
-        </tr>
-
-        <c:url value="/doctor/edit.html" var="doctorEditUrl"/>
-        <c:forEach var="doctor" items="${doctors}" varStatus="status">
-            <tr onclick="submitFormById('form-${doctor.id}')">
-                <td>
-                        ${doctor.surname}
-                    <form id="form-${doctor.id}" action="${doctorEditUrl}" method="post">
-                        <input type="hidden" name="id" value="${doctor.id}">
-                    </form>
-                </td>
-                <td>${doctor.name}</td>
-                <td>${doctor.specialization}</td>
-                <td>${doctor.workingShift.name}</td>
+    <div class="container">
+        <h2>Список врачей</h2>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Специализация</th>
+                <th>Смена рабочая</th>
             </tr>
-        </c:forEach>
-    </table>
+            </thead>
+            <tbody>
+            <c:url value="/doctor/edit.html" var="doctorEditUrl"/>
+            <c:forEach var="doctor" items="${doctors}" varStatus="status">
+                <tr onclick="submitFormById('form-${doctor.id}')">
+                    <td>
+                            ${doctor.surname}
+                        <form id="form-${doctor.id}" action="${doctorEditUrl}" method="post">
+                            <input type="hidden" name="id" value="${doctor.id}">
+                        </form>
+                    </td>
+                    <td>${doctor.name}</td>
+                    <td>${doctor.specialization}</td>
+                    <td>${doctor.workingShift.name}</td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
 
-    <form action="/user/edit.html">
-        <input type="hidden" name="role" value='Врач'>
-        <button type="submit">Зарегистрировать врача</button>
-    </form>
+        <form action="/user/edit.html">
+            <input type="hidden" name="role" value='Врач'>
+            <button type="submit">Зарегистрировать врача</button>
+        </form>
+    </div>
 </u:html>
+
