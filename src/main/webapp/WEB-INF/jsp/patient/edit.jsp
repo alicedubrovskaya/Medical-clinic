@@ -25,42 +25,48 @@
 
 <u:html title="${title}" message="${message}">
     <H2>${title}</H2>
-    <%--<form action="/patient/save.html" method="post" onsubmit="return validateEditDoctor(this)">--%>
-    <form action="/patient/save.html" method="post">
+    <div class="container">
+            <%--<form action="/patient/save.html" method="post" onsubmit="return validateEditDoctor(this)">--%>
+        <form action="/patient/save.html" method="post">
+            <c:if test="${not empty patient}">
+                <input type="hidden" name="id" value="${patient.id}">
+            </c:if>
+            <c:if test="${not empty user}">
+                <input type="hidden" name="password" value="${user.password}">
+                <input type="hidden" name="login" value="${user.login}">
+            </c:if>
+
+            <div class="form-group">
+                <label for="surname">Фамилия:</label>
+                <input type="text" class="form-control" id="surname" name="surname" value="${surname}">
+            </div>
+            <div class="form-group">
+                <label for="name">Имя:</label>
+                <input type="text" class="form-control" id="name" name="name" value="${name}">
+            </div>
+            <div class="form-group">
+                <label for="email">Почта:</label>
+                <input type="email" class="form-control" id="email" name="email" value="${email}">
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Номер телефона:</label>
+                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="${phoneNumber}">
+            </div>
+            <div class="form-group">
+                <label for="address">Адрес проживания:</label>
+                <input type="text" class="form-control" id="address" name="address" value="${address}">
+            </div>
+            <div class="btn-group">
+                <input type="submit" class="btn btn-success" value="Сохранить">
+                <input type="reset" class="btn btn-warning" value="Сбросить">
+            </div>
+        </form>
 
         <c:if test="${not empty patient}">
-            <input type="hidden" name="id" value="${patient.id}">
+            <form action="/appointment/medicalCard.html" method="get">
+                <input type="hidden" name="id" value="${patient.id}">
+                <input type="submit" value="История посещений врачей">
+            </form>
         </c:if>
-
-        <c:if test="${not empty user}">
-            <input type="hidden" name="password" value="${user.password}">
-            <input type="hidden" name="login" value="${user.login}">
-        </c:if>
-
-        <label for="surname">Фамилия:</label>
-        <input type="text" id="surname" name="surname" value="${surname}">
-
-        <label for="name">Имя:</label>
-        <input type="text" id="name" name="name" value="${name}">
-
-        <label for="email">Почта:</label>
-        <input type="text" id="email" name="email" value="${email}">
-
-        <label for="phoneNumber">Номер телефона:</label>
-        <input type="text" id="phoneNumber" name="phoneNumber" value="${phoneNumber}">
-
-        <label for="address">Адрес проживания:</label>
-        <input type="text" id="address" name="address" value="${address}">
-
-        <button type="submit">Сохранить</button>
-        <button type="reset">Сбросить</button>
-    </form>
-
-    <c:if test="${not empty patient}">
-        <form action="/appointment/medicalCard.html" method="get">
-            <input type="hidden" name="id" value="${patient.id}">
-            <button type="submit">История посещений врачей</button>
-        </form>
-    </c:if>
-
+    </div>
 </u:html>

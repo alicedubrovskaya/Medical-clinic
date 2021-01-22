@@ -23,72 +23,82 @@
 </c:choose>
 
 <u:html title="${title}" message="${message}" validator="validator-of-edit-doctor-form.js">
-    <H2>${title}</H2>
-    <form action="/doctor/save.html" method="post" onsubmit="return validateEditDoctor(this)">
-        <c:if test="${not empty doctor}">
-            <input type="hidden" name="id" value="${doctor.id}">
-        </c:if>
+    <div class="container">
+        <H2>${title}</H2>
+        <form action="/doctor/save.html" method="post" onsubmit="return validateEditDoctor(this)">
+            <c:if test="${not empty doctor}">
+                <input type="hidden" name="id" value="${doctor.id}">
+            </c:if>
 
-        <c:if test="${not empty user}">
-            <input type="hidden" name="password" value="${user.password}">
-            <input type="hidden" name="login" value="${user.login}">
-        </c:if>
+            <c:if test="${not empty user}">
+                <input type="hidden" name="password" value="${user.password}">
+                <input type="hidden" name="login" value="${user.login}">
+            </c:if>
 
-        <label for="surname">Фамилия:</label>
-        <input type="text" id="surname" name="surname" value="${surname}">
+            <div class="form-group">
+                <label for="surname">Фамилия:</label>
+                <input type="text" class="form-control" id="surname" name="surname" value="${surname}">
+            </div>
 
-        <label for="name">Имя:</label>
-        <input type="text" id="name" name="name" value="${name}">
+            <div class="form-group">
+                <label for="name">Имя:</label>
+                <input type="text" class="form-control" id="name" name="name" value="${name}">
+            </div>
 
+            <div class="form-group">
 
-        <label for="specialization">Специализация:</label>
-        <c:if test="${not empty specialization}">
-            <c:set var="selectedSpecialization" value="${specialization}"/>
-        </c:if>
+                <c:if test="${not empty specialization}">
+                    <c:set var="selectedSpecialization" value="${specialization}"/>
+                </c:if>
 
-        <select id="specialization" name="specialization">
-            <c:forEach items="${specializations}" var="specializationSelection">
-                <c:choose>
-                    <c:when test="${selectedSpecialization == specializationSelection}">
-                        <option selected value="${specializationSelection}">${specializationSelection}</option>
-                    </c:when>
-                    <c:otherwise>
-                        <option value="${specializationSelection}">${specializationSelection}</option>
-                    </c:otherwise>
-                </c:choose>
+                <label for="specialization">Специализация:</label>
+                <select class="form-control" id="specialization" name="specialization">
+                    <c:forEach items="${specializations}" var="specializationSelection">
+                        <c:choose>
+                            <c:when test="${selectedSpecialization == specializationSelection}">
+                                <option selected value="${specializationSelection}">${specializationSelection}</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="${specializationSelection}">${specializationSelection}</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                </select>
+            </div>
 
-            </c:forEach>
-        </select>
+            <div class="form-group">
 
-        <label for="workingShift">Рабочая смена:</label>
-        <c:if test="${not empty workingShift}">
-            <c:set var="selectedWorkingShift" value="${workingShift}"/>
-        </c:if>
+                <c:if test="${not empty workingShift}">
+                    <c:set var="selectedWorkingShift" value="${workingShift}"/>
+                </c:if>
 
-        <select id="workingShift" name="workingShift">
-            <c:forEach items="${workingShifts}" var="workingShiftSelection">
-                <c:choose>
-                    <c:when test="${selectedWorkingShift == workingShiftSelection}">
-                        <option selected value="${workingShiftSelection}">${workingShiftSelection}</option>
-                    </c:when>
-                    <c:otherwise>
-                        <option value="${workingShiftSelection}">${workingShiftSelection}</option>
-                    </c:otherwise>
-                </c:choose>
+                <label for="workingShift">Рабочая смена:</label>
+                <select class="form-control" id="workingShift" name="workingShift">
+                    <c:forEach items="${workingShifts}" var="workingShiftSelection">
+                        <c:choose>
+                            <c:when test="${selectedWorkingShift == workingShiftSelection}">
+                                <option selected value="${workingShiftSelection}">${workingShiftSelection}</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="${workingShiftSelection}">${workingShiftSelection}</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                </select>
+            </div>
 
-            </c:forEach>
-        </select>
-
-        <button type="submit">Сохранить</button>
-        <button type="reset">Сбросить</button>
-    </form>
-
-    <%--    TODO js--%>
-    <c:if test="${not empty doctor}">
-        <form action="/doctor/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">
-            <input type="hidden" name="id" value="${doctor.id}">
-            <input type="submit" value="Удалить">
+            <div class="btn-group">
+                <input type="submit" class="btn btn-success" value="Сохранить">
+                <input type="reset" class="btn btn-warning" value="Сбросить">
+            </div>
         </form>
-    </c:if>
+            <%--    TODO js--%>
+        <c:if test="${not empty doctor}">
+            <form action="/doctor/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">
+                <input type="hidden" name="id" value="${doctor.id}">
+                <input type="submit" class="btn btn-danger" value="Удалить">
+            </form>
+        </c:if>
+    </div>
 
 </u:html>

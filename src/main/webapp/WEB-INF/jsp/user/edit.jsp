@@ -19,43 +19,37 @@
         <c:set var="title" value="Регистрация пользователя"/>
     </c:otherwise>
 </c:choose>
-<html>
-<head>
-    <title>"${title}"</title>
-    <script type="text/javascript" src="/js/test.js"></script>
-    <script type="text/javascript" src="/js/main.js"></script>
-    <script type="text/javascript" src="/js/validator.js"></script>
-    <script type="text/javascript" src="/js/validator-of-edit-user-form.js"></script>
 
-</head>
-<body>
+<u:html title="${title}" message="${message}">
+    <div class="container">
+        <H2>${title}</H2>
+        <form action="/user/save.html" method="post" onsubmit="return validateEditUser(this)">
+            <c:if test="${not empty user}">
+                <input type="hidden" name="id" value="${user.id}">
+            </c:if>
 
-<H2>${title}</H2>
+            <div class="form-group">
+                <label for="login">Логин:</label>
+                <input type="text" class="form-control" id="login" name="login" value="${login}">
+            </div>
+            <div class="form-group">
+                <label for="password">Пароль:</label>
+                <input type="text" class="form-control" id="password" name="password" value="${password}">
+            </div>
+                <%--    TODO--%>
+            <input type="hidden" id="role" name="role" value="${role}">
 
-<form action="/user/save.html" method="post" onsubmit="return validateEditUser(this)">
-    <c:if test="${not empty user}">
-        <input type="hidden" name="id" value="${user.id}">
-    </c:if>
-    <label for="login">Логин:</label>
-    <input type="text" id="login" name="login" value="${login}">
+            <div class="btn-group">
+                <input type="submit" class="btn btn-warning" value="Сбросить">
+                <input type="submit" class="btn btn-success" value="Продолжить">
+            </div>
+        </form>
 
-    <label for="password">Пароль:</label>
-    <input type="text" id="password" name="password" value="${password}">
-
-    <%--    TODO--%>
-    <input type="hidden" id="role" name="role" value="${role}">
-
-    <button type="submit">Продолжить</button>
-    <button type="reset">Сбросить</button>
-</form>
-
-<c:if test="${not empty user}">
-    <form action="/user/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">
-        <input type="hidden" name="id" value="${user.id}">
-        <input type="submit" value="Удалить">
-    </form>
-</c:if>
-</body>
-</html>
-
-
+        <c:if test="${not empty user}">
+            <form action="/user/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">
+                <input type="hidden" name="id" value="${user.id}">
+                <input type="submit" class="btn btn-danger" value="Удалить">
+            </form>
+        </c:if>
+    </div>
+</u:html>

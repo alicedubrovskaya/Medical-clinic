@@ -10,20 +10,24 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <u:html title="Управление расписанием приемов врачей" message="${message}">
-    <%--TODO add validation--%>
-    <form action="/appointment/generate.html" method="post">
-        <label for="days">Количество дней:</label>
-        <input type="text" id="days" name="days">
+    <div class="container">
+            <%--TODO add validation--%>
+        <form action="/appointment/generate.html" method="post">
+            <div class="form-group">
+                <label for="days">Количество дней:</label>
+                <input type="text" class="form-control" id="days" name="days">
+            </div>
 
-        <label for="date">Начальная дата генерации:</label>
-        <input type="date" id="date" name="date" value="2021-01-01">
+            <div class="form-group">
+                <label for="date">Начальная дата генерации:</label>
+                <input type="date" class="form-control" id="date" name="date" value="2021-01-01">
+            </div>
+            <input type="submit" class="btn btn-warning" value="Сгенерировать приемы врачей">
+        </form>
 
-        <input type="submit" value="Сгенерировать приемы врачей">
-    </form>
+        <form action="/appointment/list.html" method="get">
+            <button type="submit" class="btn btn-default">Приемы врачей</button>
+        </form>
 
-    <form action="/appointment/list.html" method="get">
-        <button type="submit">Приемы врачей</button>
-    </form>
-
-
+    </div>
 </u:html>
