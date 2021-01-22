@@ -10,23 +10,23 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <u:html title="Прием пациентов" message="${message}">
-    <h2>Прием пациентов</h2>
+    <div class="container">
+        <h2>Прием пациентов</h2>
+        <form action="/appointment/list.html" method="post">
+            <div class="form-group">
+                <label for="date">Дата:</label>
+                <input type="date" class="form-control" id="date" name="date">
+            </div>
+            <script>
+                getDate();
+            </script>
+            <select id="status" class="form-control" name="status">
+                <c:forEach items="${statuses}" var="status">
+                    <option value="${status}">${status}</option>
+                </c:forEach>
+            </select>
 
-    <form action="/appointment/list.html" method="post">
-
-        <label for="date">Дата:</label>
-        <input type="date" id="date" name="date">
-
-        <script>
-            getDate();
-        </script>
-
-        <select id="status" name="status">
-            <c:forEach items="${statuses}" var="status">
-                <option value="${status}">${status}</option>
-            </c:forEach>
-        </select>
-
-        <input type="submit" value=Просмотреть>
-    </form>
+            <input type="submit" class="btn btn-info" value=Просмотреть>
+        </form>
+    </div>
 </u:html>

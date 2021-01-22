@@ -65,7 +65,7 @@
         <c:if test="${not empty patient}">
             <form action="/appointment/medicalCard.html" method="get">
                 <input type="hidden" name="id" value="${patient.id}">
-                <input type="submit" value="История посещений врачей">
+                <input type="submit" class="btn btn-default" value="История посещений врачей">
             </form>
         </c:if>
     </div>

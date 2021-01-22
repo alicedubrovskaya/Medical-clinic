@@ -13,55 +13,75 @@
 
 <%--TODO validatior--%>
 <u:html title="Редактирование приема" message="${message}">
-    <h2>Редактирование приема</h2>
+    <div class="container">
+        <h2>Редактирование приема</h2>
 
-    <fmt:formatDate value="${appointment.time}" var="dateFormat" pattern="yyyy-MM-dd HH:mm:ss"/>
-    <p>Время:
-        <output name="doctor">${dateFormat}</output>
-    </p>
+        <div class="form-group row">
+            <label for="dateFormat" class="col-sm-2 col-form-label">Время:</label>
+            <div class="col-sm-10">
+                <fmt:formatDate value="${appointment.time}" var="dateFormat" pattern="yyyy-MM-dd HH:mm:ss"/>
+                <input type="text" readonly class="form-control-plaintext" id="dateFormat" value="${dateFormat}">
+            </div>
+        </div>
+        <input type="hidden" name="appointmentId" value="${appointment.id}">
 
-    <input type="hidden" name="appointmentId" value="${appointment.id}">
+        <div class="form-group row">
+            <label for="patient" class="col-sm-2 col-form-label">Пациент:</label>
+            <div class="col-sm-10">
+                <c:choose>
+                    <c:when test="${not empty appointment.patient}">
+                        <input type="text" readonly class="form-control-plaintext" id="patient"
+                               onclick="submitFormById('form-${appointment.patient.id}')"
+                               value="${appointment.patient.surname} ${appointment.patient.name}">
+                        <form id="form-${appointment.patient.id}" action="/patient/edit.html" method="post">
+                            <input type="hidden" name="id" value="${appointment.patient.id}">
+                        </form>
+                        </input>
+                    </c:when>
+                </c:choose>
+            </div>
+        </div>
 
-    <c:choose>
-        <c:when test="${not empty appointment.patient}">
-            <output name="patient" onclick="submitFormById('form-${appointment.patient.id}')">
-                Пациент: ${appointment.patient.surname} ${appointment.patient.name}
-                <form id="form-${appointment.patient.id}" action="/patient/edit.html" method="post">
-                    <input type="hidden" name="id" value="${appointment.patient.id}">
-                </form>
-            </output>
+        <form action="/appointment/save.html" method="post">
+            <c:choose>
+                <c:when test="${not empty appointment.patient}">
+                    <input type="hidden" name="patientId" value="${appointment.patient.id}">
+                    <input type="hidden" name="appointmentId" value="${appointment.id}">
 
-        </c:when>
-    </c:choose>
 
-    <form action="/appointment/save.html" method="post">
+                    <select class="form-control" id="status" name="status">
+                        <c:forEach items="${statuses}" var="status">
+                            <option value="${status}">${status}</option>
+                        </c:forEach>
+                    </select>
 
-        <c:choose>
-            <c:when test="${not empty appointment.patient}">
-                <select id="status" name="status">
-                    <c:forEach items="${statuses}" var="status">
-                        <option value="${status}">${status}</option>
-                    </c:forEach>
-                </select>
+                    <div class="form-group">
+                        <label for="complaints">Жалобы:</label>
+                        <input type="text" class="form-control" id="complaints" name="complaints"
+                               value="${appointment.complaints}">
+                    </div>
+                    <div class="form-group>">
+                        <label for="medicalReport">Заключение:</label>
+                        <input type="text" class="form-control" id="medicalReport" name="medicalReport"
+                               value="${appointment.medicalReport}">
 
-                <label for="complaints">Жалобы:</label>
-                <input type="text" id="complaints" name="complaints" value="${appointment.complaints}">
-
-                <label for="medicalReport">Заключение:</label>
-                <input type="text" id="medicalReport" name="medicalReport" value="${appointment.medicalReport}">
-
-                <label for="recommendation">Рекоммендации:</label>
-                <input type="text" id="recommendation" name="recommendation" value="${appointment.recommendation}">
-
-                <button type="submit">Сохранить</button>
-                <button type="reset">Сбросить</button>
-            </c:when>
-
-            <c:otherwise>
-                <p>Пациент на данное время не записан </p>
-            </c:otherwise>
-
-        </c:choose>
-    </form>
-
+                    </div>
+                    <div class="form-group">
+                        <label for="recommendation">Рекоммендации:</label>
+                        <input type="text" class="form-control" id="recommendation" name="recommendation"
+                               value="${appointment.recommendation}">
+                    </div>
+                    <div class="btn-group">
+                        <div class="btn-group">
+                            <input type="submit" class="btn btn-success" value="Сохранить">
+                            <input type="reset" class="btn btn-warning" value="Сбросить">
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <p class="text-info">Пациент не записан</p>
+                </c:otherwise>
+            </c:choose>
+        </form>
+    </div>
 </u:html>

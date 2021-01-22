@@ -25,7 +25,7 @@
                 <input type="password" id="password" name="password" class="form-control">
             </div>
 
-            <input type="submit" class="btn btn-default" value="Войти">
+            <input type="submit" class="btn btn-success" value="Войти">
         </form>
     </div>
 </u:html>

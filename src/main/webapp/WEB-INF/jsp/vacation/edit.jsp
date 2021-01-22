@@ -28,7 +28,6 @@
             <c:if test="${not empty id}">
                 <input type="hidden" name="id" value="${id}">
             </c:if>
-
             <div class="form-group">
                 <label for="surname">Фамилия:</label>
                 <input type="text" class="form-control" id="surname" name="surname" value="${doctorSurname}">
@@ -39,21 +38,18 @@
             </div>
             <div class="form-group">
                 <label for="start">Дата начала:</label>
-                <input type="date" class="form-control" id="start" name="vacation-start" value="2021-01-01"
-                       min="2021-01-01"
+                <input type="date" class="form-control" id="start" name="vacation-start" min="2021-01-01"
                        value="${start}">
             </div>
             <div class="form-group">
                 <label for="end">Дата окончания:</label>
-                <input type="date" class="form-control" id="end" name="vacation-end" value="2021-01-01" min="2021-01-01"
-                       value="${end}">
+                <input type="date" class="form-control" id="end" name="vacation-end" min="2021-01-01" value="${end}">
             </div>
             <div class="btn-group">
                 <input type="submit" class="btn btn-success" value="Сохранить">
                 <input type="reset" class="btn btn-warning" value="Сбросить">
             </div>
         </form>
-
 
         <c:if test="${not empty vacation}">
             <form action="/vacation/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">

@@ -59,7 +59,7 @@ public class AppointmentSaveCommand extends AuthorizedUserCommand {
         }
         appointmentService.save(appointment);
 
-        forward.getAttributes().put("message", "Запись к врачу успешно сохранена");
+        forward.getAttributes().put("message", "Прием у врача успешно сохранена");
 
         return forward;
     }

@@ -9,14 +9,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--<html>--%>
-<%--<head>--%>
-<%--    <title>Отпуска врачей</title>--%>
-<%--    <script type="text/javascript" src="/js/test.js"></script>--%>
-<%--    <script type="text/javascript" src="/js/main.js"></script>--%>
-<%--</head>--%>
-<%--<body>--%>
-<%--<h2>Отпуска врачей</h2>--%>
 
 <u:html title="Список отпусков" message="${message}">
     <div class="container">
