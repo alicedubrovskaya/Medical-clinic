@@ -7,14 +7,16 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib tagdir="/WEB-INF/tags" prefix="u" %>
+
 <u:html title="Главная страница" message="${message}">
+
     <form action="/login.html" method="post">
-        <button type="submit">Войти в систему</button>
+        <input type="submit" class="btn btn-success" value="Войти в систему">
     </form>
 
     <form action="/user/edit.html" method="post">
         <input type="hidden" name="role" value="Пациент">
-        <button type="submit">Зарегистрироваться</button>
+        <input type="submit" class="btn btn-default" value="Зарегистрироваться">
     </form>
 
 </u:html>

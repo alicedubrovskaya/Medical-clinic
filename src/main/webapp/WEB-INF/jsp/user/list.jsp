@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib tagdir="/WEB-INF/tags" prefix="u" %>
 <%--
   Created by IntelliJ IDEA.
   User: Алиса
@@ -7,31 +8,32 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Список пользователей</title>
-    <script type="text/javascript" src="/js/main.js"></script>
-</head>
-<body>
-<table border="1">
-    <tr>
-        <th>Логин</th>
-        <th>Роль</th>
-    </tr>
 
-    <c:url value="/user/edit.html" var="userEditUrl"/>
-    <c:forEach items="${users}" var="user">
-        <tr onclick="submitFormById('form-${user.id}')">
-            <td>
-                    ${user.login}
-                <form id="form-${user.id}" action="${userEditUrl}" method="post">
-                    <input type="hidden" name="id" value="${user.id}">
-                </form>
-            </td>
-            <td>${user.role.name}</td>
-        </tr>
-    </c:forEach>
-</table>
+<u:html title="Список пользователей" message="${message}">
+    <div class="container">
+        <h2>Список пользователей</h2>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Логин</th>
+                <th>Роль</th>
+            </tr>
+            </thead>
 
-</body>
-</html>
+            <tbody>
+            <c:url value="/user/edit.html" var="userEditUrl"/>
+            <c:forEach items="${users}" var="user">
+                <tr onclick="submitFormById('form-${user.id}')">
+                    <td>
+                            ${user.login}
+                        <form id="form-${user.id}" action="${userEditUrl}" method="post">
+                            <input type="hidden" name="id" value="${user.id}">
+                        </form>
+                    </td>
+                    <td>${user.role.name}</td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
+</u:html>

@@ -12,6 +12,7 @@
 <u:html title="Список врачей" message="${message}">
     <div class="container">
         <h2>Список врачей</h2>
+
         <table class="table table-hover">
             <thead>
             <tr>

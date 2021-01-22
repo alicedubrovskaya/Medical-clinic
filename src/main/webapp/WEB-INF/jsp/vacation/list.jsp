@@ -19,39 +19,47 @@
 <%--<h2>Отпуска врачей</h2>--%>
 
 <u:html title="Список отпусков" message="${message}">
-    <table border="1">
-        <tr>
-            <th>Фамилия</th>
-            <th>Имя</th>
-            <th>Специализация</th>
-            <th>Дата начала</th>
-            <th>Дата конца</th>
-        </tr>
+    <div class="container">
 
-        <c:url value="/vacation/edit.html" var="vacationEditUrl"/>
-        <c:forEach var="vacation" items="${vacations}" varStatus="status">
-            <tr onclick="submitFormById('form-${vacation.id}')">
-                <td>
-                        ${vacation.doctor.surname}
-                    <form id="form-${vacation.id}" action="${vacationEditUrl}" method="post">
-                        <input type="hidden" name="id" value="${vacation.id}">
-                    </form>
-                </td>
-                <td>${vacation.doctor.name}</td>
-                <td>${vacation.doctor.specialization}</td>
-
-                <c:remove var="parsedStartDate"/>
-                <c:remove var="startFormat"/>
-                <fmt:formatDate value="${vacation.start}" var="startFormat" pattern="yyyy-MM-dd"/>
-                <td>${startFormat}</td>
-
-                <c:remove var="parsedEndDate"/>
-                <c:remove var="endFormat"/>
-                <fmt:formatDate value="${vacation.end}" var="endFormat" pattern="yyyy-MM-dd"/>
-                <td>${endFormat}</td>
+        <h2>Список отпусков</h2>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Специализация</th>
+                <th>Дата начала</th>
+                <th>Дата конца</th>
             </tr>
-        </c:forEach>
-    </table>
+            </thead>
+            <tbody>
+
+            <c:url value="/vacation/edit.html" var="vacationEditUrl"/>
+            <c:forEach var="vacation" items="${vacations}" varStatus="status">
+                <tr onclick="submitFormById('form-${vacation.id}')">
+                    <td>
+                            ${vacation.doctor.surname}
+                        <form id="form-${vacation.id}" action="${vacationEditUrl}" method="post">
+                            <input type="hidden" name="id" value="${vacation.id}">
+                        </form>
+                    </td>
+                    <td>${vacation.doctor.name}</td>
+                    <td>${vacation.doctor.specialization}</td>
+
+                    <c:remove var="parsedStartDate"/>
+                    <c:remove var="startFormat"/>
+                    <fmt:formatDate value="${vacation.start}" var="startFormat" pattern="yyyy-MM-dd"/>
+                    <td>${startFormat}</td>
+
+                    <c:remove var="parsedEndDate"/>
+                    <c:remove var="endFormat"/>
+                    <fmt:formatDate value="${vacation.end}" var="endFormat" pattern="yyyy-MM-dd"/>
+                    <td>${endFormat}</td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
 
     <%--    <form action="/vacation/edit.html" method="post">--%>
     <%--        <button type="submit">Добавить отпуск</button>--%>
