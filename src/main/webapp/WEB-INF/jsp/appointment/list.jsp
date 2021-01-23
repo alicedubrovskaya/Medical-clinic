@@ -15,7 +15,7 @@
     <div class="container">
         <c:if test="${authorizedUser.role.name == 'Администратор'}">
             <form action="/appointment/list.html" method="get">
-                <label for="date">Время:</label>
+                <label for="date">Дата:</label>
                 <input type="date" id="date" name="date" value="2021-01-01">
 
                 <button type="submit">Поиск</button>

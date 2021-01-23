@@ -24,9 +24,9 @@
 </c:choose>
 
 <u:html title="${title}" message="${message}">
-    <H2>${title}</H2>
     <div class="container">
-            <%--<form action="/patient/save.html" method="post" onsubmit="return validateEditDoctor(this)">--%>
+        <H2>${title}</H2>
+    <%--<form action="/patient/save.html" method="post" onsubmit="return validateEditDoctor(this)">--%>
         <form action="/patient/save.html" method="post">
             <c:if test="${not empty patient}">
                 <input type="hidden" name="id" value="${patient.id}">
