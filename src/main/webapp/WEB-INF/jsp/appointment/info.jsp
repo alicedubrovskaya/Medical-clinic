@@ -27,6 +27,8 @@
 <fmt:message bundle="${textResources}" key="appointment.whithoutPatient" var="withoutPatient"/>
 <fmt:message bundle="${textResources}" key="appointment.make" var="appointment_make"/>
 <fmt:message bundle="${textResources}" key="button.edit" var="button_edit"/>
+<fmt:message bundle="${textResources}" key="button.save" var="button_save"/>
+
 
 <u:html title="${appointment_making}" message="${message}">
     <div class="container">
@@ -69,14 +71,14 @@
             <c:if test="${authorizedUser.role.name =='Пациент'}">
                 <form action="/appointment/save.html" method="post">
                     <input type="hidden" name="appointmentId" value="${appointment.id}">
-                    <input type="submit" class="btn btn-success" value="${button_edit}">
+                    <input type="submit" class="btn btn-success" value="${button_save}">
                 </form>
             </c:if>
 
             <c:if test="${authorizedUser.role.name =='Врач'}">
                 <form action="/appointment/edit.html" method="post">
                     <input type="hidden" name="appointmentId" value="${appointment.id}">
-                    <input type="submit" class="btn btn-default" value="Редактировать">
+                    <input type="submit" class="btn btn-default" value="${button_edit}">
                 </form>
             </c:if>
         </div>

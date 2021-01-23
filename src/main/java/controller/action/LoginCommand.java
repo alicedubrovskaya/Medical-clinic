@@ -68,7 +68,6 @@ public class LoginCommand extends Command {
                 session.setAttribute("menu", menu.get(user.getRole()));
                 session.setAttribute("language", "ru");
 
-
                 //TODO
                 return new Forward("/main.html");
             } else {
