@@ -17,12 +17,21 @@ public class LoginCommand extends Command {
 
     static {
         menu.put(Role.ADMINISTRATOR, new ArrayList<>(Arrays.asList(
-                new MenuItem("/doctor/list.html", "Врачи", new ArrayList<>(
-                        Collections.singleton(new MenuItem("/user/edit.html", "Регистрация врача"))
+                new MenuItem("/doctor/list.html", "Врачи", Arrays.asList(
+                        new MenuItem("/user/edit.html", "Регистрация врача"),
+                        new MenuItem("/doctor/list.html", "Список врачей")
                 )),
-                new MenuItem("/patient/list.html", "Пациенты"),
-                new MenuItem("/appointment/generate.html", "Управление расписанием приемов врачей"),
-                new MenuItem("/vacation/list.html", "Управление отпусками")
+                new MenuItem("Пациенты", Arrays.asList(
+                        new MenuItem("/patient/list.html", "Список пациентов")
+                )),
+                new MenuItem("Расписание", Arrays.asList(
+                        new MenuItem("/appointment/generate.html", "Генерация расписания"),
+                        new MenuItem("/appointment/list.html", "Приемы врачей")
+                )),
+                new MenuItem("Отпуски", Arrays.asList(
+                        new MenuItem("/vacation/list.html", "Управление отпусками"),
+                        new MenuItem("/vacation/edit.html", "Добавить отпуск")
+                ))
         )));
         menu.put(Role.DOCTOR, new ArrayList<>(Arrays.asList(
                 new MenuItem("/doctor/edit.html", "Мой профиль"),
@@ -54,6 +63,8 @@ public class LoginCommand extends Command {
                 HttpSession session = request.getSession();
                 session.setAttribute("authorizedUser", user);
                 session.setAttribute("menu", menu.get(user.getRole()));
+                session.setAttribute("language", "ru");
+
 
                 //TODO
                 return new Forward("/main.html");

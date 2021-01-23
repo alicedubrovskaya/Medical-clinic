@@ -28,32 +28,24 @@
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Language
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <form action="/language.html" method="post">
+                            <input type="hidden" name="language" value="en">
+                            <input type="submit" class="btn btn-default" value="English">
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/language.html" method="post">
+                            <input type="hidden" name="language" value="ru">
+                            <input type="submit" class="btn btn-default" value="Русский">
+                        </form>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
 </nav>
-
-
-<%--<H1>Медицинская клиника<BR>«Healthy»</H1>--%>
-
-
-<%--<div id="header">--%>
-
-<%--	<c:if test="${not empty authorizedUser}">--%>
-<%--		<UL class="right">--%>
-<%--			<c:forEach items="${menu}" var="item">--%>
-<%--				<c:url value="${item.url}" var="itemUrl"/>--%>
-<%--				<LI class="item"><A href="${itemUrl}">${item.name}</A></LI>--%>
-<%--			</c:forEach>--%>
-<%--			<LI class="item">--%>
-<%--				<c:url value="/img/arrow.gif" var="arrowUrl"/>--%>
-<%--				<A href="#" class="drop-button">${authorizedUser.login} <IMG class="arrow" src="${arrowUrl}"></A>--%>
-<%--				<OL class="drop">--%>
-<%--					<c:url value="/profile/edit.html" var="profileEditUrl"/>--%>
-<%--					<LI><A href="${profileEditUrl}">профиль</A></LI>--%>
-<%--					<c:url value="/logout.html" var="logoutUrl"/>--%>
-<%--					<LI><A href="${logoutUrl}">выход</A></LI>--%>
-<%--				</OL>--%>
-<%--			</LI>--%>
-<%--		</UL>--%>
-<%--	</c:if>--%>
-<%--</div>--%>

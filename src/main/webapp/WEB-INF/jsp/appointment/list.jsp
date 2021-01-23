@@ -11,8 +11,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <u:html title="Приемы врачей" message="${message}">
-    <h2>Приемы врачей</h2>
     <div class="container">
+        <h2>Приемы врачей</h2>
         <c:if test="${authorizedUser.role.name == 'Администратор'}">
             <form action="/appointment/list.html" method="get">
                 <label for="date">Дата:</label>

@@ -15,6 +15,12 @@ public class MenuItem implements Serializable {
         this.menuItemsDropDown = menuItems;
     }
 
+    public MenuItem(String name, List<MenuItem> menuItems) {
+        this.name = name;
+        this.menuItemsDropDown = menuItems;
+    }
+
+    //TODO
     public MenuItem(String url, String name) {
         this.url = url;
         this.name = name;

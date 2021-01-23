@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib tagdir="/WEB-INF/tags" prefix="u" %>
 <%--
   Created by IntelliJ IDEA.
@@ -8,10 +9,22 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<c:choose>
+    <c:when test="${sessionScope.language != null}">
+        <fmt:setLocale value="${sessionScope.language}"/>
+    </c:when>
+    <c:otherwise>
+        <fmt:setLocale value="en"/>
+    </c:otherwise>
+</c:choose>
+
+<fmt:setBundle basename="textResources" var="textResources" scope="session"/>
+<fmt:message bundle="${textResources}" key="doctor.list" var="doctorList"/>
+
 
 <u:html title="Список врачей" message="${message}">
     <div class="container">
-        <h2>Список врачей</h2>
+        <h2>${doctorList}</h2>
 
         <table class="table table-hover">
             <thead>

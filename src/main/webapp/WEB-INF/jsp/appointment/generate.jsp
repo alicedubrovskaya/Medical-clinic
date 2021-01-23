@@ -25,9 +25,9 @@
             <input type="submit" class="btn btn-warning" value="Сгенерировать приемы врачей">
         </form>
 
-        <form action="/appointment/list.html" method="get">
-            <button type="submit" class="btn btn-default">Приемы врачей</button>
-        </form>
+<%--        <form action="/appointment/list.html" method="get">--%>
+<%--            <button type="submit" class="btn btn-default">Приемы врачей</button>--%>
+<%--        </form>--%>
 
     </div>
 </u:html>
