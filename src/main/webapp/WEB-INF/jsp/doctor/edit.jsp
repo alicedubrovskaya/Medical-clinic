@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib tagdir="/WEB-INF/tags" prefix="u" %>
 <%--
   Created by IntelliJ IDEA.
@@ -8,6 +9,28 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:choose>
+    <c:when test="${sessionScope.language != null}">
+        <fmt:setLocale value="${sessionScope.language}"/>
+    </c:when>
+    <c:otherwise>
+        <fmt:setLocale value="en"/>
+    </c:otherwise>
+</c:choose>
+
+<fmt:setBundle basename="textResources" var="textResources" scope="session"/>
+<fmt:message bundle="${textResources}" key="doctor.list" var="doctor_list"/>
+<fmt:message bundle="${textResources}" key="doctor.name" var="doctor_name"/>
+<fmt:message bundle="${textResources}" key="doctor.surname" var="doctor_surname"/>
+<fmt:message bundle="${textResources}" key="doctor.specialization" var="doctor_specialization"/>
+<fmt:message bundle="${textResources}" key="doctor" var="doctor_language"/>
+<fmt:message bundle="${textResources}" key="doctor.new" var="doctor_new"/>
+<fmt:message bundle="${textResources}" key="button.save" var="button_save"/>
+<fmt:message bundle="${textResources}" key="button.delete" var="button_delete"/>
+<fmt:message bundle="${textResources}" key="button.reset" var="button_reset"/>
+
+<fmt:message bundle="${textResources}" key="doctor.working.shift" var="doctor_working_shift"/>
+
 
 <c:choose>
     <c:when test="${not empty doctor}">
@@ -15,10 +38,10 @@
         <c:set var="name" value="${doctor.name}"/>
         <c:set var="specialization" value="${doctor.specialization}"/>
         <c:set var="workingShift" value="${doctor.workingShift.name}"/>
-        <c:set var="title" value="Врач ${doctor.surname} ${doctor.name}"/>
+        <c:set var="title" value="${doctor_language} ${doctor.surname} ${doctor.name}"/>
     </c:when>
     <c:otherwise>
-        <c:set var="title" value="Новый врач"/>
+        <c:set var="title" value="${doctor_new}"/>
     </c:otherwise>
 </c:choose>
 
@@ -36,12 +59,12 @@
             </c:if>
 
             <div class="form-group">
-                <label for="surname">Фамилия:</label>
+                <label for="surname">${doctor_surname}:</label>
                 <input type="text" class="form-control" id="surname" name="surname" value="${surname}">
             </div>
 
             <div class="form-group">
-                <label for="name">Имя:</label>
+                <label for="name">${doctor_name}:</label>
                 <input type="text" class="form-control" id="name" name="name" value="${name}">
             </div>
 
@@ -51,7 +74,7 @@
                     <c:set var="selectedSpecialization" value="${specialization}"/>
                 </c:if>
 
-                <label for="specialization">Специализация:</label>
+                <label for="specialization">${doctor_specialization}:</label>
                 <select class="form-control" id="specialization" name="specialization">
                     <c:forEach items="${specializations}" var="specializationSelection">
                         <c:choose>
@@ -72,7 +95,7 @@
                     <c:set var="selectedWorkingShift" value="${workingShift}"/>
                 </c:if>
 
-                <label for="workingShift">Рабочая смена:</label>
+                <label for="workingShift">${doctor_working_shift}:</label>
                 <select class="form-control" id="workingShift" name="workingShift">
                     <c:forEach items="${workingShifts}" var="workingShiftSelection">
                         <c:choose>
@@ -88,15 +111,15 @@
             </div>
 
             <div class="btn-group">
-                <input type="submit" class="btn btn-success" value="Сохранить">
-                <input type="reset" class="btn btn-warning" value="Сбросить">
+                <input type="submit" class="btn btn-success" value="${button_save}">
+                <input type="reset" class="btn btn-warning" value="${button_reset}">
             </div>
         </form>
             <%--    TODO js--%>
         <c:if test="${not empty doctor}">
             <form action="/doctor/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">
                 <input type="hidden" name="id" value="${doctor.id}">
-                <input type="submit" class="btn btn-danger" value="Удалить">
+                <input type="submit" class="btn btn-danger" value="${button_delete}">
             </form>
         </c:if>
     </div>

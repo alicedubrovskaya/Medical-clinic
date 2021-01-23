@@ -19,20 +19,25 @@
 </c:choose>
 
 <fmt:setBundle basename="textResources" var="textResources" scope="session"/>
-<fmt:message bundle="${textResources}" key="doctor.list" var="doctorList"/>
+<fmt:message bundle="${textResources}" key="doctor.list" var="doctor_list"/>
+<fmt:message bundle="${textResources}" key="doctor.name" var="doctor_name"/>
+<fmt:message bundle="${textResources}" key="doctor.surname" var="doctor_surname"/>
+<fmt:message bundle="${textResources}" key="doctor.specialization" var="doctor_specialization"/>
+
+<fmt:message bundle="${textResources}" key="doctor.working.shift" var="doctor_working_shift"/>
 
 
-<u:html title="Список врачей" message="${message}">
+<u:html title="${doctor_list}" message="${message}">
     <div class="container">
-        <h2>${doctorList}</h2>
+        <h2>${doctor_list}</h2>
 
         <table class="table table-hover">
             <thead>
             <tr>
-                <th>Фамилия</th>
-                <th>Имя</th>
-                <th>Специализация</th>
-                <th>Смена рабочая</th>
+                <th>${doctor_surname}</th>
+                <th>${doctor_name}</th>
+                <th>${doctor_specialization}</th>
+                <th>${doctor_working_shift}</th>
             </tr>
             </thead>
             <tbody>
@@ -53,10 +58,10 @@
             </tbody>
         </table>
 
-        <form action="/user/edit.html">
-            <input type="hidden" name="role" value='Врач'>
-            <button type="submit">Зарегистрировать врача</button>
-        </form>
+<%--        <form action="/user/edit.html">--%>
+<%--            <input type="hidden" name="role" value='Врач'>--%>
+<%--            <button type="submit">Зарегистрировать врача</button>--%>
+<%--        </form>--%>
     </div>
 </u:html>
 
