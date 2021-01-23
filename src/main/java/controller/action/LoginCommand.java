@@ -24,6 +24,9 @@ public class LoginCommand extends Command {
                 new MenuItem("Пациенты", Arrays.asList(
                         new MenuItem("/patient/list.html", "Список пациентов")
                 )),
+                new MenuItem("Пользователи", Arrays.asList(
+                        new MenuItem("/user/list.html", "Список пользователей")
+                )),
                 new MenuItem("Расписание", Arrays.asList(
                         new MenuItem("/appointment/generate.html", "Генерация расписания"),
                         new MenuItem("/appointment/list.html", "Приемы врачей")

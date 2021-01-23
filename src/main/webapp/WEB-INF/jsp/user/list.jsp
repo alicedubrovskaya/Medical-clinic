@@ -1,5 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib tagdir="/WEB-INF/tags" prefix="u" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <%--
   Created by IntelliJ IDEA.
   User: Алиса
@@ -9,17 +11,33 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<u:html title="Список пользователей" message="${message}">
+
+<c:choose>
+    <c:when test="${sessionScope.language != null}">
+        <fmt:setLocale value="${sessionScope.language}"/>
+    </c:when>
+    <c:otherwise>
+        <fmt:setLocale value="en"/>
+    </c:otherwise>
+</c:choose>
+
+<fmt:setBundle basename="textResources" var="textResources" scope="session"/>
+<fmt:message bundle="${textResources}" key="user.list" var="user_list"/>
+<fmt:message bundle="${textResources}" key="user.login" var="user_login"/>
+<fmt:message bundle="${textResources}" key="user.password" var="user_password"/>
+<fmt:message bundle="${textResources}" key="user.role" var="user_role"/>
+
+
+<u:html title="${user_list}" message="${message}">
     <div class="container">
-        <h2>Список пользователей</h2>
+        <h2>${user_list}</h2>
         <table class="table table-hover">
             <thead>
             <tr>
-                <th>Логин</th>
-                <th>Роль</th>
+                <th>${user_login}</th>
+                <th>${user_role}</th>
             </tr>
             </thead>
-
             <tbody>
             <c:url value="/user/edit.html" var="userEditUrl"/>
             <c:forEach items="${users}" var="user">

@@ -17,6 +17,7 @@ public class UserEditCommand extends Command {
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         try {
+            //TODO
             String parameter = request.getParameter("role");
             if (parameter != null) {
                 request.setAttribute("role", Role.getEnum(parameter).getId());

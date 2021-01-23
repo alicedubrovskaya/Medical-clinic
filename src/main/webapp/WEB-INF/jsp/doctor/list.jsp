@@ -23,7 +23,6 @@
 <fmt:message bundle="${textResources}" key="doctor.name" var="doctor_name"/>
 <fmt:message bundle="${textResources}" key="doctor.surname" var="doctor_surname"/>
 <fmt:message bundle="${textResources}" key="doctor.specialization" var="doctor_specialization"/>
-
 <fmt:message bundle="${textResources}" key="doctor.working.shift" var="doctor_working_shift"/>
 
 
