@@ -10,25 +10,46 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<u:html title="Приемы врачей" message="${message}">
+<c:choose>
+    <c:when test="${sessionScope.language != null}">
+        <fmt:setLocale value="${sessionScope.language}"/>
+    </c:when>
+    <c:otherwise>
+        <fmt:setLocale value="en"/>
+    </c:otherwise>
+</c:choose>
+
+<fmt:setBundle basename="textResources" var="textResources" scope="session"/>
+<fmt:message bundle="${textResources}" key="appointment.list" var="appointment_list"/>
+<fmt:message bundle="${textResources}" key="appointment" var="appointment_language"/>
+<fmt:message bundle="${textResources}" key="date" var="date"/>
+<fmt:message bundle="${textResources}" key="button.find" var="find"/>
+<fmt:message bundle="${textResources}" key="time" var="time"/>
+<fmt:message bundle="${textResources}" key="doctor" var="doctor"/>
+<fmt:message bundle="${textResources}" key="patient" var="patient"/>
+<fmt:message bundle="${textResources}" key="doctor.specialization" var="doctor_specialization"/>
+
+
+
+<u:html title="${appointment_list}" message="${message}">
     <div class="container">
-        <h2>Приемы врачей</h2>
+        <h2>${appointment_list}</h2>
         <c:if test="${authorizedUser.role.name == 'Администратор'}">
             <form action="/appointment/list.html" method="get">
-                <label for="date">Дата:</label>
+                <label for="date">${date}:</label>
                 <input type="date" id="date" name="date" value="2021-01-01">
 
-                <button type="submit">Поиск</button>
+                <button type="submit">${find}</button>
             </form>
         </c:if>
 
         <table class="table table-hover">
             <thead>
             <tr>
-                <th>Время</th>
-                <th>Врач</th>
-                <th>Пациент</th>
-                <th>Специализация</th>
+                <th>${time}</th>
+                <th>${doctor}</th>
+                <th>${patient}</th>
+                <th>${doctor_specialization}</th>
             </tr>
             </thead>
             <tbody>
@@ -60,5 +81,4 @@
             </tbody>
         </table>
     </div>
-
 </u:html>

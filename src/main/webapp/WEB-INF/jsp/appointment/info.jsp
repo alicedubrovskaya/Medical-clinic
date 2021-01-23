@@ -10,25 +10,43 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<u:html title="Запись на прием к врачу" message="${message}">
+<c:choose>
+    <c:when test="${sessionScope.language != null}">
+        <fmt:setLocale value="${sessionScope.language}"/>
+    </c:when>
+    <c:otherwise>
+        <fmt:setLocale value="en"/>
+    </c:otherwise>
+</c:choose>
+
+<fmt:setBundle basename="textResources" var="textResources" scope="session"/>
+<fmt:message bundle="${textResources}" key="appointment.making" var="appointment_making"/>
+<fmt:message bundle="${textResources}" key="doctor" var="doctor_language"/>
+<fmt:message bundle="${textResources}" key="patient" var="patient_language"/>
+<fmt:message bundle="${textResources}" key="appointment.date" var="appointment_date"/>
+<fmt:message bundle="${textResources}" key="appointment.whithoutPatient" var="withoutPatient"/>
+<fmt:message bundle="${textResources}" key="appointment.make" var="appointment_make"/>
+<fmt:message bundle="${textResources}" key="button.edit" var="button_edit"/>
+
+<u:html title="${appointment_making}" message="${message}">
     <div class="container">
         <form>
             <div class="form-group row">
-                <label for="time" class="col-sm-2 col-form-label">Дата приема:</label>
+                <label for="time" class="col-sm-2 col-form-label">${appointment_date}:</label>
                 <div class="col-sm-10">
                     <fmt:formatDate value="${appointment.time}" var="timeFormat" pattern="yyyy-MM-dd HH:mm:ss"/>
                     <input type="text" readonly class="form-control-plaintext" id="time" value="${timeFormat}">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="doctor" class="col-sm-2 col-form-label">Врач:</label>
+                <label for="doctor" class="col-sm-2 col-form-label">${doctor_language}:</label>
                 <div class="col-sm-10">
                     <input type="text" readonly class="form-control-plaintext" id="doctor"
                            value="${appointment.doctor.surname} ${appointment.doctor.name}">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="patient" class="col-sm-2 col-form-label">Пациент:</label>
+                <label for="patient" class="col-sm-2 col-form-label">${patient_language}:</label>
                 <div class="col-sm-10">
                     <c:choose>
                         <c:when test="${not empty appointment.patient}">
@@ -41,7 +59,7 @@
                             </input>
                         </c:when>
                         <c:otherwise>
-                            <input type="text" readonly class="form-control-plaintext" id="patient" value="Не записан">
+                            <input type="text" readonly class="form-control-plaintext" id="patient" value="${withoutPatient}">
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -51,7 +69,7 @@
             <c:if test="${authorizedUser.role.name =='Пациент'}">
                 <form action="/appointment/save.html" method="post">
                     <input type="hidden" name="appointmentId" value="${appointment.id}">
-                    <input type="submit" class="btn btn-success" value="Записаться">
+                    <input type="submit" class="btn btn-success" value="${button_edit}">
                 </form>
             </c:if>
 

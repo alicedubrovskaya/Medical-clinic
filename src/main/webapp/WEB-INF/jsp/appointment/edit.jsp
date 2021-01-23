@@ -11,10 +11,31 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<c:choose>
+    <c:when test="${sessionScope.language != null}">
+        <fmt:setLocale value="${sessionScope.language}"/>
+    </c:when>
+    <c:otherwise>
+        <fmt:setLocale value="en"/>
+    </c:otherwise>
+</c:choose>
+
+<fmt:setBundle basename="textResources" var="textResources" scope="session"/>
+<fmt:message bundle="${textResources}" key="appointment.edition" var="appointment_edition"/>
+<fmt:message bundle="${textResources}" key="patient" var="patient_language"/>
+<fmt:message bundle="${textResources}" key="appointment.complaints" var="appointment_complaints"/>
+<fmt:message bundle="${textResources}" key="appointment.recommendations" var="appointment_recommendations"/>
+<fmt:message bundle="${textResources}" key="appointment.medicalReport" var="appointment_medicalReport"/>
+<fmt:message bundle="${textResources}" key="button.save" var="button_save"/>
+<fmt:message bundle="${textResources}" key="button.reset" var="button_reset"/>
+<fmt:message bundle="${textResources}" key="appointment.whithoutPatient" var="withoutPatient"/>
+
+
+
 <%--TODO validatior--%>
-<u:html title="Редактирование приема" message="${message}">
+<u:html title="${appointment_edition}" message="${message}">
     <div class="container">
-        <h2>Редактирование приема</h2>
+        <h2>${appointment_edition}</h2>
 
         <div class="form-group row">
             <label for="dateFormat" class="col-sm-2 col-form-label">Время:</label>
@@ -56,30 +77,30 @@
                     </select>
 
                     <div class="form-group">
-                        <label for="complaints">Жалобы:</label>
+                        <label for="complaints">${appointment_complaints}:</label>
                         <input type="text" class="form-control" id="complaints" name="complaints"
                                value="${appointment.complaints}">
                     </div>
                     <div class="form-group>">
-                        <label for="medicalReport">Заключение:</label>
+                        <label for="medicalReport">${appointment_medicalReport}:</label>
                         <input type="text" class="form-control" id="medicalReport" name="medicalReport"
                                value="${appointment.medicalReport}">
 
                     </div>
                     <div class="form-group">
-                        <label for="recommendation">Рекоммендации:</label>
+                        <label for="recommendation">${appointment_recommendations}:</label>
                         <input type="text" class="form-control" id="recommendation" name="recommendation"
                                value="${appointment.recommendation}">
                     </div>
                     <div class="btn-group">
                         <div class="btn-group">
-                            <input type="submit" class="btn btn-success" value="Сохранить">
-                            <input type="reset" class="btn btn-warning" value="Сбросить">
+                            <input type="submit" class="btn btn-success" value="${button_save}">
+                            <input type="reset" class="btn btn-warning" value="${button_reset}">
                         </div>
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <p class="text-info">Пациент не записан</p>
+                    <p class="text-info">${withoutPatient}</p>
                 </c:otherwise>
             </c:choose>
         </form>
