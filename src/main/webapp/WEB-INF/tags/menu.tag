@@ -5,9 +5,11 @@
 <c:choose>
     <c:when test="${sessionScope.language != null}">
         <fmt:setLocale value="${sessionScope.language}"/>
+        <c:set var="lang" value="${sessionScope.language}"/>
     </c:when>
     <c:otherwise>
         <fmt:setLocale value="en"/>
+        <c:set var="lang" value="en"/>
     </c:otherwise>
 </c:choose>
 
@@ -16,6 +18,7 @@
 <fmt:message bundle="${textResources}" key="entrance" var="entrance"/>
 <fmt:message bundle="${textResources}" key="button.register" var="register"/>
 <fmt:message bundle="${textResources}" key="logout" var="logout"/>
+<fmt:message bundle="${textResources}" key="language.change" var="language"/>
 
 
 <nav class="navbar navbar-default">
@@ -31,7 +34,6 @@
                 </c:when>
                 <c:otherwise>
                     <li><a href="/login.html">${entrance}</a></li>
-<%--                    <li><a href="/language.html?">${entrance}</a></li>--%>
                 </c:otherwise>
             </c:choose>
 
@@ -40,36 +42,53 @@
                 <c:choose>
                     <c:when test="${not empty item.menuItemsDropDown}">
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">${item.name}
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <c:choose>
+                                    <c:when test="${lang =='ru'}">
+                                        ${item.russianName}
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${item.englishName}
+                                    </c:otherwise>
+                                </c:choose>
                                 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <c:forEach items="${item.menuItemsDropDown}" var="menuItem">
-                                    <li><a href="${menuItem.url}">${menuItem.name}</a></li>
+                                    <li>
+                                        <a href="${menuItem.url}">
+                                            <c:choose>
+                                                <c:when test="${lang =='ru'}">
+                                                    ${menuItem.russianName}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    ${item.englishName}
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </a>
+                                    </li>
                                 </c:forEach>
                             </ul>
                         </li>
                     </c:when>
                     <c:otherwise>
-                        <li class="item"><a href="${itemUrl}">${item.name}</a></li>
+                        <li class="item"><a href="${itemUrl}">
+                            <c:choose>
+                                <c:when test="${lang =='ru'}">
+                                    ${menuItem.russianName}
+                                </c:when>
+                                <c:otherwise>
+                                    ${item.englishName}
+                                </c:otherwise>
+                            </c:choose></a></li>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Language
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">${language}
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li>
-                        <form action="/language.html" method="post">
-                            <input type="hidden" name="language" value="en">
-                            <input type="submit" class="btn btn-default" value="English">
-                        </form>
-                    </li>
-                    <li>
-                        <form action="/language.html" method="post">
-                            <input type="hidden" name="language" value="ru">
-                            <input type="submit" class="btn btn-default" value="Русский">
-                        </form>
-                    </li>
+                    <li class="item"><a href="/language.html?language=en">English</a></li>
+                    <li class="item"><a href="/language.html?language=ru">Русский</a></li>
                 </ul>
             </li>
         </ul>

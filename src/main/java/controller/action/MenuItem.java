@@ -6,24 +6,28 @@ import java.util.List;
 
 public class MenuItem implements Serializable {
     private String url;
-    private String name;
+    private String russianName;
+    private String englishName;
     private List<MenuItem> menuItemsDropDown;
 
-    public MenuItem(String url, String name, List<MenuItem> menuItems) {
+    public MenuItem(String url, String russianName, String englishName, List<MenuItem> menuItems) {
         this.url = url;
-        this.name = name;
+        this.russianName = russianName;
+        this.englishName = englishName;
         this.menuItemsDropDown = menuItems;
     }
 
-    public MenuItem(String name, List<MenuItem> menuItems) {
-        this.name = name;
+    public MenuItem(String russianName, String englishName, List<MenuItem> menuItems) {
+        this.russianName = russianName;
+        this.englishName = englishName;
         this.menuItemsDropDown = menuItems;
     }
 
     //TODO
-    public MenuItem(String url, String name) {
+    public MenuItem(String url, String russianName, String englishName) {
         this.url = url;
-        this.name = name;
+        this.russianName = russianName;
+        this.englishName = englishName;
         this.menuItemsDropDown = new ArrayList<>();
     }
 
@@ -32,11 +36,15 @@ public class MenuItem implements Serializable {
         return url;
     }
 
-    public String getName() {
-        return name;
+    public String getRussianName() {
+        return russianName;
     }
 
     public List<MenuItem> getMenuItemsDropDown() {
         return menuItemsDropDown;
+    }
+
+    public String getEnglishName() {
+        return englishName;
     }
 }

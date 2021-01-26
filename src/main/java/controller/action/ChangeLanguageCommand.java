@@ -30,7 +30,6 @@ public class ChangeLanguageCommand extends Command {
             request.getSession().setAttribute("language", language);
             response.addCookie(new Cookie("language", language));
         }
-
         return forward;
     }
 }
