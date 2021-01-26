@@ -23,8 +23,7 @@ public class ChangeLanguageCommand extends Command {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
-        //TODO forward
-        Forward forward =  forward = new Forward("/doctor/list.html");
+        Forward forward  = new Forward("/home.html");
         String language = request.getParameter("language");
         if (language != null) {
             request.getSession().setAttribute("language", language);

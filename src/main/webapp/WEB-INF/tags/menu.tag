@@ -74,7 +74,7 @@
                         <li class="item"><a href="${itemUrl}">
                             <c:choose>
                                 <c:when test="${lang =='ru'}">
-                                    ${menuItem.russianName}
+                                    ${item.russianName}
                                 </c:when>
                                 <c:otherwise>
                                     ${item.englishName}

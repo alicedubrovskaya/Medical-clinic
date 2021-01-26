@@ -45,7 +45,6 @@ public class LoginCommand extends Command {
                 new MenuItem("/appointment/choice.html", "Записаться к врачу", "To make an appointment"),
                 new MenuItem("/appointment/medicalCard.html", "История посещений врачей", "History of appointments"),
                 new MenuItem("/patient/edit.html", "Мой профиль", "My profile")
-
         )));
     }
 
