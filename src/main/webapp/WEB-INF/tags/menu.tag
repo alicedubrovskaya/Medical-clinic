@@ -15,6 +15,8 @@
 <fmt:message bundle="${textResources}" key="medicalClinic" var="medicalClinic"/>
 <fmt:message bundle="${textResources}" key="entrance" var="entrance"/>
 <fmt:message bundle="${textResources}" key="button.register" var="register"/>
+<fmt:message bundle="${textResources}" key="logout" var="logout"/>
+
 
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -25,10 +27,11 @@
             <%--			<li class="active"><a href="#">Home</a></li>--%>
             <c:choose>
                 <c:when test="${not empty authorizedUser}">
-
+                    <li><a href="/logout.html">${logout}</a></li>
                 </c:when>
                 <c:otherwise>
                     <li><a href="/login.html">${entrance}</a></li>
+<%--                    <li><a href="/language.html?">${entrance}</a></li>--%>
                 </c:otherwise>
             </c:choose>
 

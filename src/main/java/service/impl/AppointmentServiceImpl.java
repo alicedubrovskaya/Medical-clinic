@@ -125,7 +125,6 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         VacationDao vacationDao = transaction.createVacationDao();
         List<Appointment> appointments = new ArrayList<>();
 
-
         if (defineDayOfWeek(date) != 1 && defineDayOfWeek(date) != 7 && vacationDao.readBySpecifiedDate(date) == null) {
             appointments = appointmentDao.createAppointments(date, doctor);
             for (Appointment appointment : appointments) {

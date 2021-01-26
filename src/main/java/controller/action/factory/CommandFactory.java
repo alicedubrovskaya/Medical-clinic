@@ -17,8 +17,8 @@ public class CommandFactory {
     private CommandFactory() {
         commands.put(CommandType.MAIN, new MainCommand());
         commands.put(CommandType.LOGIN, new LoginCommand());
+        commands.put(CommandType.LOGOUT, new LogoutCommand());
         commands.put(CommandType.LANGUAGE, new ChangeLanguageCommand());
-
 
         commands.put(CommandType.DOCTOR_SAVE, new DoctorSaveCommand());
         commands.put(CommandType.DOCTOR_LIST, new DoctorListCommand());
@@ -57,7 +57,7 @@ public class CommandFactory {
         return instance;
     }
 
-    public Command getCommand(String name) throws IllegalArgumentException{
+    public Command getCommand(String name) throws IllegalArgumentException {
         CommandType commandType = CommandType.getEnum(name);
         return commands.get(commandType);
     }

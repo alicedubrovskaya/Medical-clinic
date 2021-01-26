@@ -3,6 +3,7 @@ package controller.action.factory;
 public enum CommandType {
     MAIN("/main"),
     LOGIN("/login"),
+    LOGOUT("/logout"),
     LANGUAGE("/language"),
 
     DOCTOR_SAVE("/doctor/save"),

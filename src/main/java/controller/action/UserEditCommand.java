@@ -23,7 +23,6 @@ public class UserEditCommand extends Command {
                 request.setAttribute("role", Role.getEnum(parameter).getId());
             }
 
-
 //            if (getAuthorizedUser() == null) {
 //                request.setAttribute("role", Role.PATIENT.getId());
 //            }
