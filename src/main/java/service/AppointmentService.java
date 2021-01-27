@@ -10,8 +10,6 @@ import java.util.List;
 public interface AppointmentService extends Service {
     void save(Appointment appointment) throws PersistentException;
 
-    void saveGenerated(Appointment appointment) throws PersistentException;
-
     Appointment findById(Integer id) throws PersistentException;
 
     List<Appointment> findAll() throws PersistentException;
@@ -29,8 +27,6 @@ public interface AppointmentService extends Service {
     List<Appointment> findByPatient(Integer patientId) throws PersistentException;
 
     void delete(Integer id) throws PersistentException;
-
-    List<Appointment> createAppointments(Date date, Doctor doctor) throws PersistentException;
 
     void createAppointmentsForDoctors(Date date, int countOfDays) throws PersistentException;
 }

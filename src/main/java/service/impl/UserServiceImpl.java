@@ -1,8 +1,6 @@
 package service.impl;
 
-import dao.DoctorDao;
 import dao.UserDao;
-import domain.Doctor;
 import domain.User;
 import exception.PersistentException;
 import service.PasswordEncryption;
@@ -14,7 +12,6 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
 
     @Override
     public void save(User user) throws PersistentException {
-        transaction.setAutoCommit();
         UserDao userDao = transaction.createUserDao();
         if (user.getId() == null) {
             user.setPassword(PasswordEncryption.encrypt(user.getPassword()));
@@ -38,28 +35,24 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
 
     @Override
     public User findByLoginAndPassword(String login, String password) throws PersistentException {
-        transaction.setAutoCommit();
         UserDao userDao = transaction.createUserDao();
         return userDao.read(login, PasswordEncryption.encrypt(password));
     }
 
     @Override
     public User findByLogin(String login) throws PersistentException {
-        transaction.setAutoCommit();
         UserDao userDao = transaction.createUserDao();
         return userDao.read(login);
     }
 
     @Override
     public User findById(Integer id) throws PersistentException {
-        transaction.setAutoCommit();
         UserDao userDao = transaction.createUserDao();
         return userDao.read(id);
     }
 
     @Override
     public List<User> findAll() throws PersistentException {
-        transaction.setAutoCommit();
         UserDao userDao = transaction.createUserDao();
         return userDao.read();
     }

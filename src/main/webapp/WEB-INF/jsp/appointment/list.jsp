@@ -30,15 +30,16 @@
 <fmt:message bundle="${textResources}" key="doctor.specialization" var="doctor_specialization"/>
 
 
-
 <u:html title="${appointment_list}" message="${message}">
     <div class="container">
         <h2>${appointment_list}</h2>
         <c:if test="${authorizedUser.role.name == 'Администратор'}">
             <form action="/appointment/list.html" method="get">
                 <label for="date">${date}:</label>
-                <input type="date" id="date" name="date" value="2021-01-01">
-
+                <input type="date" id="date" name="date">
+                <script>
+                    getDate();
+                </script>
                 <button type="submit">${find}</button>
             </form>
         </c:if>

@@ -39,7 +39,6 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
 
     @Override
     public Doctor findById(Integer id) throws PersistentException {
-        transaction.setAutoCommit();
         DoctorDao doctorDao = transaction.createDoctorDao();
         Doctor doctor = doctorDao.read(id);
         if (doctor != null) {
@@ -50,7 +49,6 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
 
     @Override
     public List<Doctor> findBySpecializationType(String specialization) throws PersistentException {
-        transaction.setAutoCommit();
         DoctorDao doctorDao = transaction.createDoctorDao();
         List<Doctor> doctors = doctorDao.readBySpecializationType(specialization);
         buildDoctor(doctors);
@@ -59,7 +57,6 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
 
     @Override
     public List<Doctor> findAll() throws PersistentException {
-        transaction.setAutoCommit();
         DoctorDao doctorDao = transaction.createDoctorDao();
         List<Doctor> doctors = doctorDao.read();
         buildDoctor(doctors);
@@ -68,7 +65,6 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
 
     @Override
     public List<String> findAllSpecializations() throws PersistentException {
-        transaction.setAutoCommit();
         DoctorDao doctorDao = transaction.createDoctorDao();
         List<String> specializations = doctorDao.readSpecializations();
         return specializations;
@@ -77,7 +73,6 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
     @Override
     public void delete(Integer id) throws PersistentException {
         //TODO
-        transaction.setAutoCommit();
         DoctorDao doctorDao = transaction.createDoctorDao();
         doctorDao.delete(id);
     }

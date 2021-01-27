@@ -15,13 +15,11 @@ public class VacationServiceImpl extends ServiceImpl implements VacationService 
 
     @Override
     public void save(Vacation vacation) throws PersistentException {
-        transaction.setAutoCommit();
         VacationDao vacationDao = transaction.createVacationDao();
         if (vacation.getId() != null) {
-            if (vacationDao.read(vacation.getId())!=null){
+            if (vacationDao.read(vacation.getId()) != null) {
                 vacationDao.update(vacation);
-            }
-            else vacationDao.create(vacation);
+            } else vacationDao.create(vacation);
         } else {
             vacation.setId(vacationDao.create(vacation));
         }
@@ -29,14 +27,12 @@ public class VacationServiceImpl extends ServiceImpl implements VacationService 
 
     @Override
     public List<Vacation> findByTime(Date date) throws PersistentException {
-        transaction.setAutoCommit();
         VacationDao vacationDao = transaction.createVacationDao();
         return vacationDao.readByTime(date);
     }
 
     @Override
     public List<Vacation> findAll() throws PersistentException {
-        transaction.setAutoCommit();
         VacationDao vacationDao = transaction.createVacationDao();
         List<Vacation> vacations = vacationDao.read();
         buildVacation(vacations);
@@ -45,7 +41,6 @@ public class VacationServiceImpl extends ServiceImpl implements VacationService 
 
     @Override
     public Vacation findById(Integer id) throws PersistentException {
-        transaction.setAutoCommit();
         VacationDao vacationDao = transaction.createVacationDao();
         Vacation vacation = vacationDao.read(id);
         if (vacation != null) {
@@ -63,7 +58,6 @@ public class VacationServiceImpl extends ServiceImpl implements VacationService 
 
     private void buildVacation(List<Vacation> vacations) throws PersistentException {
         DoctorDao doctorDao = transaction.createDoctorDao();
-
         for (Vacation vacation : vacations) {
             if (vacation.getId() != null) {
                 Doctor doctor = doctorDao.read(vacation.getId());

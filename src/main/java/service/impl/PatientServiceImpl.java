@@ -47,7 +47,6 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
 
     @Override
     public List<Patient> findAll() throws PersistentException {
-        transaction.setAutoCommit();
         PatientDao patientDao = transaction.createPatientDao();
         List<Patient> patients = patientDao.read();
         buildPatient(patients);
@@ -56,7 +55,6 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
 
     @Override
     public Patient findByEmail(String email) throws PersistentException {
-        transaction.setAutoCommit();
         PatientDao patientDao = transaction.createPatientDao();
         Patient patient = patientDao.readByEmail(email);
         if (patient != null) {
@@ -67,7 +65,6 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
 
     @Override
     public Patient findById(Integer id) throws PersistentException {
-        transaction.setAutoCommit();
         PatientDao patientDao = transaction.createPatientDao();
         Patient patient = patientDao.read(id);
         if (patient != null) {
@@ -78,7 +75,6 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
 
     private void buildPatient(List<Patient> patients) throws PersistentException {
         UserDao userDao = transaction.createUserDao();
-
         for (Patient patient : patients) {
             if (patient.getId() != null) {
                 User user = userDao.read(patient.getId());

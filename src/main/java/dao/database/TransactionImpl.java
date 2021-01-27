@@ -80,13 +80,4 @@ public class TransactionImpl implements Transaction {
             logger.error(e.getMessage());
         }
     }
-
-    @Override
-    public void setAutoCommit() {
-        try {
-            connection.setAutoCommit(true);
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        }
-    }
 }

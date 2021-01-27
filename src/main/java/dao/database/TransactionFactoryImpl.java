@@ -17,9 +17,7 @@ public class TransactionFactoryImpl implements TransactionFactory {
     public TransactionFactoryImpl() throws PersistentException {
         try {
             connection = ConnectionPool.getInstance().getConnection();
-            //TODO
             connection.setAutoCommit(true);
-
         } catch (SQLException e) {
             logger.error("Can't initialize transactions");
             throw new PersistentException(e);

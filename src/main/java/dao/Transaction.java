@@ -18,6 +18,4 @@ public interface Transaction {
 	void rollback() throws PersistentException;
 
 	void setWithoutAutoCommit();
-
-	void setAutoCommit();
 }
