@@ -30,7 +30,7 @@
 <fmt:message bundle="${textResources}" key="button.delete" var="button_delete"/>
 <fmt:message bundle="${textResources}" key="button.reset" var="button_reset"/>
 <fmt:message bundle="${textResources}" key="button.save" var="button_save"/>
-
+<fmt:message bundle="${textResources}" key="user.password.old" var="old_password"/>
 
 <c:choose>
     <c:when test="${not empty user}">
@@ -66,10 +66,15 @@
                 </c:choose>
             </div>
 
+            <c:if test="${not empty user}">
+                <div class="form-group">
+                    <label for="old_password">${old_password}:</label>
+                    <input type="password" class="form-control" id="old_password" name="old_password">
+                </div>
+            </c:if>
             <div class="form-group">
                 <label for="password">${user_password}:</label>
                 <input type="password" class="form-control" id="password" name="password">
-
             </div>
             <div class="form-group">
                 <label for="password_confirm">${user_password_confirm}:</label>

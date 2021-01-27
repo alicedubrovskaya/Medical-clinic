@@ -4,6 +4,7 @@ import domain.User;
 import domain.enumeration.Role;
 import exception.IncorrectFormDataException;
 import exception.PersistentException;
+import service.PasswordEncryption;
 import service.UserService;
 import validator.Validator;
 
@@ -36,15 +37,23 @@ public class UserSaveCommand extends Command {
                     forward = new Command.Forward("/doctor/edit.html");
                 }
                 forward.getAttributes().put("user", user);
-//                forward.getAttributes().put("message", "Данные пользователя успешно сохранены");
             } else {
                 forward = new Command.Forward("/user/edit.html");
                 HttpSession session = request.getSession(false);
                 User authorizedUser = (User) session.getAttribute("authorizedUser");
                 if (authorizedUser.getId() == existingUser.getId()) {
-                    service.save(user);
-                    forward.getAttributes().put("user", user);
-                    forward.getAttributes().put("message", "Пароль успешно изменен");
+                    String oldPassword = request.getParameter("old_password");
+                    if (oldPassword != null) {
+                        if (PasswordEncryption.checkPassword(oldPassword, existingUser.getPassword())) {
+                            service.save(user);
+                            forward.getAttributes().put("user", user);
+                            forward.getAttributes().put("message", "Пароль успешно изменен");
+                        } else {
+                            forward.getAttributes().put("message", "Старый пароль неверно введен");
+                        }
+                    } else {
+                        forward.getAttributes().put("message", "Старый пароль не введен");
+                    }
                 } else {
                     forward.getAttributes().put("message", "Пользователь с данным логином уже существует");
                 }

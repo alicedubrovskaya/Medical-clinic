@@ -23,8 +23,6 @@
 <fmt:message bundle="${textResources}" key="date" var="appointment_date"/>
 <fmt:message bundle="${textResources}" key="button.view" var="button_view"/>
 
-
-
 <u:html title="${patient_appointment}" message="${message}">
     <div class="container">
         <h2>${patient_appointment}</h2>
