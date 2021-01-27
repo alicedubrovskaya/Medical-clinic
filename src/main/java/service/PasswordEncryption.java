@@ -12,6 +12,10 @@ public class PasswordEncryption {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
+    public static boolean checkPassword(String password, String existingPassword) {
+        return BCrypt.checkpw(password, existingPassword);
+    }
+
     public static String md5(String string) {
         MessageDigest digest;
         try {
@@ -20,13 +24,13 @@ public class PasswordEncryption {
             digest.update(string.getBytes());
             byte hash[] = digest.digest();
             Formatter formatter = new Formatter();
-            for(int i = 0; i < hash.length; i++) {
+            for (int i = 0; i < hash.length; i++) {
                 formatter.format("%02X", hash[i]);
             }
             String md5summ = formatter.toString();
             formatter.close();
             return md5summ;
-        } catch(NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             return null;
         }
     }

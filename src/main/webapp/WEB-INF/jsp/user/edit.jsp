@@ -65,6 +65,7 @@
                     </c:otherwise>
                 </c:choose>
             </div>
+
             <div class="form-group">
                 <label for="password">${user_password}:</label>
                 <input type="password" class="form-control" id="password" name="password">

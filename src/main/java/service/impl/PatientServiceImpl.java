@@ -23,7 +23,7 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
         try {
             if (patient.getId() == null) {
                 Integer userId = userDao.create(new User(patient.getLogin(),
-                        PasswordEncryption.md5(patient.getPassword()), Role.PATIENT)
+                        PasswordEncryption.encrypt(patient.getPassword()), Role.PATIENT)
                 );
                 patient.setId(userId);
                 patientDao.create(patient);

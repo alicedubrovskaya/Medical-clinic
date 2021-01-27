@@ -3,6 +3,7 @@ package controller.action;
 import domain.User;
 import domain.enumeration.Role;
 import exception.PersistentException;
+import service.PasswordEncryption;
 import service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,14 +67,16 @@ public class LoginCommand extends Command {
         String password = request.getParameter("password");
         if (login != null & password != null) {
             UserService service = serviceFactory.getUserService();
-            User user = service.findByLoginAndPassword(login, password);
+            User user = service.findByLogin(login);
             if (user != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("authorizedUser", user);
-                session.setAttribute("menu", menu.get(user.getRole()));
-                session.setAttribute("language", "en");
-                //TODO
-                return new Forward("/main.html");
+                if (PasswordEncryption.checkPassword(password, user.getPassword())) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("authorizedUser", user);
+                    session.setAttribute("menu", menu.get(user.getRole()));
+                    session.setAttribute("language", "en");
+                    //TODO
+                    return new Forward("/main.html");
+                }
             } else {
                 request.setAttribute("message", "Логин пользователя или пароль не опознанны");
             }

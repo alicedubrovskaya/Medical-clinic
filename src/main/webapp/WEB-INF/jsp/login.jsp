@@ -39,12 +39,10 @@
                 <label for="login">${user_login}:</label>
                 <input type="text" id="login" name="login" class="form-control">
             </div>
-
             <div class="form-group">
                 <label for="password">${user_password}:</label>
                 <input type="password" id="password" name="password" class="form-control">
             </div>
-
             <input type="submit" class="btn btn-success" value="${button_enter}">
         </form>
     </div>

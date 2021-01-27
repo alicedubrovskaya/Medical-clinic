@@ -1,10 +1,10 @@
 INSERT INTO `user`
     (login, password, role)
-VALUES ('marg', '5F4DCC3B5AA765D61D8327DEB882CF99', 2),
-       ('patient', '5F4DCC3B5AA765D61D8327DEB882CF99', 2),
-       ('alisa', '5F4DCC3B5AA765D61D8327DEB882CF99', 1),
-       ('doctor', '5F4DCC3B5AA765D61D8327DEB882CF99', 1),
-       ('admin', '5F4DCC3B5AA765D61D8327DEB882CF99', 0);
+VALUES ('marg', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 2),
+       ('patient', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 2),
+       ('alisa', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 1),
+       ('doctor', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 1),
+       ('admin', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 0);
 INSERT INTO `specialization`
     (type)
 VALUES ('Кардиолог');
