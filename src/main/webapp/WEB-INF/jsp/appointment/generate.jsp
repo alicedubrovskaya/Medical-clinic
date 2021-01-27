@@ -35,8 +35,11 @@
 
             <div class="form-group">
                 <label for="date">${date_start}:</label>
-                <input type="date" class="form-control" id="date" name="date" value="2021-01-01">
+                <input type="date" class="form-control" id="date" name="date">
             </div>
+            <script>
+                getDate();
+            </script>
             <input type="submit" class="btn btn-warning" value="${appointment_generate}">
         </form>
 

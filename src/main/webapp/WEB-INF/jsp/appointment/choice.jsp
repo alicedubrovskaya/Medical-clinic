@@ -31,9 +31,11 @@
         <form action="/appointment/list.html" method="post">
             <div class="form-group">
                 <label for="date">${appointment_date}:</label>
-                <input type="date" class="form-control" id="date" name="date" value="2021-01-01">
+                <input type="date" class="form-control" id="date" name="date">
             </div>
-
+            <script>
+                getDate();
+            </script>
             <div class="form-group">
                 <label for="specialization">${doctor_specialization}:</label>
                 <select class="form-control" id="specialization" name="specialization">

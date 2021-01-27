@@ -38,7 +38,7 @@ public class LoginCommand extends Command {
                 ))
         )));
         menu.put(Role.DOCTOR, new ArrayList<>(Arrays.asList(
-                new MenuItem("/appointment/doctor/choice.html", "Прием пациентов", "My appointments"),
+                new MenuItem("/appointment/doctor/choice.html", "Прием пациентов", "Patient appointments"),
                 new MenuItem("Личная информация", "Personal information", Arrays.asList(
                         new MenuItem("/doctor/edit.html", "Мой профиль", "My profile"),
                         new MenuItem("/user/edit.html", "Учетная запись", "Account")

@@ -30,7 +30,6 @@ public class UserSaveCommand extends Command {
 
             User existingUser = service.findByLogin(user.getLogin());
             if (existingUser == null) {
-//                service.save(user);
                 if (user.getRole() == Role.PATIENT) {
                     forward = new Command.Forward("/patient/edit.html");
                 } else {
