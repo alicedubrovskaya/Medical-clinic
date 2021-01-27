@@ -17,25 +17,10 @@ public class UserEditCommand extends Command {
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         try {
-            //TODO
             String parameter = request.getParameter("role");
             if (parameter != null) {
                 request.setAttribute("role", Role.getEnum(parameter).getId());
             }
-
-//            if (getAuthorizedUser() == null) {
-//                request.setAttribute("role", Role.PATIENT.getId());
-//            }
-
-//            Integer id = (Integer) request.getAttribute("id");
-//            if (id == null) {
-//                id = Integer.parseInt(request.getParameter("id"));
-//            }
-//            UserService service = serviceFactory.getUserService();
-//            User user = service.findById(id);
-//            if (user != null) {
-//                request.setAttribute("user", user);
-//            }
         } catch (NumberFormatException e) {
         }
         return null;

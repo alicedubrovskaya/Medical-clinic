@@ -17,7 +17,6 @@ function checkNumber(value) {
 }
 
 function checkRegexp(value, regexp) {
-	alert('Checking');
 	return new RegExp(regexp).test(value);
 }
 

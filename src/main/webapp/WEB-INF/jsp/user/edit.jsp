@@ -23,6 +23,7 @@
 <fmt:setBundle basename="textResources" var="textResources" scope="session"/>
 <fmt:message bundle="${textResources}" key="user.login" var="user_login"/>
 <fmt:message bundle="${textResources}" key="user.password" var="user_password"/>
+<fmt:message bundle="${textResources}" key="user.password.confirm" var="user_password_confirm"/>
 <fmt:message bundle="${textResources}" key="user.role" var="user_role"/>
 <fmt:message bundle="${textResources}" key="user.registration" var="user_registration"/>
 <fmt:message bundle="${textResources}" key="button.continue" var="button_continue"/>
@@ -33,6 +34,7 @@
     <c:when test="${not empty user}">
         <c:set var="login" value="${user.login}"/>
         <c:set var="password" value="скрыт"/>
+        <c:set var="password_confirm" value="скрыт"/>
         <c:set var="roleId" value="${user.role.id}"/>
         <c:set var="title" value="${user.role.name}"/>
     </c:when>
@@ -41,7 +43,7 @@
     </c:otherwise>
 </c:choose>
 
-<u:html title="${title}" message="${message}">
+<u:html title="${title}" message="${message}" validator="validator-of-edit-user-form.js">
     <div class="container">
         <H2>${title}</H2>
         <form action="/user/save.html" method="post" onsubmit="return validateEditUser(this)">
@@ -55,11 +57,14 @@
             </div>
             <div class="form-group">
                 <label for="password">${user_password}:</label>
-                <input type="text" class="form-control" id="password" name="password" value="${password}">
+                <input type="password" class="form-control" id="password" name="password" value="${password}">
             </div>
-                <%--    TODO--%>
+            <div class="form-group">
+                <label for="password_confirm">${user_password_confirm}:</label>
+                <input type="password" class="form-control" id="password_confirm" name="password_confirm"
+                       value="${password_confirm}">
+            </div>
             <input type="hidden" id="role" name="role" value="${role}">
-
             <div class="btn-group">
                 <input type="submit" class="btn btn-warning" value="${button_reset}">
                 <input type="submit" class="btn btn-success" value="${button_continue}">
@@ -73,4 +78,7 @@
             </form>
         </c:if>
     </div>
+    <%--    <div class="container">--%>
+    <%--        <jsp:include page="/WEB-INF/jsp/patient/edit.jsp"/>--%>
+    <%--    </div>--%>
 </u:html>

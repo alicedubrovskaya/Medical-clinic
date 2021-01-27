@@ -61,7 +61,7 @@
                                                     ${menuItem.russianName}
                                                 </c:when>
                                                 <c:otherwise>
-                                                    ${item.englishName}
+                                                    ${menuItem.englishName}
                                                 </c:otherwise>
                                             </c:choose>
                                         </a>

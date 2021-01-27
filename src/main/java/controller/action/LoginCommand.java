@@ -18,7 +18,7 @@ public class LoginCommand extends Command {
     static {
         menu.put(Role.ADMINISTRATOR, new ArrayList<>(Arrays.asList(
                 new MenuItem("/doctor/list.html", "Врачи", "Doctors", Arrays.asList(
-                        new MenuItem("/user/edit.html", "Регистрация врача", "Doctor registration"),
+                        new MenuItem("/user/edit.html?role=Врач", "Регистрация врача", "Doctor registration"),
                         new MenuItem("/doctor/list.html", "Список врачей", "Doctors list")
                 )),
                 new MenuItem("Пациенты", "Patients", Arrays.asList(
