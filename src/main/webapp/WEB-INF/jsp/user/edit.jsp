@@ -29,6 +29,8 @@
 <fmt:message bundle="${textResources}" key="button.continue" var="button_continue"/>
 <fmt:message bundle="${textResources}" key="button.delete" var="button_delete"/>
 <fmt:message bundle="${textResources}" key="button.reset" var="button_reset"/>
+<fmt:message bundle="${textResources}" key="button.save" var="button_save"/>
+
 
 <c:choose>
     <c:when test="${not empty user}">
@@ -53,21 +55,36 @@
 
             <div class="form-group">
                 <label for="login">${user_login}:</label>
-                <input type="text" class="form-control" id="login" name="login" value="${login}">
+                <c:choose>
+                    <c:when test="${not empty user}">
+                        <input readonly type="text" class="form-control" id="login" name="login" value="${login}">
+                        <input type="hidden" id="role" name="role" value="${roleId}">
+                    </c:when>
+                    <c:otherwise>
+                        <input type="text" class="form-control" id="login" name="login" value="${login}">
+                    </c:otherwise>
+                </c:choose>
             </div>
             <div class="form-group">
                 <label for="password">${user_password}:</label>
-                <input type="password" class="form-control" id="password" name="password" value="${password}">
+                <input type="password" class="form-control" id="password" name="password">
+
             </div>
             <div class="form-group">
                 <label for="password_confirm">${user_password_confirm}:</label>
-                <input type="password" class="form-control" id="password_confirm" name="password_confirm"
-                       value="${password_confirm}">
+                <input type="password" class="form-control" id="password_confirm" name="password_confirm">
             </div>
             <input type="hidden" id="role" name="role" value="${role}">
             <div class="btn-group">
                 <input type="submit" class="btn btn-warning" value="${button_reset}">
-                <input type="submit" class="btn btn-success" value="${button_continue}">
+                <c:choose>
+                    <c:when test="${not empty role}">
+                        <input type="submit" class="btn btn-success" value="${button_continue}">
+                    </c:when>
+                    <c:otherwise>
+                        <input type="submit" class="btn btn-success" value="${button_save}">
+                    </c:otherwise>
+                </c:choose>
             </div>
         </form>
 

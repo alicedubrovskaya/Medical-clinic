@@ -37,14 +37,20 @@ public class LoginCommand extends Command {
                 ))
         )));
         menu.put(Role.DOCTOR, new ArrayList<>(Arrays.asList(
-                new MenuItem("/doctor/edit.html", "Мой профиль", "My profile"),
-                new MenuItem("/appointment/doctor/choice.html", "Прием пациентов", "My appointments")
+                new MenuItem("/appointment/doctor/choice.html", "Прием пациентов", "My appointments"),
+                new MenuItem("Личная информация", "Personal information", Arrays.asList(
+                        new MenuItem("/doctor/edit.html", "Мой профиль", "My profile"),
+                        new MenuItem("/user/edit.html", "Учетная запись", "Account")
+                ))
         )));
 
         menu.put(Role.PATIENT, new ArrayList<>(Arrays.asList(
                 new MenuItem("/appointment/choice.html", "Записаться к врачу", "To make an appointment"),
                 new MenuItem("/appointment/medicalCard.html", "История посещений врачей", "History of appointments"),
-                new MenuItem("/patient/edit.html", "Мой профиль", "My profile")
+                new MenuItem("Личная информация", "Personal information", Arrays.asList(
+                        new MenuItem("/patient/edit.html", "Мой профиль", "My profile"),
+                        new MenuItem("/user/edit.html", "Учетная запись", "Account")
+                ))
         )));
     }
 

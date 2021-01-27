@@ -28,6 +28,7 @@
 <fmt:message bundle="${textResources}" key="button.enter" var="button_enter"/>
 <fmt:message bundle="${textResources}" key="entrance" var="entrance"/>
 
+
 <u:html title="${entrance}" message="${message}">
     <div class="container">
         <h2>${entrance}</h2>

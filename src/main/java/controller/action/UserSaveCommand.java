@@ -9,6 +9,7 @@ import validator.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Set;
 
 public class UserSaveCommand extends Command {
@@ -38,9 +39,16 @@ public class UserSaveCommand extends Command {
 //                forward.getAttributes().put("message", "Данные пользователя успешно сохранены");
             } else {
                 forward = new Command.Forward("/user/edit.html");
-                forward.getAttributes().put("message", "Пользователь с данным логином уже существует");
+                HttpSession session = request.getSession(false);
+                User authorizedUser = (User) session.getAttribute("authorizedUser");
+                if (authorizedUser.getId() == existingUser.getId()) {
+                    service.save(user);
+                    forward.getAttributes().put("user", user);
+                    forward.getAttributes().put("message", "Пароль успешно изменен");
+                } else {
+                    forward.getAttributes().put("message", "Пользователь с данным логином уже существует");
+                }
             }
-
         } catch (IncorrectFormDataException e) {
             e.printStackTrace();
         }
