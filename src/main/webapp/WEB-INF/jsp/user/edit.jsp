@@ -31,6 +31,9 @@
 <fmt:message bundle="${textResources}" key="button.reset" var="button_reset"/>
 <fmt:message bundle="${textResources}" key="button.save" var="button_save"/>
 <fmt:message bundle="${textResources}" key="user.password.old" var="old_password"/>
+<fmt:message bundle="${textResources}" key="validation.incorrect.login" var="incorrect_login"/>
+<fmt:message bundle="${textResources}" key="validation.incorrect.password" var="incorrect_password"/>
+
 
 <c:choose>
     <c:when test="${not empty user}">
@@ -50,7 +53,8 @@
 
     <div class="container">
         <H2>${title}</H2>
-        <form action="/user/save.html" method="post" onsubmit="return validatePassword(this)">
+        <form action="/user/save.html" method="post"
+              onsubmit="return validatePassword(this)">
             <c:if test="${not empty user}">
                 <input type="hidden" name="id" value="${user.id}">
             </c:if>
@@ -63,28 +67,23 @@
                         <input type="hidden" id="role" name="role" value="${roleId}">
                     </c:when>
                     <c:otherwise>
-                        <input type="text" required pattern="^[a-z0-9_-]{3,16}$" class="form-control" id="login"
+                        <input type="text" required pattern="^[a-z0-9_-]{3,16}$"
+                               title="${incorrect_login}" class="form-control" id="login"
                                name="login" value="${login}">
-                        <div class="invalid-feedback">
-                            Логин должен содержать от 3 до 16 символов, можно использовать дефис, нижнее подчеркивание,
-                            маленькие латинские буквы, цифры
-                        </div>
                     </c:otherwise>
                 </c:choose>
             </div>
 
             <c:if test="${not empty user}">
-                <div class="form-group">
+                <div class=" form-group">
                     <label for="old_password">${old_password}:</label>
                     <input type="password" required class="form-control" id="old_password" name="old_password">
                 </div>
             </c:if>
             <div class="form-group">
                 <label for="password">${user_password}:</label>
-                <input type="password" required pattern="^.{6,16}$" class="form-control" id="password" name="password">
-                <div class="invalid-feedback">
-                    Пароль должен содержать от 6 до 16 символов
-                </div>
+                <input type="password" required pattern="^.{6,16}$" title="${incorrect_password}" class="form-control"
+                       id="password" name="password">
             </div>
             <div class="form-group">
                 <label for="password_confirm">${user_password_confirm}:</label>

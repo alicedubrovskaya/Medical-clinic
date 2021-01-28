@@ -52,26 +52,29 @@
 <u:html title="${title}" message="${message}">
     <div class="container">
         <H2>${title}</H2>
-        <form action="/vacation/save.html" method="post" onsubmit="return validateEditVacation(this)">
+        <form action="/vacation/save.html" method="post">
             <c:if test="${not empty id}">
                 <input type="hidden" name="id" value="${id}">
             </c:if>
             <div class="form-group">
                 <label for="surname">${doctor_surname}:</label>
-                <input type="text" class="form-control" id="surname" name="surname" value="${doctorSurname}">
+                <input type="text" pattern="^[A-ZА-Я][a-zа-я]+$" required class="form-control" id="surname"
+                       name="surname" value="${doctorSurname}">
             </div>
             <div class="form-group">
                 <label for="name">${doctor_name}:</label>
-                <input type="text" class="form-control" id="name" name="name" value="${doctorName}">
+                <input type="text" pattern="^[A-ZА-Я][a-zа-я]+$" required class="form-control" id="name" name="name"
+                       value="${doctorName}">
             </div>
             <div class="form-group">
                 <label for="start">${date_start}:</label>
-                <input type="date" class="form-control" id="start" name="vacation-start" min="2021-01-01"
+                <input type="date" required class="form-control" id="start" name="vacation-start" min="2021-01-01"
                        value="${start}">
             </div>
             <div class="form-group">
                 <label for="end">${date_end}:</label>
-                <input type="date" class="form-control" id="end" name="vacation-end" min="2021-01-01" value="${end}">
+                <input type="date" required class="form-control" id="end" name="vacation-end" min="2021-01-01"
+                       value="${end}">
             </div>
             <div class="btn-group">
                 <input type="submit" class="btn btn-success" value="${button_save}">

@@ -26,11 +26,10 @@
 
 <u:html title="${appointment_management}" message="${message}">
     <div class="container">
-            <%--TODO add validation--%>
         <form action="/appointment/generate.html" method="post">
             <div class="form-group">
                 <label for="days">${count_of_days}:</label>
-                <input type="text" class="form-control" id="days" name="days">
+                <input type="text" required pattern="^[0-9]+$" class="form-control" id="days" name="days">
             </div>
 
             <div class="form-group">
@@ -42,10 +41,5 @@
             </script>
             <input type="submit" class="btn btn-warning" value="${appointment_generate}">
         </form>
-
-            <%--        <form action="/appointment/list.html" method="get">--%>
-            <%--            <button type="submit" class="btn btn-default">Приемы врачей</button>--%>
-            <%--        </form>--%>
-
     </div>
 </u:html>

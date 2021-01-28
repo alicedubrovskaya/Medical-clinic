@@ -22,7 +22,7 @@ public class UserSaveCommand extends Command {
 
     @Override
     public Command.Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
-        Command.Forward forward = null;
+        Command.Forward forward = new Forward("/home.html");
         try {
             Validator<User> validator = validatorFactory.createUserValidator();
             User user = validator.validate(request);
