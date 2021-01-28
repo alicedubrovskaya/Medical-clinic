@@ -11,7 +11,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <TITLE>Медицинская клиника - ${title}</TITLE>
+    <title>Медицинская клиника - ${title}</title>
     <%--	<c:url value="/main.css" var="cssUrl"/>--%>
     <%--	<LINK rel="stylesheet" type="text/css" href="${cssUrl}">--%>
     <c:url value="/js" var="javascriptUrl"/>
@@ -23,6 +23,7 @@
 
     <c:if test="${not empty message}">
         <script type="text/javascript">
+            alert("${message}");
             startMessage = "${message}";
         </script>
     </c:if>

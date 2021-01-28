@@ -3,13 +3,13 @@ var dropClicked = false;
 var currentMenu = null;
 
 window.onload = function () {
+    if (startMessage !== null) {
+        show(startMessage);
+    }
     var menus = document.getElementById("header").getElementsByClassName("drop");
     for (var index = 0, size = menus.length; index < size; index++) {
         menus[index].style.display = "none";
         menus[index].parentNode.getElementsByTagName("A")[0].onclick = dropMenu;
-    }
-    if (startMessage !== null) {
-        show(startMessage);
     }
 }
 
@@ -26,7 +26,7 @@ window.onclick = function () {
 
 function show(message, action) {
     showMessage(message, [{
-        caption: "Закрыть",
+        caption: "Close",
         handler: (action !== undefined ? action : function () {
         })
     }]);
@@ -59,17 +59,17 @@ function submitFormById(id) {
 }
 
 function showMessage(message, buttons) {
-    var body = document.getElementsByTagName("BODY")[0];
-    var messageElement = document.createElement("DIV");
+    var body = document.getElementsByTagName("body")[0];
+    var messageElement = document.createElement("div");
     messageElement.id = "confirm-message";
-    var messageContent = document.createElement("DIV");
-    var messageText = document.createElement("P");
+    var messageContent = document.createElement("div");
+    var messageText = document.createElement("p");
     messageText.innerHTML = message;
     messageContent.appendChild(messageText);
-    var buttonsElement = document.createElement("FORM");
+    var buttonsElement = document.createElement("form");
     for (var index = 0, size = buttons.length; index < size; index++) {
-        var button = document.createElement("BUTTON");
-        button.type = "BUTTON";
+        var button = document.createElement("button");
+        button.type = "button";
         button.handler = buttons[index];
         button.onclick = function () {
             body.removeChild(messageElement);
