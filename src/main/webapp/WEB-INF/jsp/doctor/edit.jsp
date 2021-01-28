@@ -60,12 +60,14 @@
 
             <div class="form-group">
                 <label for="surname">${doctor_surname}:</label>
-                <input type="text" class="form-control" id="surname" name="surname" value="${surname}">
+                <input type="text" pattern="^[A-ZА-Я][a-zа-я]+$" required class="form-control" id="surname"
+                       name="surname" value="${surname}">
             </div>
 
             <div class="form-group">
                 <label for="name">${doctor_name}:</label>
-                <input type="text" class="form-control" id="name" name="name" value="${name}">
+                <input type="text" pattern="^[A-ZА-Я][a-zа-я]+$" required class="form-control" id="name" name="name"
+                       value="${name}">
             </div>
 
             <div class="form-group">

@@ -52,7 +52,6 @@
 <u:html title="${title}" message="${message}">
     <div class="container">
         <H2>${title}</H2>
-            <%--<form action="/patient/save.html" method="post" onsubmit="return validateEditDoctor(this)">--%>
         <form action="/patient/save.html" method="post">
             <c:if test="${not empty patient}">
                 <input type="hidden" name="id" value="${patient.id}">
@@ -61,22 +60,25 @@
                 <input type="hidden" name="password" value="${user.password}">
                 <input type="hidden" name="login" value="${user.login}">
             </c:if>
-
             <div class="form-group">
                 <label for="surname">${patient_surname}:</label>
-                <input type="text" class="form-control" id="surname" name="surname" value="${surname}">
+                <input type="text" pattern="^[A-ZА-Я][a-zа-я]+$" required class="form-control" id="surname"
+                       name="surname" value="${surname}">
             </div>
             <div class="form-group">
                 <label for="name">${patient_name}:</label>
-                <input type="text" class="form-control" id="name" name="name" value="${name}">
+                <input type="text" pattern="^[A-ZА-Я][a-zа-я]+$" required class="form-control" id="name" name="name"
+                       value="${name}">
             </div>
             <div class="form-group">
                 <label for="email">${patient_email}:</label>
-                <input type="email" class="form-control" id="email" name="email" value="${email}">
+                <input type="email" required class="form-control" id="email" name="email" value="${email}">
             </div>
             <div class="form-group">
                 <label for="phoneNumber">${patient_phoneNumber}:</label>
-                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="${phoneNumber}">
+                <input type="tel" required pattern="375\s[0-9]{2}\s[0-9]{3}\s[0-9]{2}\s[0-9]{2}"
+                       placeholder="375 29 894 20 43"
+                       class="form-control" id="phoneNumber" name="phoneNumber" value="${phoneNumber}">
             </div>
             <div class="form-group">
                 <label for="address">${patient_address}:</label>
@@ -87,7 +89,6 @@
                 <input type="reset" class="btn btn-warning" value="${button_reset}">
             </div>
         </form>
-
         <c:if test="${not empty patient}">
             <form action="/appointment/medicalCard.html" method="get">
                 <input type="hidden" name="id" value="${patient.id}">

@@ -113,3 +113,5 @@ function getDate() {
     today = yyyy + '-' + mm + '-' + dd;
     document.getElementById('date').value = today;
 }
+
+

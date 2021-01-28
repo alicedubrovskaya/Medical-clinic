@@ -46,9 +46,11 @@
 </c:choose>
 
 <u:html title="${title}" message="${message}" validator="validator-of-edit-user-form.js">
+    <%--<u:html title="${title}" message="${message}">--%>
+
     <div class="container">
         <H2>${title}</H2>
-        <form action="/user/save.html" method="post" onsubmit="return validateEditUser(this)">
+        <form action="/user/save.html" method="post" onsubmit="return validatePassword(this)">
             <c:if test="${not empty user}">
                 <input type="hidden" name="id" value="${user.id}">
             </c:if>
@@ -61,7 +63,12 @@
                         <input type="hidden" id="role" name="role" value="${roleId}">
                     </c:when>
                     <c:otherwise>
-                        <input type="text" class="form-control" id="login" name="login" value="${login}">
+                        <input type="text" required pattern="^[a-z0-9_-]{3,16}$" class="form-control" id="login"
+                               name="login" value="${login}">
+                        <div class="invalid-feedback">
+                            Логин должен содержать от 3 до 16 символов, можно использовать дефис, нижнее подчеркивание,
+                            маленькие латинские буквы, цифры
+                        </div>
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -69,16 +76,20 @@
             <c:if test="${not empty user}">
                 <div class="form-group">
                     <label for="old_password">${old_password}:</label>
-                    <input type="password" class="form-control" id="old_password" name="old_password">
+                    <input type="password" required class="form-control" id="old_password" name="old_password">
                 </div>
             </c:if>
             <div class="form-group">
                 <label for="password">${user_password}:</label>
-                <input type="password" class="form-control" id="password" name="password">
+                <input type="password" required pattern="^.{6,16}$" class="form-control" id="password" name="password">
+                <div class="invalid-feedback">
+                    Пароль должен содержать от 6 до 16 символов
+                </div>
             </div>
             <div class="form-group">
                 <label for="password_confirm">${user_password_confirm}:</label>
-                <input type="password" class="form-control" id="password_confirm" name="password_confirm">
+                <input type="password" required pattern="^.{6,16}$" class="form-control" id="password_confirm"
+                       name="password_confirm">
             </div>
             <input type="hidden" id="role" name="role" value="${role}">
             <div class="btn-group">
