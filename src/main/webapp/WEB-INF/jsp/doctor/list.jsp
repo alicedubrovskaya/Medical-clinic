@@ -56,11 +56,6 @@
             </c:forEach>
             </tbody>
         </table>
-
-<%--        <form action="/user/edit.html">--%>
-<%--            <input type="hidden" name="role" value='Врач'>--%>
-<%--            <button type="submit">Зарегистрировать врача</button>--%>
-<%--        </form>--%>
     </div>
 </u:html>
 

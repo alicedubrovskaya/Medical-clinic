@@ -18,21 +18,29 @@ public class VacationSaveCommand extends AdministratorCommand {
         Forward forward = new Forward("/vacation/list.html");
         try {
             Validator<Vacation> validator = validatorFactory.createVacationValidator();
+            Validator<Doctor> doctorValidator = validatorFactory.createDoctorValidator();
             Vacation vacation = validator.validate(request);
+            Doctor doctorFromRequest = doctorValidator.validate(request);
 
             VacationService vacationService = serviceFactory.getVacationService();
             DoctorService doctorService = serviceFactory.getDoctorService();
 
-            Doctor doctor = doctorService.findById(vacation.getId());
-            vacation.setDoctor(doctor);
-            if (vacation.getStart().getTime() < vacation.getEnd().getTime()) {
+            Doctor doctor;
+            if (vacation.getId() != null) {
+                doctor = doctorService.findById(vacation.getId());
+            } else {
+                //TODO can be doctors with the same name and surname
+                doctor = doctorService.findBySurnameAndName(doctorFromRequest.getSurname(), doctorFromRequest.getName());
+                vacation.setId(doctor.getId());
+            }
+            if (doctor != null) {
+                vacation.setDoctor(doctor);
                 vacationService.save(vacation);
                 forward.getAttributes().put("id", vacation.getId());
                 forward.getAttributes().put("message", "Данные об отпуске успешно сохранены");
             } else {
-                forward.getAttributes().put("message", "Данные отпуска некорректны");
+                forward.getAttributes().put("message", "Данного врача не найдено");
             }
-
         } catch (IncorrectFormDataException e) {
             e.printStackTrace();
         }

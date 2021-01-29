@@ -2,6 +2,7 @@ package dao.database;
 
 import dao.DoctorDao;
 import domain.Doctor;
+import domain.Patient;
 import domain.enumeration.Shift;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
@@ -28,6 +29,8 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
     private static final String READ_DOCTORS_WITHOUT_VACATION_DAY = "SELECT * from `doctor` LEFT JOIN vacation v " +
             "ON doctor.id = v.doctor_id WHERE doctor_id is NULL OR (? NOT BETWEEN `start` AND `end`)";
 
+    private static final String READ_DOCTOR_BY_SURNAME_AND_NAME = "SELECT `id`, `name`, `surname`, " +
+            "`working_shift`, `specialization_id` FROM `doctor` WHERE name=? AND surname=?";
 
     private static final String READ_DOCTOR_BY_SPECIALIZATION = "SELECT `id`, `name`, `surname` " +
             "`working_shift` FROM `doctor` WHERE specialization_id=?";
@@ -328,6 +331,54 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
         } finally {
             try {
                 resultSet.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+            try {
+                statement.close();
+                specializationStatement.close();
+            } catch (SQLException | NullPointerException e) {
+            }
+        }
+    }
+
+    @Override
+    public Doctor readBySurnameAndName(String surname, String name) throws PersistentException {
+        PreparedStatement statement = null;
+        PreparedStatement specializationStatement = null;
+        ResultSet resultSet = null;
+        ResultSet resultSetSpecialization = null;
+        try {
+            statement = connection.prepareStatement(READ_DOCTOR_BY_SURNAME_AND_NAME);
+            statement.setString(1, name);
+            statement.setString(2, surname);
+
+            resultSet = statement.executeQuery();
+            Doctor doctor = null;
+            if (resultSet.next()) {
+                doctor = new Doctor();
+                doctor.setId(resultSet.getInt("id"));
+                doctor.setName(resultSet.getString("name"));
+                doctor.setSurname(resultSet.getString("surname"));
+                doctor.setWorkingShift(Shift.getById(resultSet.getInt("working_shift")));
+
+                specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_ID);
+                specializationStatement.setInt(1, resultSet.getInt("specialization_id"));
+                resultSetSpecialization = specializationStatement.executeQuery();
+                if (resultSetSpecialization.next()) {
+                    doctor.setSpecialization(resultSetSpecialization.getString("type"));
+                }
+            }
+            return doctor;
+        } catch (SQLException e) {
+            throw new PersistentException(e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (resultSetSpecialization != null) {
+                    resultSetSpecialization.close();
+                }
             } catch (SQLException | NullPointerException e) {
             }
             try {

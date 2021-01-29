@@ -34,6 +34,9 @@
 <fmt:message bundle="${textResources}" key="button.save" var="button_save"/>
 <fmt:message bundle="${textResources}" key="button.delete" var="button_delete"/>
 <fmt:message bundle="${textResources}" key="button.reset" var="button_reset"/>
+<fmt:message bundle="${textResources}" key="button.cancel" var="button_cancel"/>
+<fmt:message bundle="${textResources}" key="vacation.delete" var="delete_vacation"/>
+<fmt:message bundle="${textResources}" key="vacation.delete.question" var="delete_question"/>
 
 
 <c:choose>
@@ -49,10 +52,10 @@
     </c:otherwise>
 </c:choose>
 
-<u:html title="${title}" message="${message}">
+<u:html title="${title}" message="${message}" validator="validator-of-edit-vacation-form.js">
     <div class="container">
         <H2>${title}</H2>
-        <form action="/vacation/save.html" method="post">
+        <form action="/vacation/save.html" method="post" onsubmit="return validateVacation(this)">
             <c:if test="${not empty id}">
                 <input type="hidden" name="id" value="${id}">
             </c:if>
@@ -81,12 +84,27 @@
                 <input type="reset" class="btn btn-warning" value="${button_reset}">
             </div>
         </form>
-
         <c:if test="${not empty vacation}">
-            <form action="/vacation/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">
-                <input type="hidden" name="id" value="${id}">
-                <input type="submit" class="btn btn-danger" value="${button_delete}">
-            </form>
+            <button class="btn btn-danger"
+                    onclick="document.getElementById('delete').style.display='block'">${button_delete}</button>
+            <div id="delete" class="modal">
+            <span onclick="document.getElementById('delete').style.display='none'" class="close"
+                  title="${button_delete}">&times;</span>
+                <form class="modal-content" action="/vacation/delete.html" method="post">
+                    <input type="hidden" name="id" value="${id}">
+                    <div class="container">
+                        <h1>${delete_vacation}</h1>
+                        <p>${delete_question}</p>
+                        <div class="clearfix">
+                            <button type="button" onclick="document.getElementById('delete').style.display='none'"
+                                    class="btn btn-secondary">${button_cancel}
+                            </button>
+                            <input type="submit" onclick="document.getElementById('delete').style.display='none'"
+                                   class="btn btn-danger" value="${button_delete}">
+                        </div>
+                    </div>
+                </form>
+            </div>
         </c:if>
     </div>
 </u:html>

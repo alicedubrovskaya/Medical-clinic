@@ -48,6 +48,16 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
     }
 
     @Override
+    public Doctor findBySurnameAndName(String surname, String name) throws PersistentException {
+        DoctorDao doctorDao = transaction.createDoctorDao();
+        Doctor doctor = doctorDao.readBySurnameAndName(surname, name);
+        if (doctor != null) {
+            buildDoctor(Collections.singletonList(doctor));
+        }
+        return doctor;
+    }
+
+    @Override
     public List<Doctor> findBySpecializationType(String specialization) throws PersistentException {
         DoctorDao doctorDao = transaction.createDoctorDao();
         List<Doctor> doctors = doctorDao.readBySpecializationType(specialization);

@@ -1,5 +1,6 @@
 package validator;
 
+import domain.Doctor;
 import domain.Vacation;
 import domain.enumeration.Shift;
 import exception.IncorrectFormDataException;
@@ -39,7 +40,6 @@ public class VacationValidator implements Validator<Vacation> {
                 throw new IncorrectFormDataException("vacation-start", parameter);
             }
         }
-
         return vacation;
     }
 }
