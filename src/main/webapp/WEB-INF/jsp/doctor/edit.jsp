@@ -28,6 +28,10 @@
 <fmt:message bundle="${textResources}" key="button.save" var="button_save"/>
 <fmt:message bundle="${textResources}" key="button.delete" var="button_delete"/>
 <fmt:message bundle="${textResources}" key="button.reset" var="button_reset"/>
+<fmt:message bundle="${textResources}" key="button.cancel" var="button_cancel"/>
+<fmt:message bundle="${textResources}" key="account.delete.question" var="delete_question"/>
+<fmt:message bundle="${textResources}" key="account.delete" var="delete_account"/>
+
 
 <fmt:message bundle="${textResources}" key="doctor.working.shift" var="doctor_working_shift"/>
 
@@ -117,13 +121,28 @@
                 <input type="reset" class="btn btn-warning" value="${button_reset}">
             </div>
         </form>
-            <%--    TODO js--%>
-        <c:if test="${not empty doctor}">
-            <form action="/doctor/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">
-                <input type="hidden" name="id" value="${doctor.id}">
-                <input type="submit" class="btn btn-danger" value="${button_delete}">
-            </form>
+
+        <c:if test="${(not empty doctor)  && (authorizedUser.role.name=='Администратор')}">
+            <button class="btn btn-danger"
+                    onclick="document.getElementById('delete').style.display='block'">${button_delete}</button>
+            <div id="delete" class="modal">
+            <span onclick="document.getElementById('delete').style.display='none'" class="close"
+                  title="${button_delete}">&times;</span>
+                <form class="modal-content" action="/doctor/delete.html" method="post">
+                    <input type="hidden" name="id" value="${doctor.id}">
+                    <div class="container">
+                        <h1>${delete_account}</h1>
+                        <p>${delete_question}</p>
+                        <div class="clearfix">
+                            <button type="button" onclick="document.getElementById('delete').style.display='none'"
+                                    class="btn btn-secondary">${button_cancel}
+                            </button>
+                            <input type="submit" onclick="document.getElementById('delete').style.display='none'"
+                                   class="btn btn-danger" value="${button_delete}">
+                        </div>
+                    </div>
+                </form>
+            </div>
         </c:if>
     </div>
-
 </u:html>
