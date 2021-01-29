@@ -31,6 +31,7 @@
 <fmt:message bundle="${textResources}" key="patient" var="patient_language"/>
 <fmt:message bundle="${textResources}" key="button.save" var="button_save"/>
 <fmt:message bundle="${textResources}" key="button.delete" var="button_delete"/>
+<fmt:message bundle="${textResources}" key="button.cancel" var="button_cancel"/>
 <fmt:message bundle="${textResources}" key="button.reset" var="button_reset"/>
 <fmt:message bundle="${textResources}" key="appointment.history" var="appointment_history"/>
 
@@ -91,18 +92,31 @@
         </form>
         <c:if test="${not empty patient}">
             <c:if test="${authorizedUser.role.name =='Пациент'}">
-                <form action="/patient/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">
-                    <input type="hidden" name="id" value="${patient.id}">
-                    <input type="submit" class="btn btn-danger" value="${button_delete}">
-                </form>
+                <button class="btn btn-danger"
+                        onclick="document.getElementById('delete').style.display='block'">${button_delete}</button>
+                <div id="delete" class="modal">
+                 <span onclick="document.getElementById('delete').style.display='none'" class="close"
+                       title="${button_delete}">&times;</span>
+                    <form class="modal-content" action="/patient/delete.html" method="post">
+                        <input type="hidden" name="id" value="${patient.id}">
+                        <div class="container">
+                            <h1>${delete_account}</h1>
+                            <p>${delete_question}</p>
+                            <div class="clearfix">
+                                <button type="button" onclick="document.getElementById('delete').style.display='none'"
+                                        class="btn btn-secondary">${button_cancel}
+                                </button>
+                                <input type="submit" onclick="document.getElementById('delete').style.display='none'"
+                                       class="btn btn-danger" value="${button_delete}">
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </c:if>
-
             <form action="/appointment/medicalCard.html" method="get">
                 <input type="hidden" name="id" value="${patient.id}">
                 <input type="submit" class="btn btn-default" value="${appointment_history}">
             </form>
         </c:if>
-
-
     </div>
 </u:html>
