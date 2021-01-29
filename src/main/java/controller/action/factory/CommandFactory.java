@@ -6,6 +6,7 @@ import controller.action.authorized.*;
 import controller.action.doctor.AppointmentEditCommand;
 import controller.action.doctor.AppointmentsChoiceCommand;
 import controller.action.patient.AppointmentChoiceCommand;
+import controller.action.patient.PatientDeleteCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +40,7 @@ public class CommandFactory {
         commands.put(CommandType.PATIENT_SAVE, new PatientSaveCommand());
         commands.put(CommandType.PATIENT_LIST, new PatientListCommand());
         commands.put(CommandType.PATIENT_EDIT, new PatientEditCommand());
+        commands.put(CommandType.PATIENT_DELETE, new PatientDeleteCommand());
 
         commands.put(CommandType.APPOINTMENT_SAVE, new AppointmentSaveCommand());
         commands.put(CommandType.APPOINTMENT_EDIT, new AppointmentEditCommand());

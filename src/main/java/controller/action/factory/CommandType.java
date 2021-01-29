@@ -25,6 +25,8 @@ public enum CommandType {
     PATIENT_SAVE("/patient/save"),
     PATIENT_LIST("/patient/list"),
     PATIENT_EDIT("/patient/edit"),
+    PATIENT_DELETE("/patient/delete"),
+
 
     APPOINTMENT_SAVE("/appointment/save"),
     APPOINTMENT_EDIT("/appointment/edit"),

@@ -104,12 +104,12 @@
             </div>
         </form>
 
-        <c:if test="${not empty user}">
-            <form action="/user/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">
-                <input type="hidden" name="id" value="${user.id}">
-                <input type="submit" class="btn btn-danger" value="${button_delete}">
-            </form>
-        </c:if>
+<%--        <c:if test="${not empty user}">--%>
+<%--            <form action="/user/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">--%>
+<%--                <input type="hidden" name="id" value="${user.id}">--%>
+<%--                <input type="submit" class="btn btn-danger" value="${button_delete}">--%>
+<%--            </form>--%>
+<%--        </c:if>--%>
     </div>
     <%--    <div class="container">--%>
     <%--        <jsp:include page="/WEB-INF/jsp/patient/edit.jsp"/>--%>

@@ -27,7 +27,12 @@ public class UserEditCommand extends Command {
             } else {
                 HttpSession session = request.getSession(false);
                 User authorizedUser = (User) session.getAttribute("authorizedUser");
-                Integer userId = authorizedUser.getId();
+                Integer userId = null;
+                if (authorizedUser.getRole() == Role.ADMINISTRATOR) {
+                    userId = Integer.parseInt(request.getParameter("id"));
+                } else {
+                    userId = authorizedUser.getId();
+                }
                 if (userId != null) {
                     UserService service = serviceFactory.getUserService();
                     User user = service.findById(userId);

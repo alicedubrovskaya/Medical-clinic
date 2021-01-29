@@ -17,7 +17,7 @@ CREATE TABLE `patient`
     `email`        VARCHAR(255) UNIQUE NOT NULL,
     `phone_number` VARCHAR(255)        NOT NULL,
     `address`      VARCHAR(255),
-    FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ,
+    FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE NO ACTION,
     PRIMARY KEY (`id`)
 );
 
@@ -44,7 +44,7 @@ CREATE TABLE `doctor`
     `working_shift`     TINYINT CHECK (`working_shift` IN (0, 1)),
 
     FOREIGN KEY (`specialization_id`) REFERENCES `specialization` (id),
-    FOREIGN KEY (`id`) REFERENCES `user` (id) ON DELETE CASCADE,
+    FOREIGN KEY (`id`) REFERENCES `user` (id) ON DELETE NO ACTION,
     PRIMARY KEY (`id`)
 );
 
@@ -53,15 +53,15 @@ CREATE TABLE `vacation`
     `doctor_id` INTEGER NOT NULL,
     `start`     DATE    NOT NULL,
     `end`       DATE    NOT NULL,
-    FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE ,
+    FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE,
     PRIMARY KEY (`doctor_id`)
 );
 
 CREATE TABLE `holiday`
 (
-    `id`   INTEGER NOT NULL AUTO_INCREMENT,
+    `id`   INTEGER     NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255),
-    `day`  DATE   UNIQUE NOT NULL,
+    `day`  DATE UNIQUE NOT NULL,
     PRIMARY KEY (`id`)
 );
 
@@ -79,8 +79,8 @@ CREATE TABLE `appointment`
     `doctor_id`      INTEGER NOT NULL,
 
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`patient_id`) REFERENCES `patient` (id) ON DELETE CASCADE ,
-    FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (id) ON DELETE CASCADE
+    FOREIGN KEY (`patient_id`) REFERENCES `patient` (id) ON DELETE NO ACTION,
+    FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (id) ON DELETE NO ACTION
 );
 
 CREATE TABLE `patient_disease`
@@ -90,7 +90,7 @@ CREATE TABLE `patient_disease`
     `appointment_id` INTEGER,
     FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`),
     FOREIGN KEY (`disease_id`) REFERENCES `disease` (`id`),
-    FOREIGN KEY (`appointment_id`) REFERENCES `appointment` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`appointment_id`) REFERENCES `appointment` (`id`) ON DELETE NO ACTION,
     PRIMARY KEY (`patient_id`, `disease_id`)
 );
 

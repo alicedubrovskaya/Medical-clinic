@@ -40,9 +40,18 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
 
     @Override
     public void delete(Integer id) throws PersistentException {
-        //TODO
+        transaction.setWithoutAutoCommit();
+        UserDao userDao = transaction.createUserDao();
         PatientDao patientDao = transaction.createPatientDao();
-        patientDao.delete(id);
+        try {
+            patientDao.delete(id);
+            userDao.delete(id);
+            transaction.commit();
+        } catch (PersistentException e) {
+            transaction.rollback();
+            //TODO service exception
+            throw new PersistentException();
+        }
     }
 
     @Override

@@ -1,6 +1,5 @@
 package controller.action.admin;
 
-import controller.action.admin.AdministratorCommand;
 import exception.PersistentException;
 import service.UserService;
 
