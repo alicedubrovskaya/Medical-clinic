@@ -1,9 +1,13 @@
 package controller.action.authorized;
 
+import controller.action.admin.DoctorDeleteCommand;
 import domain.Doctor;
 import domain.User;
 import exception.PersistentException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import service.DoctorService;
+import service.exception.ServicePersistentException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 
 public class DoctorEditCommand extends AuthorizedUserCommand {
+    private static final Logger logger = LogManager.getLogger(DoctorDeleteCommand.class);
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
@@ -27,12 +32,22 @@ public class DoctorEditCommand extends AuthorizedUserCommand {
                 } else {
                     id = authorizedUser.getId();
                 }
-                Doctor doctor = service.findById(id);
-                request.setAttribute("doctor", doctor);
+
+                try {
+                    Doctor doctor = service.findById(id);
+                    request.setAttribute("doctor", doctor);
+                } catch (ServicePersistentException e) {
+                    logger.error("Doctor wasn't found");
+                }
             } else {
                 request.setAttribute("user", user);
             }
-            request.setAttribute("specializations", service.findAllSpecializations());
+
+            try {
+                request.setAttribute("specializations", service.findAllSpecializations());
+            } catch (ServicePersistentException e) {
+                logger.error("Specializations wasn't found");
+            }
             request.setAttribute("workingShifts", Arrays.asList("Первая", "Вторая"));
         } catch (NumberFormatException e) {
             e.printStackTrace();

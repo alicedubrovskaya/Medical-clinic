@@ -3,21 +3,22 @@ package service;
 import domain.Doctor;
 import domain.Patient;
 import exception.PersistentException;
+import service.exception.ServicePersistentException;
 
 import java.util.List;
 
 public interface DoctorService extends Service {
-    void save(Doctor doctor) throws PersistentException;
+    void save(Doctor doctor) throws ServicePersistentException;
 
-    Doctor findById(Integer id) throws PersistentException;
+    Doctor findById(Integer id) throws ServicePersistentException;
 
-    Doctor findBySurnameAndName(String surname, String name) throws PersistentException;
+    Doctor findBySurnameAndName(String surname, String name) throws ServicePersistentException;
 
-    List<Doctor> findBySpecializationType(String specialization) throws PersistentException;
+    List<Doctor> findBySpecializationType(String specialization) throws ServicePersistentException;
 
-    List<Doctor> findAll() throws PersistentException;
+    List<Doctor> findAll() throws ServicePersistentException;
 
-    List<String> findAllSpecializations() throws PersistentException;
+    List<String> findAllSpecializations() throws ServicePersistentException;
 
-    void delete(Integer id) throws PersistentException;
+    void delete(Integer id) throws ServicePersistentException;
 }
