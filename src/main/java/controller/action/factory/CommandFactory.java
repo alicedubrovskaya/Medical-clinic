@@ -20,7 +20,6 @@ public class CommandFactory {
         commands.put(CommandType.LOGIN, new LoginCommand());
         commands.put(CommandType.LOGOUT, new LogoutCommand());
         commands.put(CommandType.LANGUAGE, new ChangeLanguageCommand());
-        commands.put(CommandType.HOME, new HomeCommand());
 
         commands.put(CommandType.DOCTOR_SAVE, new DoctorSaveCommand());
         commands.put(CommandType.DOCTOR_LIST, new DoctorListCommand());

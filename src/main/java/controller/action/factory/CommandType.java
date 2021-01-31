@@ -5,7 +5,6 @@ public enum CommandType {
     LOGIN("/login"),
     LOGOUT("/logout"),
     LANGUAGE("/language"),
-    HOME("/home"),
 
     DOCTOR_SAVE("/doctor/save"),
     DOCTOR_LIST("/doctor/list"),

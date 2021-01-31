@@ -25,10 +25,15 @@
 <fmt:message bundle="${textResources}" key="doctor.specialization" var="doctor_specialization"/>
 <fmt:message bundle="${textResources}" key="doctor.working.shift" var="doctor_working_shift"/>
 
+<%--<c:set var="cssFiles" value="${['main.css']}" scope="page"/>--%>
+<%--<u:html title="${doctor_list}" cssFiles="${cssFiles}" message="${message}">--%>
 
 <u:html title="${doctor_list}" message="${message}">
     <div class="container">
-        <h2>${doctor_list}</h2>
+
+        <div class="main-head">
+            <h2>${doctor_list}</h2>
+        </div>
 
         <table class="table table-hover">
             <thead>

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
-public class HomeCommand extends Command {
+public class MainCommand extends Command {
     @Override
     public Set<Role> getAllowRoles() {
         return null;
@@ -15,6 +15,8 @@ public class HomeCommand extends Command {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
+//		List<MenuItem> menu = (List<MenuItem>)request.getSession(false).getAttribute("menu");
+//		return new Forward(menu.get(0).getUrl());
         return null;
     }
 }

@@ -42,7 +42,7 @@
             <div class="card text-white bg-primary">
                 <img class="img-responsive" src="<c:url value="/img/therapist.jpg"/>" alt="therapist">
                 <div class="card-body">
-                    <h4 class="card-title">${therapist}</h4>
+                    <h5 class="card-title">${therapist}</h5>
                 </div>
             </div>
         </div>
@@ -50,7 +50,7 @@
             <div class="card text-white bg-primary">
                 <img class="img-responsive" src="<c:url value="/img/surgeon.jpg"/>" alt="surgeon">
                 <div class="card-body">
-                    <h4 class="card-title">${surgeon}</h4>
+                    <h5 class="card-title">${surgeon}</h5>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
             <div class="card text-white bg-primary">
                 <img class="img-responsive" src="<c:url value="/img/allergist.jpg"/>" alt="allergist">
                 <div class="card-body">
-                    <h4 class="card-title">${allergist}</h4>
+                    <h5 class="card-title">${allergist}</h5>
                 </div>
             </div>
         </div>
@@ -68,7 +68,7 @@
             <div class="card text-white bg-primary">
                 <img class="img-responsive" src="<c:url value="/img/nutritionist.jpg"/>" alt="nutritionist">
                 <div class="card-body">
-                    <h4 class="card-title">${nutritionist}</h4>
+                    <h5 class="card-title">${nutritionist}</h5>
                 </div>
             </div>
         </div>
@@ -76,7 +76,7 @@
             <div class="card text-white bg-primary">
                 <img class="img-responsive" src="<c:url value="/img/rheumatologist.png"/>" alt="rheumatologist">
                 <div class="card-body">
-                    <h4 class="card-title">${rheumatologist}</h4>
+                    <h5 class="card-title">${rheumatologist}</h5>
                 </div>
             </div>
         </div>
@@ -84,7 +84,7 @@
             <div class="card text-white bg-primary">
                 <img class="img-responsive" src="<c:url value="/img/cardiologist.jpg"/>" alt="cardiologist">
                 <div class="card-body">
-                    <h4 class="card-title">${cardiologist}</h4>
+                    <h5 class="card-title">${cardiologist}</h5>
                 </div>
             </div>
         </div>

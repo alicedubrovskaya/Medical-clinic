@@ -22,41 +22,44 @@
 
 <%--<link href="<c:url value="/css/menu.css"/>" rel="stylesheet">--%>
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">${medicalClinic}</a>
+            <a class="navbar-brand" href="/main.html">${medicalClinic}</a>
         </div>
-        <ul class="nav navbar-nav">
-            <%--			<li class="active"><a href="#">Home</a></li>--%>
-            <c:choose>
-                <c:when test="${not empty authorizedUser}">
-                    <li><a href="/logout.html">${logout}</a></li>
-                </c:when>
-                <c:otherwise>
-                    <li><a href="/login.html">${entrance}</a></li>
-                </c:otherwise>
-            </c:choose>
 
-            <c:forEach items="${menu}" var="item">
-                <c:url value="${item.url}" var="itemUrl"/>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav">
                 <c:choose>
-                    <c:when test="${not empty item.menuItemsDropDown}">
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <c:choose>
-                                    <c:when test="${lang =='ru'}">
-                                        ${item.russianName}
-                                    </c:when>
-                                    <c:otherwise>
-                                        ${item.englishName}
-                                    </c:otherwise>
-                                </c:choose>
-                                <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <c:forEach items="${item.menuItemsDropDown}" var="menuItem">
-                                    <li>
-                                        <a href="${menuItem.url}">
+                    <c:when test="${not empty authorizedUser}">
+                        <li class="nav-item"><a class="nav-link" href="/logout.html">${logout}</a></li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="nav-item"><a class="nav-link" href="/login.html">${entrance}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/user/edit.html?role=Пациент">${register}</a>
+                        </li>
+                    </c:otherwise>
+                </c:choose>
+
+                <c:forEach items="${menu}" var="item">
+                    <c:url value="${item.url}" var="itemUrl"/>
+                    <c:choose>
+                        <c:when test="${not empty item.menuItemsDropDown}">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <c:choose>
+                                        <c:when test="${lang =='ru'}">
+                                            ${item.russianName}
+                                        </c:when>
+                                        <c:otherwise>
+                                            ${item.englishName}
+                                        </c:otherwise>
+                                    </c:choose>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <c:forEach items="${item.menuItemsDropDown}" var="menuItem">
+                                        <a class="dropdown-item" href="${menuItem.url}">
                                             <c:choose>
                                                 <c:when test="${lang =='ru'}">
                                                     ${menuItem.russianName}
@@ -66,32 +69,31 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </a>
-                                    </li>
-                                </c:forEach>
-                            </ul>
-                        </li>
-                    </c:when>
-                    <c:otherwise>
-                        <li class="item"><a href="${itemUrl}">
-                            <c:choose>
-                                <c:when test="${lang =='ru'}">
-                                    ${item.russianName}
-                                </c:when>
-                                <c:otherwise>
-                                    ${item.englishName}
-                                </c:otherwise>
-                            </c:choose></a></li>
-                    </c:otherwise>
-                </c:choose>
-            </c:forEach>
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">${language}
-                    <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li class="item"><a href="/language.html?language=en">English</a></li>
-                    <li class="item"><a href="/language.html?language=ru">Русский</a></li>
-                </ul>
-            </li>
-        </ul>
+                                    </c:forEach>
+                                </div>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class=class="nav-item"><a class="nav-link" href="${itemUrl}">
+                                <c:choose>
+                                    <c:when test="${lang =='ru'}">
+                                        ${item.russianName}
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${item.englishName}
+                                    </c:otherwise>
+                                </c:choose></a></li>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">${language}</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/language.html?language=en">English</a>
+                        <a class="dropdown-item" href="/language.html?language=ru">Русский</a>
+                    </div>
+                </li>
+            </div>
+        </div>
     </div>
 </nav>

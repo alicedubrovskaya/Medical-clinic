@@ -27,10 +27,11 @@
 <fmt:message bundle="${textResources}" key="patient.surname" var="patient_surname"/>
 
 
-
 <u:html title="${patient_list}" message="${message}">
     <div class="container">
-        <h2>${patient_list}</h2>
+        <div class="main-head">
+            <h2>${patient_list}</h2>
+        </div>
         <table class="table table-hover">
             <thead>
             <tr>

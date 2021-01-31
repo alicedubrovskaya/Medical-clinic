@@ -1,0 +1,7 @@
+.main-head h2 {
+    color: #138f03;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: #86cd81;
+}

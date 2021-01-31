@@ -32,7 +32,9 @@
 
 <u:html title="${appointment_list}" message="${message}">
     <div class="container">
-        <h2>${appointment_list}</h2>
+        <div class="main-head">
+            <h2>${appointment_list}</h2>
+        </div>
         <c:if test="${authorizedUser.role.name == 'Администратор'}">
             <form action="/appointment/list.html" method="get">
                 <label for="date">${date}:</label>
@@ -40,7 +42,7 @@
                 <script>
                     getDate();
                 </script>
-                <button type="submit">${find}</button>
+                <input type="submit" class="btn btn-success" value="${find}">
             </form>
         </c:if>
 

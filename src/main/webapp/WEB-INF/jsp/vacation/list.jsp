@@ -30,10 +30,11 @@
 <fmt:message bundle="${textResources}" key="date.end" var="date_end"/>
 
 
-
 <u:html title="${vacation_list}" message="${message}">
     <div class="container">
-        <h2>${vacation_list}</h2>
+        <div class="main-head">
+            <h2>${vacation_list}</h2>
+        </div>
         <table class="table table-hover">
             <thead>
             <tr>
