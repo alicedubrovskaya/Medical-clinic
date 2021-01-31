@@ -20,6 +20,7 @@
 <fmt:message bundle="${textResources}" key="logout" var="logout"/>
 <fmt:message bundle="${textResources}" key="language.change" var="language"/>
 
+<%--<link href="<c:url value="/css/menu.css"/>" rel="stylesheet">--%>
 
 <nav class="navbar navbar-default">
     <div class="container-fluid">

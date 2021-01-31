@@ -1,3 +1,4 @@
+<%@ attribute name="cssFiles" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
 <%@tag language="java" pageEncoding="UTF-8" %>
@@ -17,9 +18,19 @@
     <c:url value="/js" var="javascriptUrl"/>
     <script type="text/javascript" src="${javascriptUrl}/main.js"></script>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/bootstrap/jQuery/jquery-3.5.1.min.js"></script>
+        <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" id="bootstrap-css">
+        <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+
+    <c:if test="${not empty cssFiles}">
+        <c:forEach var="cssFileItem" items="${cssFiles}">
+            <link href="<c:url value="/css/${cssFileItem}"/>" rel="stylesheet">
+        </c:forEach>
+    </c:if>
+
+<%--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">--%>
+<%--    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>--%>
+<%--    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>--%>
 
     <c:if test="${not empty message}">
         <script type="text/javascript">

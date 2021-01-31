@@ -28,22 +28,25 @@
 <fmt:message bundle="${textResources}" key="button.enter" var="button_enter"/>
 <fmt:message bundle="${textResources}" key="entrance" var="entrance"/>
 
-
+<%--<c:set var="cssFiles" value="${['menu.css']}" scope="page"/>--%>
+<%--<u:html title="${entrance}" cssFiles="${cssFiles}" message="${message}">--%>
 <u:html title="${entrance}" message="${message}">
     <div class="container">
         <h2>${entrance}</h2>
 
-        <c:url value="/login.html" var="loginUrl"/>
-        <form action="${loginUrl}" method="post">
-            <div class="form-group">
-                <label for="login">${user_login}:</label>
-                <input type="text" id="login" name="login" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="password">${user_password}:</label>
-                <input type="password" id="password" name="password" class="form-control">
-            </div>
-            <input type="submit" class="btn btn-success" value="${button_enter}">
-        </form>
+        <div class="col-sm-4">
+            <c:url value="/login.html" var="loginUrl"/>
+            <form action="${loginUrl}" method="post">
+                <div class="form-group">
+                    <label for="login">${user_login}:</label>
+                    <input type="text" id="login" name="login" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="password">${user_password}:</label>
+                    <input type="password" id="password" name="password" class="form-control">
+                </div>
+                <input type="submit" class="btn btn-success" value="${button_enter}">
+            </form>
+        </div>
     </div>
 </u:html>
