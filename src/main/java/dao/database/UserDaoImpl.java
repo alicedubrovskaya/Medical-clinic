@@ -1,10 +1,8 @@
 package dao.database;
 
 import dao.UserDao;
-import domain.Doctor;
 import domain.User;
 import domain.enumeration.Role;
-import domain.enumeration.Shift;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     private static final String CREATE_USER = "INSERT INTO `user` (`login`, `password`, `role`)" +
@@ -30,6 +30,10 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
     private static final String READ_USER_BY_LOGIN =
             "SELECT `id`, `role`, `password` FROM `user` WHERE `login` = ?";
+
+    private static final String READ_USERS_LIMIT = "SELECT SQL_CALC_FOUND_ROWS `id`,`login`, `password`, `role` FROM `user` LIMIT ? ,?";
+    private static final String SQL_NUMBER_OF_RECORDS = "SELECT FOUND_ROWS()";
+
 
     private static final String UPDATE_USER = "UPDATE `user` SET `login` = ?, `password` = ?," +
             " `role` = ? WHERE `id` = ?";
@@ -232,6 +236,37 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
                 statement.close();
             } catch (SQLException | NullPointerException e) {
             }
+        }
+    }
+
+    @Override
+    public Map<Integer, List<User>> read(int offset, int noOfRecords) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_USERS_LIMIT)) {
+            statement.setInt(1, offset);
+            statement.setInt(2, noOfRecords);
+            ResultSet resultSet = statement.executeQuery();
+
+            User user;
+            Map<Integer, List<User>> map = new HashMap<>();
+            List<User> users = new ArrayList<>();
+            while (resultSet.next()) {
+                user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setLogin(resultSet.getString("login"));
+                user.setPassword(resultSet.getString("password"));
+                user.setRole(Role.getById(resultSet.getInt("role")));
+                users.add(user);
+            }
+            resultSet = statement.executeQuery(SQL_NUMBER_OF_RECORDS);
+            Integer sqlNoOfRecords = null;
+            if (resultSet.next()) {
+                sqlNoOfRecords = resultSet.getInt(1);
+            }
+            map.put(sqlNoOfRecords, users);
+            logger.debug("Users were read");
+            return map;
+        } catch (SQLException e) {
+            throw new PersistentException("It is impossible co connect to database", e);
         }
     }
 }

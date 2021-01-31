@@ -26,6 +26,8 @@
 <fmt:message bundle="${textResources}" key="user.login" var="user_login"/>
 <fmt:message bundle="${textResources}" key="user.password" var="user_password"/>
 <fmt:message bundle="${textResources}" key="user.role" var="user_role"/>
+<fmt:message bundle="${textResources}" key="page.next" var="next"/>
+<fmt:message bundle="${textResources}" key="page.previous" var="previous"/>
 
 
 <u:html title="${user_list}" message="${message}">
@@ -55,5 +57,44 @@
             </c:forEach>
             </tbody>
         </table>
+        <ul class="pagination justify-content-center">
+            <c:choose>
+                <c:when test="${currentPage==1}">
+                    <li class="page-item disabled">
+                        <a class="page-link" aria-disabled="true" href="#">${previous}</a>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="page-item">
+                        <a class="page-link" href="/user/list.html?page=${currentPage-1}">${previous}</a>
+                    </li>
+                </c:otherwise>
+            </c:choose>
+
+            <c:forEach begin="1" end="${noOfPages}" var="i">
+                <c:choose>
+                    <c:when test="${currentPage == i}">
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="#">${i}</a>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="page-item"><a class="page-link" href="/user/list.html?page=${i}">${i}</a></li>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+
+            <c:choose>
+                <c:when test="${currentPage != noOfPages}">
+                    <li class="page-item"><a class="page-link" href="/user/list.html?page=${currentPage+1}">${next}</a>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="page-item disabled">
+                        <a class="page-link" aria-disabled="true" href="#">${next}</a>
+                    </li>
+                </c:otherwise>z
+            </c:choose>
+        </ul>
     </div>
 </u:html>

@@ -2,8 +2,10 @@ package service;
 
 import domain.User;
 import exception.PersistentException;
+import service.exception.ServicePersistentException;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService extends Service {
     void save(User user) throws PersistentException;
@@ -17,4 +19,7 @@ public interface UserService extends Service {
     User findById(Integer id) throws PersistentException;
 
     List<User> findAll() throws PersistentException;
+
+    Map<Integer, List<User>> find(int offset, int noOfRecords) throws ServicePersistentException;
+
 }

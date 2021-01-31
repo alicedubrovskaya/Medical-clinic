@@ -5,8 +5,10 @@ import domain.User;
 import exception.PersistentException;
 import service.PasswordEncryption;
 import service.UserService;
+import service.exception.ServicePersistentException;
 
 import java.util.List;
+import java.util.Map;
 
 public class UserServiceImpl extends ServiceImpl implements UserService {
 
@@ -55,5 +57,23 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
     public List<User> findAll() throws PersistentException {
         UserDao userDao = transaction.createUserDao();
         return userDao.read();
+    }
+
+    /**
+     * Reads all users with specified offset and number of records
+     * @param offset
+     * @param noOfRecords
+     * @return
+     * @throws ServicePersistentException
+     */
+    @Override
+    public Map<Integer, List<User>> find(int offset, int noOfRecords) throws ServicePersistentException {
+        try {
+            UserDao userDao = transaction.createUserDao();
+            Map<Integer, List<User>> map = userDao.read(offset, noOfRecords);
+            return map;
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
+        }
     }
 }
