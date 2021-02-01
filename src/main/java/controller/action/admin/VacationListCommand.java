@@ -21,7 +21,7 @@ public class VacationListCommand extends AdministratorCommand {
             List<Vacation> vacations = service.findAll();
             request.setAttribute("vacations", vacations);
         } catch (ServicePersistentException e) {
-            logger.info("Vacations were not found");
+            logger.info(e);
         }
         return null;
     }

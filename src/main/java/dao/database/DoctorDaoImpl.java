@@ -141,10 +141,10 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
                 statement.setInt(3, resultSet.getInt("id"));
             }
             statement.executeUpdate();
+            logger.debug("Doctor with id={} was updated", doctor.getId());
         } catch (SQLException e) {
             throw new PersistentException("Doctor cannot be updated");
         }
-        logger.debug("Doctor with id={} was updated", doctor.getId());
     }
 
     /**
@@ -158,8 +158,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_DOCTOR)) {
             statement.setInt(1, id);
             statement.executeUpdate();
-
-            logger.debug("Doctor with id={} was updated", id);
+            logger.debug("Doctor with id={} was deleted", id);
         } catch (SQLException e) {
             throw new PersistentException("Doctor cannot be deleted");
         }

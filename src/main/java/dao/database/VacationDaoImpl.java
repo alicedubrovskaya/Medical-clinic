@@ -3,6 +3,9 @@ package dao.database;
 import dao.VacationDao;
 import domain.Vacation;
 import exception.PersistentException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import service.impl.DoctorServiceImpl;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
+    private static final Logger logger = LogManager.getLogger(VacationDaoImpl.class);
 
     private static final String CREATE_VACATION = "INSERT INTO `vacation`(`doctor_id`, `start`, `end`) VALUES (?,?,?)";
 
@@ -30,38 +34,24 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
 
     @Override
     public Integer create(Vacation vacation) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(CREATE_VACATION);
+        try (PreparedStatement statement = connection.prepareStatement(CREATE_VACATION);
+        ) {
             statement.setInt(1, vacation.getId());
             statement.setDate(2, new java.sql.Date(vacation.getStart().getTime()));
             statement.setDate(3, new java.sql.Date(vacation.getEnd().getTime()));
             statement.executeUpdate();
-
+            logger.debug("Vacation with id={} was created", vacation.getId());
             return vacation.getId();
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Vacation cannot be created");
         }
     }
 
     @Override
     public Vacation read(Integer id) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(READ_VACATION);
+        try (PreparedStatement statement = connection.prepareStatement(READ_VACATION)) {
             statement.setInt(1, id);
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             Vacation vacation = null;
             if (resultSet.next()) {
                 vacation = new Vacation();
@@ -69,66 +59,44 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
                 vacation.setStart(resultSet.getDate("start"));
                 vacation.setEnd(resultSet.getDate("end"));
             }
+            logger.debug("Vacation was read");
             return vacation;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Vacation cannot be read");
         }
     }
 
     @Override
     public void update(Vacation vacation) throws PersistentException {
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(UPDATE_VACATION);
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_VACATION)) {
             statement.setDate(1, new java.sql.Date(vacation.getStart().getTime()));
             statement.setDate(2, new java.sql.Date(vacation.getEnd().getTime()));
             statement.setInt(3, vacation.getId());
 
             statement.executeUpdate();
+            logger.debug("Vacation with id={} was updated", vacation.getId());
         } catch (SQLException e) {
             throw new PersistentException(e);
-        } finally {
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
         }
     }
 
     @Override
     public void delete(Integer id) throws PersistentException {
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(DELETE_VACATION);
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_VACATION);
+        ) {
             statement.setInt(1, id);
             statement.executeUpdate();
+            logger.debug("Vacation with id={} was deleted", id);
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Vacation cannot be deleted");
         }
     }
 
     @Override
     public List<Vacation> read() throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
+        try (PreparedStatement statement = connection.prepareStatement(READ_VACATIONS)) {
             List<Vacation> vacations = new ArrayList<>();
-            statement = connection.prepareStatement(READ_VACATIONS);
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             Vacation vacation = null;
             while (resultSet.next()) {
                 vacation = new Vacation();
@@ -137,30 +105,19 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
                 vacation.setEnd(resultSet.getDate("end"));
                 vacations.add(vacation);
             }
+            logger.debug("Vacations were read");
             return vacations;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Vacations cannot be read");
         }
     }
 
     @Override
     public List<Vacation> readByTime(Date date) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
+        try (PreparedStatement statement = connection.prepareStatement(READ_VACATION_BY_TIME)) {
             List<Vacation> vacations = new ArrayList<>();
-            statement = connection.prepareStatement(READ_VACATION_BY_TIME);
             statement.setDate(1, new java.sql.Date(date.getTime()));
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             Vacation vacation = null;
             while (resultSet.next()) {
                 vacation = new Vacation();
@@ -169,29 +126,18 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
                 vacation.setEnd(resultSet.getDate("end"));
                 vacations.add(vacation);
             }
+            logger.debug("Vacations were read");
             return vacations;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Vacations cannot be read");
         }
     }
 
     @Override
     public Vacation readBySpecifiedDate(Date date) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(READ_VACATION_FOR_ALL);
+        try (PreparedStatement statement = connection.prepareStatement(READ_VACATION_FOR_ALL)) {
             statement.setDate(1, new java.sql.Date(date.getTime()));
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
 
             Vacation vacation = null;
             if (resultSet.next()) {
@@ -199,20 +145,10 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
                 vacation.setStart(resultSet.getDate("day"));
                 vacation.setEnd(resultSet.getDate("day"));
             }
+            logger.debug("Vacation was read");
             return vacation;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Vacation cannot be read");
         }
     }
 }

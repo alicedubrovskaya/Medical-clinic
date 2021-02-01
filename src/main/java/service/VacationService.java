@@ -8,13 +8,13 @@ import java.util.Date;
 import java.util.List;
 
 public interface VacationService extends Service{
-    void save(Vacation vacation) throws PersistentException;
+    void save(Vacation vacation) throws ServicePersistentException;
 
-    List<Vacation> findByTime(Date date) throws PersistentException;
+    List<Vacation> findByTime(Date date) throws ServicePersistentException;
 
     List<Vacation> findAll() throws ServicePersistentException;
 
-    Vacation findById(Integer id) throws PersistentException;
+    Vacation findById(Integer id) throws ServicePersistentException;
 
-    void delete(Integer id) throws PersistentException;
+    void delete(Integer id) throws ServicePersistentException;
 }

@@ -1,5 +1,4 @@
 function validateVacation(form) {
-    alert("validation");
     if (form["start"].value <= form["end"].value) {
         form["end"].setCustomValidity('');
         form["end"].reportValidity();

@@ -12,26 +12,61 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Vacation service
+ */
 public class VacationServiceImpl extends ServiceImpl implements VacationService {
 
+    /**
+     * Saves vacation
+     *
+     * @param vacation
+     * @throws ServicePersistentException
+     */
     @Override
-    public void save(Vacation vacation) throws PersistentException {
+    public void save(Vacation vacation) throws ServicePersistentException {
         VacationDao vacationDao = transaction.createVacationDao();
-        if (vacation.getId() != null) {
-            if (vacationDao.read(vacation.getId()) != null) {
-                vacationDao.update(vacation);
-            } else vacationDao.create(vacation);
-        } else {
-            vacation.setId(vacationDao.create(vacation));
+        try {
+            if (vacation.getId() != null) {
+                if (vacationDao.read(vacation.getId()) != null) {
+                    vacationDao.update(vacation);
+                } else vacationDao.create(vacation);
+            } else {
+                throw new ServicePersistentException("Vacation has no id (doctor)");
+            }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
         }
     }
 
+    /**
+     * Finds vacations by time
+     *
+     * @param date
+     * @return list of found vacations
+     * @throws ServicePersistentException
+     */
     @Override
-    public List<Vacation> findByTime(Date date) throws PersistentException {
+    public List<Vacation> findByTime(Date date) throws ServicePersistentException {
         VacationDao vacationDao = transaction.createVacationDao();
-        return vacationDao.readByTime(date);
+        try {
+            List<Vacation> vacations = vacationDao.readByTime(date);
+            if (!vacations.isEmpty()) {
+                return vacations;
+            } else {
+                throw new ServicePersistentException("Empty list of vacations");
+            }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
+        }
     }
 
+    /**
+     * Finds all vacations
+     *
+     * @return list of vacations
+     * @throws ServicePersistentException
+     */
     @Override
     public List<Vacation> findAll() throws ServicePersistentException {
         VacationDao vacationDao = transaction.createVacationDao();
@@ -48,23 +83,51 @@ public class VacationServiceImpl extends ServiceImpl implements VacationService 
         }
     }
 
+    /**
+     * Finds vacation by id
+     *
+     * @param id
+     * @return found vacation
+     * @throws ServicePersistentException
+     */
     @Override
-    public Vacation findById(Integer id) throws PersistentException {
+    public Vacation findById(Integer id) throws ServicePersistentException {
         VacationDao vacationDao = transaction.createVacationDao();
-        Vacation vacation = vacationDao.read(id);
-        if (vacation != null) {
-            buildVacation(Collections.singletonList(vacation));
+        try {
+            Vacation vacation = vacationDao.read(id);
+            if (vacation != null) {
+                buildVacation(Collections.singletonList(vacation));
+                return vacation;
+            } else {
+                throw new ServicePersistentException("Vacation wasn't found");
+            }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
         }
-        return vacation;
     }
 
+    /**
+     * Deletes vacation by id
+     *
+     * @param id
+     * @throws ServicePersistentException
+     */
     @Override
-    public void delete(Integer id) throws PersistentException {
-        //TODO
+    public void delete(Integer id) throws ServicePersistentException {
         VacationDao vacationDao = transaction.createVacationDao();
-        vacationDao.delete(id);
+        try {
+            vacationDao.delete(id);
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
+        }
     }
 
+    /**
+     * Fills missing fields of vacations
+     *
+     * @param vacations
+     * @throws PersistentException
+     */
     private void buildVacation(List<Vacation> vacations) throws PersistentException {
         DoctorDao doctorDao = transaction.createDoctorDao();
         for (Vacation vacation : vacations) {
