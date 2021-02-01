@@ -6,6 +6,8 @@ import controller.action.CommandManagerFactory;
 import dao.database.TransactionFactoryImpl;
 import dao.pool.ConnectionPool;
 import exception.PersistentException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import service.ServiceFactory;
 import service.impl.ServiceFactoryImpl;
 
@@ -18,6 +20,8 @@ import java.io.IOException;
 import java.util.Map;
 
 public class DispatcherServlet extends HttpServlet {
+    private static final Logger logger = LogManager.getLogger(DispatcherServlet.class);
+
     public static final String DB_DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
     public static final String DB_URL = "jdbc:mysql://localhost:3306/clinic_db?serverTimezone=Europe/Minsk";
     public static final String DB_USER = "root";
@@ -26,14 +30,15 @@ public class DispatcherServlet extends HttpServlet {
     public static final int DB_POOL_MAX_SIZE = 1000;
     public static final int DB_POOL_CHECK_CONNECTION_TIMEOUT = 0;
 
-    public void init() {
-        try {
-            ConnectionPool.getInstance().init(DB_DRIVER_CLASS, DB_URL, DB_USER, DB_PASSWORD, DB_POOL_START_SIZE,
-                    DB_POOL_MAX_SIZE, DB_POOL_CHECK_CONNECTION_TIMEOUT);
-        } catch (PersistentException e) {
-            destroy();
-        }
-    }
+//    public void init() {
+//        try {
+//            ConnectionPool.getInstance().init(DB_DRIVER_CLASS, DB_URL, DB_USER, DB_PASSWORD, DB_POOL_START_SIZE,
+//                    DB_POOL_MAX_SIZE, DB_POOL_CHECK_CONNECTION_TIMEOUT);
+//        } catch (PersistentException e) {
+//            logger.error("It is impossible to initialize application", e);
+//            destroy();
+//        }
+//    }
 
     public ServiceFactory getFactory() throws PersistentException {
         return new ServiceFactoryImpl(new TransactionFactoryImpl());
@@ -89,5 +94,10 @@ public class DispatcherServlet extends HttpServlet {
             request.setAttribute("error", "Ошибка обработки данных");
             getServletContext().getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
         }
+    }
+
+    @Override
+    public void destroy() {
+        ConnectionPool.getInstance().destroy();
     }
 }

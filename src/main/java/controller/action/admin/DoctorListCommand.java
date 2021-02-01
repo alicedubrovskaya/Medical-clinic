@@ -21,7 +21,7 @@ public class DoctorListCommand extends AdministratorCommand {
             List<Doctor> doctors = service.findAll();
             request.setAttribute("doctors", doctors);
         } catch (ServicePersistentException e) {
-            logger.info("Doctors wasn't find");
+            logger.info("Doctors were not found");
         }
         return null;
     }

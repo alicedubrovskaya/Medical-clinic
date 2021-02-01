@@ -1,0 +1,12 @@
+2021-02-01 12:19:47.816 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:46)] - The limit of number of database connections is exceeded
+2021-02-01 12:22:02.037 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:46)] - The limit of number of database connections is exceeded
+2021-02-01 12:28:51.484 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:46)] - The limit of number of database connections is exceeded
+2021-02-01 12:34:11.332 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:82)] - The limit of number of database connections is exceeded
+2021-02-01 12:40:29.636 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:82)] - The limit of number of database connections is exceeded
+2021-02-01 12:40:45.043 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:82)] - The limit of number of database connections is exceeded
+2021-02-01 12:41:12.099 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:82)] - The limit of number of database connections is exceeded
+2021-02-01 12:46:57.992 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:82)] - The limit of number of database connections is exceeded
+2021-02-01 13:21:42.684 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-01 13:21:42.760 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
+2021-02-01 13:28:44.210 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-01 13:28:44.277 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read

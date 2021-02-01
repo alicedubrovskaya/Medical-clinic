@@ -6,6 +6,7 @@ import domain.Doctor;
 import domain.Vacation;
 import exception.PersistentException;
 import service.VacationService;
+import service.exception.ServicePersistentException;
 
 import java.util.Collections;
 import java.util.Date;
@@ -32,11 +33,19 @@ public class VacationServiceImpl extends ServiceImpl implements VacationService 
     }
 
     @Override
-    public List<Vacation> findAll() throws PersistentException {
+    public List<Vacation> findAll() throws ServicePersistentException {
         VacationDao vacationDao = transaction.createVacationDao();
-        List<Vacation> vacations = vacationDao.read();
-        buildVacation(vacations);
-        return vacations;
+        try {
+            List<Vacation> vacations = vacationDao.read();
+            if (!vacations.isEmpty()) {
+                buildVacation(vacations);
+                return vacations;
+            } else {
+                throw new ServicePersistentException("Empty list of vacations");
+            }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
+        }
     }
 
     @Override

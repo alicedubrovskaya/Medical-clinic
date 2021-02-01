@@ -4,17 +4,25 @@ import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.ReentrantLock;
 
 final public class ConnectionPool {
     private final Logger logger = LogManager.getLogger(getClass().getName());
 
+    private static final String PROPERTY_PATH = "database.properties";
+
+
+    private static final ReentrantLock lock = new ReentrantLock();
     private String url;
     private String user;
     private String password;
@@ -24,10 +32,65 @@ final public class ConnectionPool {
     private BlockingQueue<PooledConnection> freeConnections = new LinkedBlockingQueue<>();
     private Set<PooledConnection> usedConnections = new ConcurrentSkipListSet<>();
 
-    private ConnectionPool() {
+    private static ConnectionPool instance = new ConnectionPool();
+
+    public static ConnectionPool getInstance() {
+        if (instance == null) {
+            try {
+                lock.lock();
+                if (instance == null) {
+                    instance = new ConnectionPool();
+                }
+            } finally {
+                lock.unlock();
+            }
+        }
+        return instance;
     }
 
-    public synchronized Connection getConnection() throws PersistentException {
+    private ConnectionPool() {
+        Properties properties = new Properties();
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            InputStream inputStream = classLoader.getResourceAsStream(PROPERTY_PATH);
+            properties.load(inputStream);
+        } catch (IOException e) {
+            logger.error("Error while reading properties", e);
+        }
+        String driverClass = properties.getProperty("db.driver");
+        String url = properties.getProperty("db.url");
+        String user = properties.getProperty("db.user");
+        String password = properties.getProperty("db.password");
+        int startSize = Integer.parseInt(properties.getProperty("db.poolStartSize"));
+        int maxSize = Integer.parseInt(properties.getProperty("db.poolMaxSize"));
+        int checkConnectionTimeOut = Integer.parseInt(properties.getProperty("db.poolCheckConnectionTimeOut"));
+
+        try {
+            init(driverClass, url, user, password, startSize, maxSize, checkConnectionTimeOut);
+        } catch (PersistentException e) {
+            logger.error(e);
+        }
+    }
+
+    public void init(String driverClass, String url, String user, String password, int startSize, int maxSize, int checkConnectionTimeout) throws PersistentException {
+        try {
+            destroy();
+            Class.forName(driverClass);
+            this.url = url;
+            this.user = user;
+            this.password = password;
+            this.maxSize = maxSize;
+            this.checkConnectionTimeout = checkConnectionTimeout;
+            for (int counter = 0; counter < startSize; counter++) {
+                freeConnections.put(createConnection());
+            }
+        } catch (ClassNotFoundException | SQLException | InterruptedException e) {
+            logger.fatal("It is impossible to initialize connection pool", e);
+            throw new PersistentException(e);
+        }
+    }
+
+    public Connection getConnection() throws PersistentException {
         PooledConnection connection = null;
         while (connection == null) {
             try {
@@ -56,7 +119,7 @@ final public class ConnectionPool {
         return connection;
     }
 
-    synchronized void freeConnection(PooledConnection connection) {
+    void freeConnection(PooledConnection connection) {
         try {
             if (connection.isValid(checkConnectionTimeout)) {
                 connection.clearWarnings();
@@ -74,35 +137,12 @@ final public class ConnectionPool {
         }
     }
 
-    public synchronized void init(String driverClass, String url, String user, String password, int startSize, int maxSize, int checkConnectionTimeout) throws PersistentException {
-        try {
-            destroy();
-            Class.forName(driverClass);
-            this.url = url;
-            this.user = user;
-            this.password = password;
-            this.maxSize = maxSize;
-            this.checkConnectionTimeout = checkConnectionTimeout;
-            for (int counter = 0; counter < startSize; counter++) {
-                freeConnections.put(createConnection());
-            }
-        } catch (ClassNotFoundException | SQLException | InterruptedException e) {
-            logger.fatal("It is impossible to initialize connection pool", e);
-            throw new PersistentException(e);
-        }
-    }
-
-    private static ConnectionPool instance = new ConnectionPool();
-
-    public static ConnectionPool getInstance() {
-        return instance;
-    }
 
     private PooledConnection createConnection() throws SQLException {
         return new PooledConnection(DriverManager.getConnection(url, user, password));
     }
 
-    public synchronized void destroy() {
+    public void destroy() {
         usedConnections.addAll(freeConnections);
         freeConnections.clear();
         for (PooledConnection connection : usedConnections) {
