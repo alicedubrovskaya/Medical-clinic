@@ -22,7 +22,7 @@ public class DoctorDeleteCommand extends AdministratorCommand {
                 service.delete(id);
                 forward.getAttributes().put("message", "Врач успешно удалён");
             } catch (ServicePersistentException e) {
-                logger.error("Doctors wasn't delete");
+                logger.error("Doctor wasn't deleted");
             }
         } catch (NumberFormatException e) {
             logger.error("Incorrect data");

@@ -116,7 +116,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             logger.debug("Doctor was read");
             return doctor;
         } catch (SQLException e) {
-            throw new PersistentException("It is impossible co connect to database", e);
+            throw new PersistentException("Doctor wasn't read", e);
         }
     }
 

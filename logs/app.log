@@ -77,3 +77,43 @@
 2021-02-02 15:32:23.445 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
 2021-02-02 15:32:23.447 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
 2021-02-02 15:32:23.450 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 15:46:06.788 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 15:46:06.852 DEBUG [main] [dao.database.DoctorDaoImpl.delete(DoctorDaoImpl.java:162)] - Doctor with id=8 was deleted
+2021-02-02 15:49:35.347 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 15:49:38.431 DEBUG [main] [dao.database.DoctorDaoImpl.delete(DoctorDaoImpl.java:162)] - Doctor with id=8 was deleted
+2021-02-02 15:50:50.176 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 15:50:50.251 DEBUG [main] [dao.database.DoctorDaoImpl.delete(DoctorDaoImpl.java:162)] - Doctor with id=10 was deleted
+2021-02-02 15:50:50.255 DEBUG [main] [dao.database.UserDaoImpl.delete(UserDaoImpl.java:130)] - User with id=10 was deleted
+2021-02-02 15:50:50.289 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:196)] - Doctors were read
+2021-02-02 15:50:50.292 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 15:50:50.296 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 15:50:50.299 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 15:53:41.111 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 15:53:41.191 DEBUG [main] [dao.database.DoctorDaoImpl.update(DoctorDaoImpl.java:145)] - Doctor with id=11 was updated
+2021-02-02 15:53:41.200 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:196)] - Doctors were read
+2021-02-02 15:53:41.203 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 15:53:41.206 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 15:53:41.209 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 15:53:41.213 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 15:53:41.215 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 15:57:49.792 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 15:57:49.883 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:116)] - Doctor was read
+2021-02-02 15:57:49.887 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 15:57:49.910 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:116)] - Doctor was read
+2021-02-02 15:58:16.876 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 15:58:16.959 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:116)] - Doctor was read
+2021-02-02 15:58:16.962 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 15:58:16.980 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:116)] - Doctor was read
+2021-02-02 15:58:16.984 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 15:58:45.343 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 15:58:45.426 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:116)] - Doctor was read
+2021-02-02 15:58:45.429 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 15:58:45.441 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:116)] - Doctor was read
+2021-02-02 15:58:45.444 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 16:02:00.004 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 16:02:00.095 DEBUG [main] [dao.database.DoctorDaoImpl.readBySurnameAndName(DoctorDaoImpl.java:330)] - Doctors were read
+2021-02-02 16:02:00.098 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 16:02:00.110 DEBUG [main] [dao.database.DoctorDaoImpl.readBySurnameAndName(DoctorDaoImpl.java:330)] - Doctors were read
+2021-02-02 16:02:00.113 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 16:03:26.156 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 16:03:26.226 DEBUG [main] [dao.database.DoctorDaoImpl.readSpecializations(DoctorDaoImpl.java:255)] - Specializations were read
