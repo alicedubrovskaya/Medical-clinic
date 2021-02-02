@@ -8,17 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 public interface UserService extends Service {
-    void save(User user) throws PersistentException;
+    void save(User user) throws ServicePersistentException;
 
-    void delete(Integer id) throws PersistentException;
+    void delete(Integer id) throws ServicePersistentException;
 
-    User findByLoginAndPassword(String login, String password) throws PersistentException;
+    User findByLoginAndPassword(String login, String password) throws ServicePersistentException;
 
-    User findByLogin(String login) throws PersistentException;
+    User findByLogin(String login) throws ServicePersistentException;
 
-    User findById(Integer id) throws PersistentException;
+    User findById(Integer id) throws ServicePersistentException;
 
-    List<User> findAll() throws PersistentException;
+    List<User> findAll() throws ServicePersistentException;
 
     Map<Integer, List<User>> find(int offset, int noOfRecords) throws ServicePersistentException;
 

@@ -9,6 +9,7 @@ import domain.enumeration.Status;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import service.exception.ServicePersistentException;
 
 import java.sql.*;
 import java.util.*;
@@ -65,10 +66,8 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
 
     @Override
     public Integer create(Appointment appointment) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(CREATE_APPOINTMENT, Statement.RETURN_GENERATED_KEYS);
+        try (PreparedStatement statement = connection.prepareStatement(CREATE_APPOINTMENT, Statement.RETURN_GENERATED_KEYS);
+        ) {
             statement.setTimestamp(1, new Timestamp(appointment.getTime().getTime()));
             statement.setBoolean(2, appointment.isApproved());
             statement.setInt(3, appointment.getStatus().getId());
@@ -87,24 +86,17 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             }
 
             statement.executeUpdate();
-            resultSet = statement.getGeneratedKeys();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            Integer appointmentId = null;
             if (resultSet.next()) {
-                return resultSet.getInt(1);
+                appointmentId = resultSet.getInt(1);
+                logger.debug("Appointment with id={} was created", appointmentId);
             } else {
-                logger.error("There is no autoincremented index after trying to add record into table `appointment`");
-                throw new PersistentException();
+                throw new PersistentException("There is no autoincremented id after trying to add record into table `appointment`");
             }
+            return appointmentId;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Appointment wasn't created");
         }
     }
 

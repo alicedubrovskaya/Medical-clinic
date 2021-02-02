@@ -7,6 +7,7 @@ import domain.enumeration.Shift;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import service.exception.ServicePersistentException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -80,7 +81,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             logger.debug("Doctor with id={} was created", doctor.getId());
             return doctor.getId();
         } catch (SQLException e) {
-            throw new PersistentException("It is impossible co connect to database", e);
+            throw new PersistentException("Doctor wasn't created", e);
         }
     }
 

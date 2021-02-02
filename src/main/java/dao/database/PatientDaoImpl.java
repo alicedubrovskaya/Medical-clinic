@@ -5,6 +5,7 @@ import domain.Patient;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import service.exception.ServicePersistentException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,9 +41,7 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
 
     @Override
     public Integer create(Patient patient) throws PersistentException {
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(CREATE_PATIENT);
+        try (PreparedStatement statement = connection.prepareStatement(CREATE_PATIENT)) {
             statement.setInt(1, patient.getId());
             statement.setString(2, patient.getName());
             statement.setString(3, patient.getSurname());
@@ -51,14 +50,10 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             statement.setString(6, patient.getAddress());
 
             statement.executeUpdate();
+            logger.debug("Patient with id={} was created", patient.getId());
             return patient.getId();
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Patient wasn't created");
         }
     }
 

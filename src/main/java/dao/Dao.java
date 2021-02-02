@@ -2,6 +2,7 @@ package dao;
 
 import domain.Entity;
 import exception.PersistentException;
+import service.exception.ServicePersistentException;
 
 public interface Dao<Type extends Entity> {
     Integer create(Type entity) throws PersistentException;

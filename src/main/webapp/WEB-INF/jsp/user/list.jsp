@@ -93,7 +93,7 @@
                     <li class="page-item disabled">
                         <a class="page-link" aria-disabled="true" href="#">${next}</a>
                     </li>
-                </c:otherwise>z
+                </c:otherwise>
             </c:choose>
         </ul>
     </div>

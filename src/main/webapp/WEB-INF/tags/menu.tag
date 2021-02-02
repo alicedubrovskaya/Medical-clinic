@@ -36,7 +36,7 @@
                     </c:when>
                     <c:otherwise>
                         <li class="nav-item"><a class="nav-link" href="/login.html">${entrance}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/user/edit.html?role=Пациент">${register}</a>
+                        <li class="nav-item"><a class="nav-link" href="/user/edit.html?registration=register">${register}</a>
                         </li>
                     </c:otherwise>
                 </c:choose>

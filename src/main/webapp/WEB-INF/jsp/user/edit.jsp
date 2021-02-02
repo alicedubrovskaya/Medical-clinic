@@ -59,6 +59,10 @@
                 <input type="hidden" name="id" value="${user.id}">
             </c:if>
 
+            <c:if test="${not empty registration}">
+                <input type="hidden" id="registration" name="registration" value="${registration}">
+            </c:if>
+
             <div class="form-group">
                 <label for="login">${user_login}:</label>
                 <c:choose>
@@ -90,7 +94,6 @@
                 <input type="password" required pattern="^.{6,16}$" class="form-control" id="password_confirm"
                        name="password_confirm">
             </div>
-            <input type="hidden" id="role" name="role" value="${role}">
             <div class="btn-group">
                 <input type="submit" class="btn btn-warning" value="${button_reset}">
                 <c:choose>
@@ -104,12 +107,12 @@
             </div>
         </form>
 
-<%--        <c:if test="${not empty user}">--%>
-<%--            <form action="/user/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">--%>
-<%--                <input type="hidden" name="id" value="${user.id}">--%>
-<%--                <input type="submit" class="btn btn-danger" value="${button_delete}">--%>
-<%--            </form>--%>
-<%--        </c:if>--%>
+            <%--        <c:if test="${not empty user}">--%>
+            <%--            <form action="/user/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">--%>
+            <%--                <input type="hidden" name="id" value="${user.id}">--%>
+            <%--                <input type="submit" class="btn btn-danger" value="${button_delete}">--%>
+            <%--            </form>--%>
+            <%--        </c:if>--%>
     </div>
     <%--    <div class="container">--%>
     <%--        <jsp:include page="/WEB-INF/jsp/patient/edit.jsp"/>--%>

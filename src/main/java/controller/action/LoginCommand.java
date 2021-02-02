@@ -3,8 +3,12 @@ package controller.action;
 import domain.User;
 import domain.enumeration.Role;
 import exception.PersistentException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import service.PasswordEncryption;
 import service.UserService;
+import service.exception.ServicePersistentException;
+import service.impl.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,12 +18,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LoginCommand extends Command {
 
+    private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
     private static Map<Role, List<MenuItem>> menu = new ConcurrentHashMap<>();
 
     static {
         menu.put(Role.ADMINISTRATOR, new ArrayList<>(Arrays.asList(
                 new MenuItem("/doctor/list.html", "Врачи", "Doctors", Arrays.asList(
-                        new MenuItem("/user/edit.html?role=Врач", "Регистрация врача", "Doctor registration"),
+                        new MenuItem("/user/edit.html?registration=register", "Регистрация врача", "Doctor registration"),
                         new MenuItem("/doctor/list.html", "Список врачей", "Doctors list")
                 )),
                 new MenuItem("Пациенты", "Patients", Arrays.asList(
@@ -67,17 +72,15 @@ public class LoginCommand extends Command {
         String password = request.getParameter("password");
         if (login != null & password != null) {
             UserService service = serviceFactory.getUserService();
-            User user = service.findByLogin(login);
-            if (user != null) {
-                if (PasswordEncryption.checkPassword(password, user.getPassword())) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("authorizedUser", user);
-                    session.setAttribute("menu", menu.get(user.getRole()));
-                    session.setAttribute("language", "en");
-                    //TODO
-                    return new Forward("/main.html");
-                }
-            } else {
+            try {
+                User user = service.findByLoginAndPassword(login, password);
+                HttpSession session = request.getSession();
+                session.setAttribute("authorizedUser", user);
+                session.setAttribute("menu", menu.get(user.getRole()));
+                session.setAttribute("language", "en");
+                return new Forward("/main.html");
+            } catch (ServicePersistentException e) {
+                logger.error(e);
                 request.setAttribute("message", "Логин пользователя или пароль не опознанны");
             }
         }

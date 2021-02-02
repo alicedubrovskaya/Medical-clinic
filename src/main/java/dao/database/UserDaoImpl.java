@@ -41,47 +41,46 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     private static final String DELETE_USER = "DELETE FROM `user` WHERE `id` = ?";
     private final Logger logger = LogManager.getLogger(getClass().getName());
 
+    /**
+     * Creates user in database
+     *
+     * @param user
+     * @return generated id
+     * @throws PersistentException
+     */
     @Override
     public Integer create(User user) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-
-            statement = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS);
+        try (PreparedStatement statement = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getLogin());
             statement.setString(2, user.getPassword());
             statement.setInt(3, user.getRole().getId());
             statement.executeUpdate();
-            resultSet = statement.getGeneratedKeys();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            Integer userId = null;
             if (resultSet.next()) {
-                return resultSet.getInt(1);
+                userId = resultSet.getInt(1);
+                logger.debug("User with id={} was created", userId);
             } else {
-                logger.error("There is no autoincremented index after trying to add record into table `user`");
-                throw new PersistentException();
+                throw new PersistentException("There is no autoincremented id after trying to add record into table `user`");
             }
+            return userId;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("User wasn't created");
         }
     }
 
+    /**
+     * Reads user from database
+     *
+     * @param id
+     * @return found user
+     * @throws PersistentException
+     */
     @Override
     public User read(Integer id) throws PersistentException {
-
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(READ_USER);
+        try (PreparedStatement statement = connection.prepareStatement(READ_USER)) {
             statement.setInt(1, id);
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             User user = null;
             if (resultSet.next()) {
                 user = new User();
@@ -90,67 +89,61 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
                 user.setPassword(resultSet.getString("password"));
                 user.setRole(Role.getById(resultSet.getInt("role")));
             }
+            logger.debug("User was read");
             return user;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("User cannot be read");
         }
     }
 
+    /**
+     * Updates user in database
+     *
+     * @param user
+     * @throws PersistentException
+     */
     @Override
     public void update(User user) throws PersistentException {
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(UPDATE_USER);
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
             statement.setString(1, user.getLogin());
             statement.setString(2, user.getPassword());
             statement.setInt(3, user.getRole().getId());
             statement.setInt(4, user.getId());
             statement.executeUpdate();
+            logger.debug("User with id={} was updated", user.getId());
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("User cannot be updated");
         }
     }
 
+    /**
+     * Deletes user by id
+     *
+     * @param id
+     * @throws PersistentException
+     */
     @Override
     public void delete(Integer id) throws PersistentException {
-
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(DELETE_USER);
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_USER)) {
             statement.setInt(1, id);
             statement.executeUpdate();
+            logger.debug("User with id={} was deleted", id);
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("User with cannot be deleted");
         }
     }
 
+    /**
+     * Reads all users from database
+     *
+     * @return
+     * @throws PersistentException
+     */
     @Override
     public List<User> read() throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(READ_USERS);
-            resultSet = statement.executeQuery();
-            User user = null;
+        try (PreparedStatement statement = connection.prepareStatement(READ_USERS)) {
+            ResultSet resultSet = statement.executeQuery();
+            User user;
             List<User> users = new ArrayList<>();
             while (resultSet.next()) {
                 user = new User();
@@ -161,30 +154,27 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
                 users.add(user);
             }
+            logger.debug("Users were read");
             return users;
         } catch (SQLException e) {
             throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
         }
     }
 
+    /**
+     * Reads user by login with password
+     *
+     * @param login
+     * @param password
+     * @return found user
+     * @throws PersistentException
+     */
     @Override
     public User read(String login, String password) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(READ_USER_BY_PASSWORD_AND_LOGIN);
+        try (PreparedStatement statement = connection.prepareStatement(READ_USER_BY_PASSWORD_AND_LOGIN)) {
             statement.setString(1, login);
             statement.setString(2, password);
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             User user = null;
             if (resultSet.next()) {
                 user = new User();
@@ -193,29 +183,25 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
                 user.setPassword(password);
                 user.setRole(Role.getById(resultSet.getInt("role")));
             }
+            logger.debug("User was read");
             return user;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("User cannot be read");
         }
     }
 
+    /**
+     * Reads user by login form database
+     *
+     * @param login
+     * @return found user
+     * @throws PersistentException
+     */
     @Override
     public User read(String login) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(READ_USER_BY_LOGIN);
+        try (PreparedStatement statement = connection.prepareStatement(READ_USER_BY_LOGIN)) {
             statement.setString(1, login);
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             User user = null;
             if (resultSet.next()) {
                 user = new User();
@@ -223,22 +209,22 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
                 user.setLogin(login);
                 user.setPassword(resultSet.getString("password"));
                 user.setRole(Role.getById(resultSet.getInt("role")));
+                logger.debug("User with login={} was read", login);
             }
             return user;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("User cannot be read");
         }
     }
 
+    /**
+     * Reads users with specified offset number of records
+     *
+     * @param offset
+     * @param noOfRecords
+     * @return Map<K, V> , K- number of found rows, V- list of users with offset
+     * @throws PersistentException
+     */
     @Override
     public Map<Integer, List<User>> read(int offset, int noOfRecords) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_USERS_LIMIT)) {
@@ -266,7 +252,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
             logger.debug("Users were read");
             return map;
         } catch (SQLException e) {
-            throw new PersistentException("It is impossible co connect to database", e);
+            throw new PersistentException("Users cannot be read", e);
         }
     }
 }

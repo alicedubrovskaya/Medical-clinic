@@ -58,6 +58,7 @@
                 <input type="hidden" name="id" value="${patient.id}">
             </c:if>
             <c:if test="${not empty user}">
+<%--                <input type="hidden" name="user" value="${user}">--%>
                 <input type="hidden" name="password" value="${user.password}">
                 <input type="hidden" name="login" value="${user.login}">
             </c:if>
