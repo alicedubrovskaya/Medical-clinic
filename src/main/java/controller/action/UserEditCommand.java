@@ -33,8 +33,22 @@ public class UserEditCommand extends Command {
             }
             HttpSession session = request.getSession(false);
             User authorizedUser = (User) session.getAttribute("authorizedUser");
+            Integer userId = null;
             if (authorizedUser != null) {
-
+                if (authorizedUser.getRole() == Role.ADMINISTRATOR) {
+                    userId = Integer.parseInt(request.getParameter("id"));
+                } else {
+                    userId = authorizedUser.getId();
+                }
+                if (userId != null) {
+                    UserService service = serviceFactory.getUserService();
+                    try {
+                        User user = service.findById(userId);
+                        request.setAttribute("user", user);
+                    } catch (ServicePersistentException e) {
+                        logger.error(e);
+                    }
+                }
             }
 //            String parameter = request.getParameter("role");
 //            if (parameter != null) {
