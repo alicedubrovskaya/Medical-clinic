@@ -6,16 +6,28 @@ import domain.Patient;
 import domain.User;
 import domain.enumeration.Role;
 import exception.PersistentException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import service.PasswordEncryption;
 import service.PatientService;
+import service.exception.ServicePersistentException;
 
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Patient service
+ */
 public class PatientServiceImpl extends ServiceImpl implements PatientService {
+    private static final Logger logger = LogManager.getLogger(PatientServiceImpl.class);
 
-    @Override
-    public void save(Patient patient) throws PersistentException {
+    /**
+     * Saves patient
+     *
+     * @param patient
+     * @throws ServicePersistentException
+     */
+    public void save(Patient patient) throws ServicePersistentException {
         transaction.setWithoutAutoCommit();
         UserDao userDao = transaction.createUserDao();
         PatientDao patientDao = transaction.createPatientDao();
@@ -32,14 +44,23 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
             }
             transaction.commit();
         } catch (PersistentException e) {
-            transaction.rollback();
-            //TODO service exception
-            throw new PersistentException();
+            try {
+                transaction.rollback();
+            } catch (PersistentException ex) {
+                logger.warn("Transaction can not be rollbacked:{} ", ex.getMessage());
+            }
+            throw new ServicePersistentException(e);
         }
     }
 
+    /**
+     * Deletes patient by id
+     *
+     * @param id
+     * @throws PersistentException
+     */
     @Override
-    public void delete(Integer id) throws PersistentException {
+    public void delete(Integer id) throws ServicePersistentException {
         transaction.setWithoutAutoCommit();
         UserDao userDao = transaction.createUserDao();
         PatientDao patientDao = transaction.createPatientDao();
@@ -48,51 +69,104 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
             userDao.delete(id);
             transaction.commit();
         } catch (PersistentException e) {
-            transaction.rollback();
-            //TODO service exception
-            throw new PersistentException();
+            try {
+                transaction.rollback();
+            } catch (PersistentException ex) {
+                logger.warn("Transaction can not be rollbacked: {}", ex.getMessage());
+            }
+            throw new ServicePersistentException(e);
         }
     }
 
+    /**
+     * Finds all patients
+     *
+     * @return list of found patients
+     * @throws PersistentException
+     */
     @Override
-    public List<Patient> findAll() throws PersistentException {
+    public List<Patient> findAll() throws ServicePersistentException {
         PatientDao patientDao = transaction.createPatientDao();
-        List<Patient> patients = patientDao.read();
-        buildPatient(patients);
-        return patients;
-    }
-
-    @Override
-    public Patient findByEmail(String email) throws PersistentException {
-        PatientDao patientDao = transaction.createPatientDao();
-        Patient patient = patientDao.readByEmail(email);
-        if (patient != null) {
-            buildPatient(Collections.singletonList(patient));
+        try {
+            List<Patient> patients = patientDao.read();
+            if (!patients.isEmpty()) {
+                buildPatient(patients);
+                return patients;
+            } else {
+                throw new ServicePersistentException("Empty list of patients");
+            }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
         }
-        return patient;
     }
 
+    /**
+     * Finds patient by email
+     *
+     * @param email
+     * @return found patient
+     * @throws ServicePersistentException
+     */
     @Override
-    public Patient findById(Integer id) throws PersistentException {
+    public Patient findByEmail(String email) throws ServicePersistentException {
         PatientDao patientDao = transaction.createPatientDao();
-        Patient patient = patientDao.read(id);
-        if (patient != null) {
-            buildPatient(Collections.singletonList(patient));
+        try {
+            Patient patient = patientDao.readByEmail(email);
+            if (patient != null) {
+                buildPatient(Collections.singletonList(patient));
+                return patient;
+            } else {
+                throw new ServicePersistentException("There is no such patient");
+            }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
         }
-        return patient;
     }
 
-    private void buildPatient(List<Patient> patients) throws PersistentException {
+    /**
+     * Finds patient by id
+     *
+     * @param id
+     * @return found patient
+     * @throws ServicePersistentException
+     */
+    @Override
+    public Patient findById(Integer id) throws ServicePersistentException {
+        PatientDao patientDao = transaction.createPatientDao();
+        try {
+            Patient patient = patientDao.read(id);
+            if (patient != null) {
+                buildPatient(Collections.singletonList(patient));
+                return patient;
+            } else {
+                throw new ServicePersistentException("There is no such patient");
+            }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
+        }
+    }
+
+    /**
+     * Fills patients with corresponding fields
+     *
+     * @param patients
+     * @throws ServicePersistentException
+     */
+    private void buildPatient(List<Patient> patients) throws ServicePersistentException {
         UserDao userDao = transaction.createUserDao();
-        for (Patient patient : patients) {
-            if (patient.getId() != null) {
-                User user = userDao.read(patient.getId());
-                if (user != null) {
-                    patient.setLogin(user.getLogin());
-                    patient.setPassword(user.getPassword());
-                    patient.setRole(Role.PATIENT);
+        try {
+            for (Patient patient : patients) {
+                if (patient.getId() != null) {
+                    User user = userDao.read(patient.getId());
+                    if (user != null) {
+                        patient.setLogin(user.getLogin());
+                        patient.setPassword(user.getPassword());
+                        patient.setRole(Role.PATIENT);
+                    }
                 }
             }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
         }
     }
 }

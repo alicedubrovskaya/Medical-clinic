@@ -5,7 +5,11 @@ import domain.User;
 import domain.enumeration.Role;
 import exception.IncorrectFormDataException;
 import exception.PersistentException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import service.PatientService;
+import service.exception.ServicePersistentException;
+import service.impl.DoctorServiceImpl;
 import validator.Validator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,12 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 public class PatientSaveCommand extends Command {
+    private static final Logger logger = LogManager.getLogger(PatientSaveCommand.class);
 
     @Override
     public Set<Role> getAllowRoles() {
         return null;
     }
-
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
@@ -46,9 +50,8 @@ public class PatientSaveCommand extends Command {
                     forward.getAttributes().put("message", "Данные пациента успешно сохранены");
                 }
             }
-
-        } catch (IncorrectFormDataException e) {
-            e.printStackTrace();
+        } catch (IncorrectFormDataException | ServicePersistentException e) {
+            logger.error(e);
         }
         return forward;
     }

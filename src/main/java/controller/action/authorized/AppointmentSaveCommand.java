@@ -5,8 +5,12 @@ import domain.Patient;
 import domain.User;
 import exception.IncorrectFormDataException;
 import exception.PersistentException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import service.AppointmentService;
 import service.PatientService;
+import service.exception.ServicePersistentException;
+import service.impl.DoctorServiceImpl;
 import validator.Validator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class AppointmentSaveCommand extends AuthorizedUserCommand {
+    private static final Logger logger = LogManager.getLogger(AppointmentSaveCommand.class);
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
@@ -40,27 +45,29 @@ public class AppointmentSaveCommand extends AuthorizedUserCommand {
         AppointmentService appointmentService = serviceFactory.getAppointmentService();
         Appointment appointment = appointmentService.findById(appointmentId);
 
-        String complaints = request.getParameter("complaints");
-        if (complaints == null) {
-            PatientService patientService = serviceFactory.getPatientService();
-            Patient patient = patientService.findById(patientId);
-            appointment.setPatient(patient);
-        } else {
-            Validator<Appointment> validator = validatorFactory.createAppointmentValidator();
-            try {
-                Appointment appointmentFromRequest = validator.validate(request);
-                appointment.setComplaints(appointmentFromRequest.getComplaints());
-                appointment.setStatus(appointmentFromRequest.getStatus());
-                appointment.setRecommendation(appointmentFromRequest.getRecommendation());
-                appointment.setMedicalReport(appointmentFromRequest.getMedicalReport());
-            } catch (IncorrectFormDataException e) {
-                e.printStackTrace();
+        try {
+            String complaints = request.getParameter("complaints");
+            if (complaints == null) {
+                PatientService patientService = serviceFactory.getPatientService();
+                Patient patient = patientService.findById(patientId);
+                appointment.setPatient(patient);
+            } else {
+                Validator<Appointment> validator = validatorFactory.createAppointmentValidator();
+                try {
+                    Appointment appointmentFromRequest = validator.validate(request);
+                    appointment.setComplaints(appointmentFromRequest.getComplaints());
+                    appointment.setStatus(appointmentFromRequest.getStatus());
+                    appointment.setRecommendation(appointmentFromRequest.getRecommendation());
+                    appointment.setMedicalReport(appointmentFromRequest.getMedicalReport());
+                } catch (IncorrectFormDataException e) {
+                    e.printStackTrace();
+                }
             }
+            appointmentService.save(appointment);
+            forward.getAttributes().put("message", "Прием у врача успешно сохранен");
+        } catch (ServicePersistentException e) {
+            logger.error(e);
         }
-        appointmentService.save(appointment);
-
-        forward.getAttributes().put("message", "Прием у врача успешно сохранена");
-
         return forward;
     }
 }

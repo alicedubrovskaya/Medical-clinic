@@ -38,3 +38,4 @@
 2021-02-02 12:58:21.615 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
 2021-02-02 12:58:21.868 DEBUG [main] [dao.database.UserDaoImpl.create(UserDaoImpl.java:62)] - User with id=8 was created
 2021-02-02 12:58:21.873 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:157)] - Users were read
+2021-02-02 14:45:25.655 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection

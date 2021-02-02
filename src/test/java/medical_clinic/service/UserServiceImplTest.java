@@ -2,7 +2,6 @@ package medical_clinic.service;
 
 import dao.database.TransactionFactoryImpl;
 import domain.User;
-import domain.Vacation;
 import domain.enumeration.Role;
 import exception.PersistentException;
 import org.testng.Assert;

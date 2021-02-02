@@ -5,7 +5,6 @@ import domain.Patient;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import service.exception.ServicePersistentException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -59,14 +58,11 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
 
     @Override
     public List<Patient> read() throws PersistentException {
-        PreparedStatement statement = null;
-        PreparedStatement diseasesStatement = null;
-        ResultSet resultSet = null;
-        ResultSet diseaseResultSet = null;
-        try {
-            statement = connection.prepareStatement(READ_PATIENTS);
-            resultSet = statement.executeQuery();
-            Patient patient = null;
+        try (PreparedStatement statement = connection.prepareStatement(READ_PATIENTS);
+             PreparedStatement diseasesStatement = connection.prepareStatement(READ_DISEASES_BY_PATIENT);
+        ) {
+            ResultSet resultSet = statement.executeQuery();
+            Patient patient;
             List<Patient> patients = new ArrayList<>();
             while (resultSet.next()) {
                 patient = new Patient();
@@ -78,42 +74,28 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
                 patient.setAddress(resultSet.getString("address"));
 
                 //TODO
-                diseasesStatement = connection.prepareStatement(READ_DISEASES_BY_PATIENT);
                 diseasesStatement.setInt(1, patient.getId());
-                diseaseResultSet = diseasesStatement.executeQuery();
+                ResultSet diseaseResultSet = diseasesStatement.executeQuery();
 
                 while (diseaseResultSet.next()) {
                     patient.getDiseases().add(diseaseResultSet.getString("name"));
                 }
                 patients.add(patient);
             }
+            logger.debug("Patients were read");
             return patients;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-                diseaseResultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-                diseasesStatement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Patients were not read");
         }
     }
 
     @Override
     public Patient read(Integer id) throws PersistentException {
-        PreparedStatement statement = null;
-        PreparedStatement diseasesStatement = null;
-        ResultSet resultSet = null;
-        ResultSet diseaseResultSet = null;
-        try {
-            statement = connection.prepareStatement(READ_PATIENT);
+        try (PreparedStatement statement = connection.prepareStatement(READ_PATIENT);
+             PreparedStatement diseasesStatement = connection.prepareStatement(READ_DISEASES_BY_PATIENT)
+        ) {
             statement.setInt(1, id);
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             Patient patient = null;
             if (resultSet.next()) {
                 patient = new Patient();
@@ -124,36 +106,23 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
                 patient.setPhoneNumber(resultSet.getString("phone_number"));
                 patient.setAddress(resultSet.getString("address"));
 
-                diseasesStatement = connection.prepareStatement(READ_DISEASES_BY_PATIENT);
                 diseasesStatement.setInt(1, patient.getId());
-                diseaseResultSet = diseasesStatement.executeQuery();
+                ResultSet diseaseResultSet = diseasesStatement.executeQuery();
 
                 while (diseaseResultSet.next()) {
                     patient.getDiseases().add(diseaseResultSet.getString("name"));
                 }
             }
+            logger.debug("Patient with id = {} was read", id);
             return patient;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-                diseaseResultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-                diseasesStatement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Patient wasn't read");
         }
     }
 
     @Override
     public void update(Patient patient) throws PersistentException {
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(UPDATE_PATIENT);
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_PATIENT)) {
             statement.setString(1, patient.getName());
             statement.setString(2, patient.getSurname());
             statement.setString(3, patient.getEmail());
@@ -162,43 +131,30 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             statement.setInt(6, patient.getId());
 
             statement.executeUpdate();
+            logger.debug("Patient with id={} was updated", patient.getId());
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Patient wasn't updated");
         }
     }
 
     @Override
     public void delete(Integer id) throws PersistentException {
-
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(DELETE_PATIENT);
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_PATIENT)) {
             statement.setInt(1, id);
             statement.executeUpdate();
+            logger.debug("Patient with id = {} was deleted", id);
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Patient wasn't deleted");
         }
     }
 
     @Override
     public Patient readByEmail(String email) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        ResultSet diseaseResultSet = null;
-        try {
-            statement = connection.prepareStatement(READ_PATIENT_BY_EMAIL);
+        try (PreparedStatement statement = connection.prepareStatement(READ_PATIENT_BY_EMAIL);
+             PreparedStatement diseaseStatement = connection.prepareStatement(READ_DISEASES_BY_PATIENT);
+        ) {
             statement.setString(1, email);
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             Patient patient = null;
             if (resultSet.next()) {
                 patient = new Patient();
@@ -209,27 +165,17 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
                 patient.setPhoneNumber(resultSet.getString("phone_number"));
                 patient.setAddress(resultSet.getString("address"));
 
-                statement = connection.prepareStatement(READ_DISEASES_BY_PATIENT);
-                statement.setInt(1, patient.getId());
-                statement.executeQuery();
+                diseaseStatement.setInt(1, patient.getId());
+                ResultSet diseaseResultSet = diseaseStatement.executeQuery();
 
                 while (diseaseResultSet.next()) {
                     patient.getDiseases().add(diseaseResultSet.getString("name"));
                 }
             }
+            logger.debug("Patient with email = {} was read", email);
             return patient;
         } catch (SQLException e) {
             throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-                diseaseResultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
         }
     }
 }

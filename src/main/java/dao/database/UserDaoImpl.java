@@ -129,7 +129,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
             statement.executeUpdate();
             logger.debug("User with id={} was deleted", id);
         } catch (SQLException e) {
-            throw new PersistentException("User with cannot be deleted");
+            throw new PersistentException("User cannot be deleted");
         }
     }
 
