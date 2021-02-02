@@ -5,7 +5,8 @@ VALUES ('marg', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 
        ('alisa', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 1),
        ('doctor', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 1),
        ('doctor2', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 1),
-       ('admin', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 0);
+       ('admin', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 0),
+       ('user', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 2);
 INSERT INTO `specialization`
     (type)
 VALUES ('Кардиолог');

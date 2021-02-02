@@ -1,134 +1,40 @@
-2021-02-01 12:19:47.816 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:46)] - The limit of number of database connections is exceeded
-2021-02-01 12:22:02.037 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:46)] - The limit of number of database connections is exceeded
-2021-02-01 12:28:51.484 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:46)] - The limit of number of database connections is exceeded
-2021-02-01 12:34:11.332 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:82)] - The limit of number of database connections is exceeded
-2021-02-01 12:40:29.636 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:82)] - The limit of number of database connections is exceeded
-2021-02-01 12:40:45.043 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:82)] - The limit of number of database connections is exceeded
-2021-02-01 12:41:12.099 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:82)] - The limit of number of database connections is exceeded
-2021-02-01 12:46:57.992 ERROR [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:82)] - The limit of number of database connections is exceeded
-2021-02-01 13:21:42.684 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 13:21:42.760 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 13:28:44.210 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 13:28:44.277 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 13:30:24.015 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 13:30:24.080 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 13:32:02.026 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 13:32:12.116 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 13:33:23.895 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 13:33:54.504 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 16:07:49.825 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 16:11:39.135 DEBUG [main] [dao.database.VacationDaoImpl.delete(VacationDaoImpl.java:117)] - Vacation with id=4 was deleted
-2021-02-01 16:11:45.182 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 16:11:52.098 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 16:12:48.203 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 16:12:48.211 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 16:13:58.054 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 16:14:04.602 DEBUG [main] [dao.database.VacationDaoImpl.delete(VacationDaoImpl.java:117)] - Vacation with id=3 was deleted
-2021-02-01 16:14:06.439 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 16:14:14.231 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 16:14:26.114 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 16:14:26.189 DEBUG [main] [dao.database.VacationDaoImpl.delete(VacationDaoImpl.java:117)] - Vacation with id=3 was deleted
-2021-02-01 16:14:26.207 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 16:14:26.223 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 16:15:53.092 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 16:15:53.181 DEBUG [main] [dao.database.VacationDaoImpl.delete(VacationDaoImpl.java:117)] - Vacation with id=3 was deleted
-2021-02-01 16:15:53.205 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 16:15:53.224 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 16:17:26.936 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 16:17:29.207 DEBUG [main] [dao.database.VacationDaoImpl.delete(VacationDaoImpl.java:117)] - Vacation with id=3 was deleted
-2021-02-01 16:17:33.762 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 16:19:20.853 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 16:19:20.932 DEBUG [main] [dao.database.VacationDaoImpl.delete(VacationDaoImpl.java:117)] - Vacation with id=3 was deleted
-2021-02-01 16:19:20.953 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 16:19:20.958 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 16:20:37.931 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 16:20:38.019 DEBUG [main] [dao.database.VacationDaoImpl.delete(VacationDaoImpl.java:117)] - Vacation with id=4 was deleted
-2021-02-01 16:20:38.040 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 16:20:38.046 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 16:26:44.471 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 16:26:44.627 DEBUG [main] [dao.database.VacationDaoImpl.delete(VacationDaoImpl.java:117)] - Vacation with id=4 was deleted
-2021-02-01 16:26:44.660 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 16:26:44.667 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 16:33:46.228 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 16:33:46.323 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 16:39:31.087 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 16:39:31.190 DEBUG [main] [dao.database.VacationDaoImpl.delete(VacationDaoImpl.java:117)] - Vacation with id=3 was deleted
-2021-02-01 16:39:31.212 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 16:39:31.218 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 16:39:31.229 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 16:39:31.233 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 17:49:22.881 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 17:49:23.052 DEBUG [main] [dao.database.VacationDaoImpl.delete(VacationDaoImpl.java:117)] - Vacation with id=3 was deleted
-2021-02-01 17:49:23.072 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 17:49:23.082 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 17:49:23.090 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 17:49:23.094 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 17:52:57.837 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 18:03:53.047 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 18:04:28.570 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 18:04:28.725 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 18:04:28.733 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:04:28.737 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:04:28.741 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:06:04.307 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 18:06:04.430 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 18:06:04.438 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:06:04.442 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:06:04.446 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:07:04.039 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 18:07:04.141 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 18:07:04.149 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:07:04.153 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:07:04.161 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:07:38.779 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 18:07:38.859 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 18:07:38.863 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:07:38.867 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:07:38.871 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:08:58.433 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 18:09:01.587 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:09:44.921 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 18:09:45.015 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:11:36.143 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 18:11:36.226 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 18:11:36.234 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:11:36.238 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:11:36.243 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:12:30.957 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 18:12:31.038 DEBUG [main] [dao.database.VacationDaoImpl.delete(VacationDaoImpl.java:117)] - Vacation with id=3 was deleted
-2021-02-01 18:12:31.062 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 18:12:31.066 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:12:31.078 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 18:12:31.086 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:12:31.124 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 18:12:31.128 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:12:31.132 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:18:52.597 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 18:18:52.677 DEBUG [main] [dao.database.VacationDaoImpl.delete(VacationDaoImpl.java:117)] - Vacation with id=4 was deleted
-2021-02-01 18:18:52.697 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 18:18:52.703 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:18:52.711 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:18:52.723 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 18:18:52.727 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:18:52.731 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:18:52.736 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:18:52.787 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:139)] - Vacations were read
-2021-02-01 18:18:52.791 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:18:52.795 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:18:52.799 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:36:24.579 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
-2021-02-01 18:36:24.757 DEBUG [main] [dao.database.VacationDaoImpl.delete(VacationDaoImpl.java:89)] - Vacation with id=4 was deleted
-2021-02-01 18:36:24.777 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:108)] - Vacations were read
-2021-02-01 18:36:24.785 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:36:24.789 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:36:24.805 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:108)] - Vacations were read
-2021-02-01 18:36:24.809 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:36:24.813 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:36:24.821 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:62)] - Vacation was read
-2021-02-01 18:36:24.825 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:36:24.829 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:62)] - Vacation was read
-2021-02-01 18:36:24.851 DEBUG [main] [dao.database.VacationDaoImpl.create(VacationDaoImpl.java:43)] - Vacation with id=4 was created
-2021-02-01 18:36:24.855 DEBUG [main] [dao.database.VacationDaoImpl.read(VacationDaoImpl.java:108)] - Vacations were read
-2021-02-01 18:36:24.859 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:36:24.863 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
-2021-02-01 18:36:24.867 DEBUG [main] [dao.database.DoctorDaoImpl.read(DoctorDaoImpl.java:115)] - Doctor was read
+2021-02-02 12:28:08.278 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 12:28:08.379 DEBUG [main] [dao.database.UserDaoImpl.delete(UserDaoImpl.java:130)] - User with id=7 was deleted
+2021-02-02 12:28:08.398 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:157)] - Users were read
+2021-02-02 12:31:55.158 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 12:31:55.354 DEBUG [main] [dao.database.UserDaoImpl.update(UserDaoImpl.java:113)] - User with id=8 was updated
+2021-02-02 12:31:55.379 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:157)] - Users were read
+2021-02-02 12:33:24.606 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 12:33:24.835 DEBUG [main] [dao.database.UserDaoImpl.create(UserDaoImpl.java:62)] - User with id=8 was created
+2021-02-02 12:33:24.839 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:157)] - Users were read
+2021-02-02 12:45:18.676 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 12:45:18.765 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:212)] - User with login=marg was read
+2021-02-02 12:45:18.774 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:212)] - User with login=patient was read
+2021-02-02 12:46:48.956 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 12:46:49.033 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 12:46:49.042 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 12:53:20.622 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 12:53:20.708 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:212)] - User with login=marg was read
+2021-02-02 12:53:20.863 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:212)] - User with login=patient was read
+2021-02-02 12:54:49.011 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 12:54:49.100 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:157)] - Users were read
+2021-02-02 12:57:00.654 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 12:57:00.733 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:252)] - Users were read
+2021-02-02 12:57:00.743 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:252)] - Users were read
+2021-02-02 12:57:00.749 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:252)] - Users were read
+2021-02-02 12:57:13.865 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 12:57:14.013 DEBUG [main] [dao.database.UserDaoImpl.delete(UserDaoImpl.java:130)] - User with id=7 was deleted
+2021-02-02 12:57:14.031 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:157)] - Users were read
+2021-02-02 12:57:14.048 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:252)] - Users were read
+2021-02-02 12:57:14.054 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:252)] - Users were read
+2021-02-02 12:57:14.061 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:252)] - Users were read
+2021-02-02 12:57:14.066 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:157)] - Users were read
+2021-02-02 12:57:14.070 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 12:57:14.075 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
+2021-02-02 12:57:14.081 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:212)] - User with login=marg was read
+2021-02-02 12:57:14.221 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:212)] - User with login=patient was read
+2021-02-02 12:57:14.336 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:212)] - User with login=marg was read
+2021-02-02 12:57:14.340 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:212)] - User with login=patient was read
+2021-02-02 12:58:21.615 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 12:58:21.868 DEBUG [main] [dao.database.UserDaoImpl.create(UserDaoImpl.java:62)] - User with id=8 was created
+2021-02-02 12:58:21.873 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:157)] - Users were read
