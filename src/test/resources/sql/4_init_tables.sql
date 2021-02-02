@@ -6,7 +6,10 @@ VALUES ('marg', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 
        ('doctor', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 1),
        ('doctor2', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 1),
        ('admin', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 0),
-       ('user', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 2);
+       ('user', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 2),
+       ('patient_to_delete', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 2),
+       ('patient_to_save', '$2a$10$B/RmAhwRl88LK.V28XEIEuD/X1qbkC/btkzQm5QRaaWzu/SCsnDJK', 2);
+
 INSERT INTO `specialization`
     (type)
 VALUES ('Кардиолог');

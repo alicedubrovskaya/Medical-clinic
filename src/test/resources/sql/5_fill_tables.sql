@@ -1,7 +1,9 @@
 INSERT INTO `patient`
     (`id`, `name`, `surname`, `email`, `phone_number`, `address`)
 VALUES (1, 'Маргарита', 'Агеенко', 'marg@gmail.com', '375291111111', 'Минск'),
-       (2, 'Алина', 'Концевая', 'aline@gmail.com', '375291111111', 'Минск');
+       (2, 'Алина', 'Концевая', 'aline@gmail.com', '375291111111', 'Минск'),
+       (8, 'Эстер','Андрейченко', 'ester@mail.ru', '375292999922', 'Минск'),
+       (9, 'Ясмин', 'Рогалевич', 'yasmin@gmail.com','375292999922','Минск');
 
 INSERT INTO `doctor`
     (`id`, `name`, `surname`, `specialization_id`, `working_shift`)
