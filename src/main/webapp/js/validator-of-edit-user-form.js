@@ -3,7 +3,6 @@ function validatePassword() {
     let password_confirm = document.getElementById("password_confirm");
 
     if (password.value === password_confirm.value) {
-        alert("OK");
         password_confirm.setCustomValidity('');
         password_confirm.reportValidity();
         return true;

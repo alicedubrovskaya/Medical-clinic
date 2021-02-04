@@ -55,7 +55,7 @@
 <u:html title="${title}" message="${message}" validator="validator-of-edit-vacation-form.js">
     <div class="container">
         <H2>${title}</H2>
-        <form action="/vacation/save.html" method="post" onsubmit="return validateVacation(this)">
+        <form action="/vacation/save.html" method="post" onsubmit="return validateVacation()">
             <c:if test="${not empty id}">
                 <input type="hidden" name="id" value="${id}">
             </c:if>
@@ -77,7 +77,9 @@
             <div class="form-group">
                 <label for="end">${date_end}:</label>
                 <input type="date" required class="form-control" id="end" name="vacation-end" min="2021-01-01"
-                       value="${end}">
+                       value="${end}"
+                       onblur="validateVacation()"
+                >
             </div>
             <div class="btn-group">
                 <input type="submit" class="btn btn-success" value="${button_save}">
