@@ -117,3 +117,5 @@
 2021-02-02 16:02:00.113 DEBUG [main] [dao.database.UserDaoImpl.read(UserDaoImpl.java:92)] - User was read
 2021-02-02 16:03:26.156 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
 2021-02-02 16:03:26.226 DEBUG [main] [dao.database.DoctorDaoImpl.readSpecializations(DoctorDaoImpl.java:255)] - Specializations were read
+2021-02-02 16:05:29.765 DEBUG [main] [dao.pool.ConnectionPool.getConnection(ConnectionPool.java:118)] - Connection was received from pool. Current pool size: 1 used connections; 9 free connection
+2021-02-02 16:05:29.854 DEBUG [main] [dao.database.DoctorDaoImpl.readSpecializations(DoctorDaoImpl.java:255)] - Specializations were read

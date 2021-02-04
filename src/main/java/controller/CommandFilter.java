@@ -7,7 +7,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-public class ActionFromUriFilter implements Filter {
+public class CommandFilter implements Filter {
     private static final CommandFactory commandFactory = CommandFactory.getInstance();
 
     @Override
