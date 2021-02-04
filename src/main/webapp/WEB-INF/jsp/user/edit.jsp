@@ -49,12 +49,10 @@
 </c:choose>
 
 <u:html title="${title}" message="${message}" validator="validator-of-edit-user-form.js">
-    <%--<u:html title="${title}" message="${message}">--%>
-
     <div class="container">
         <H2>${title}</H2>
         <form action="/user/save.html" method="post"
-              onsubmit="return validatePassword(this)">
+              onsubmit="return validatePassword()">
             <c:if test="${not empty user}">
                 <input type="hidden" name="id" value="${user.id}">
             </c:if>
@@ -91,8 +89,11 @@
             </div>
             <div class="form-group">
                 <label for="password_confirm">${user_password_confirm}:</label>
-                <input type="password" required pattern="^.{6,16}$" class="form-control" id="password_confirm"
-                       name="password_confirm">
+                <input type="password" required class="form-control" id="password_confirm"
+                       name="password_confirm"
+                       pattern="^.{6,16}$"
+                       onkeyup="validatePassword()"
+                >
             </div>
             <div class="btn-group">
                 <input type="submit" class="btn btn-warning" value="${button_reset}">
@@ -106,15 +107,5 @@
                 </c:choose>
             </div>
         </form>
-
-            <%--        <c:if test="${not empty user}">--%>
-            <%--            <form action="/user/delete.html" method="post" onsubmit="deleteConfirmation(this);return false;">--%>
-            <%--                <input type="hidden" name="id" value="${user.id}">--%>
-            <%--                <input type="submit" class="btn btn-danger" value="${button_delete}">--%>
-            <%--            </form>--%>
-            <%--        </c:if>--%>
     </div>
-    <%--    <div class="container">--%>
-    <%--        <jsp:include page="/WEB-INF/jsp/patient/edit.jsp"/>--%>
-    <%--    </div>--%>
 </u:html>

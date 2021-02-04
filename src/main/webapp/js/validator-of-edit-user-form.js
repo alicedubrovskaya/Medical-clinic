@@ -1,11 +1,15 @@
-function validatePassword(form) {
-    if (form["password"].value == form["password_confirm"].value) {
-        form["password_confirm"].setCustomValidity('');
-        form["password_confirm"].reportValidity();
+function validatePassword() {
+    let password = document.getElementById("password");
+    let password_confirm = document.getElementById("password_confirm");
+
+    if (password.value === password_confirm.value) {
+        alert("OK");
+        password_confirm.setCustomValidity('');
+        password_confirm.reportValidity();
         return true;
     } else {
-        form["password_confirm"].setCustomValidity("Passwords don't match");
-        form["password_confirm"].reportValidity();
+        password_confirm.setCustomValidity("Passwords don't match");
+        password_confirm.reportValidity();
         return false;
     }
 }
