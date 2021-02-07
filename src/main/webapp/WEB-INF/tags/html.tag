@@ -8,11 +8,24 @@
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib tagdir="/WEB-INF/tags" prefix="u" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<c:choose>
+    <c:when test="${sessionScope.language != null}">
+        <fmt:setLocale value="${sessionScope.language}"/>
+    </c:when>
+    <c:otherwise>
+        <fmt:setLocale value="en"/>
+    </c:otherwise>
+</c:choose>
+
+<fmt:setBundle basename="textResources" var="textResources" scope="session"/>
+<fmt:message bundle="${textResources}" key="clinic" var="clinic"/>
 
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Медицинская клиника - ${title}</title>
+    <title>${clinic} - ${title}</title>
     <%--	<c:url value="/main.css" var="cssUrl"/>--%>
     <%--	<LINK rel="stylesheet" type="text/css" href="${cssUrl}">--%>
     <c:url value="/js" var="javascriptUrl"/>

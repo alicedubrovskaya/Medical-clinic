@@ -16,6 +16,7 @@ public class AppointmentChoiceCommand extends PatientCommand {
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         DoctorService service = serviceFactory.getDoctorService();
+
         try {
             List<String> specializations = service.findAllSpecializations();
             request.setAttribute("specializations", specializations);

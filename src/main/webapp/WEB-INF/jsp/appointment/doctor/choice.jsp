@@ -22,6 +22,8 @@
 <fmt:message bundle="${textResources}" key="patient.appointment" var="patient_appointment"/>
 <fmt:message bundle="${textResources}" key="date" var="appointment_date"/>
 <fmt:message bundle="${textResources}" key="button.view" var="button_view"/>
+<fmt:message bundle="${textResources}" key="status.undefined" var="status_undefined"/>
+
 
 <u:html title="${patient_appointment}" message="${message}">
     <div class="container">
@@ -35,12 +37,14 @@
                 getDate();
             </script>
             <select id="status" class="form-control" name="status">
+                <option>${status_undefined}</option>
                 <c:forEach items="${statuses}" var="status">
                     <option value="${status}">${status}</option>
                 </c:forEach>
             </select>
-
             <input type="submit" class="btn btn-info" value="${button_view}">
         </form>
     </div>
+
+    <jsp:include page="/WEB-INF/jsp/appointment/list.jsp"/>
 </u:html>

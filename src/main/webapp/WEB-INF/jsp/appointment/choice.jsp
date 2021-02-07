@@ -47,4 +47,5 @@
             <input type="submit" class="btn btn-info" value="${button_find}">
         </form>
     </div>
+    <jsp:include page="/WEB-INF/jsp/appointment/list.jsp"/>
 </u:html>

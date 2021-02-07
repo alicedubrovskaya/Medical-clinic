@@ -3,6 +3,7 @@ package controller.action.authorized;
 import controller.action.Command;
 import domain.Appointment;
 import domain.User;
+import domain.enumeration.Role;
 import exception.IncorrectFormDataException;
 import exception.PersistentException;
 import service.AppointmentService;
@@ -41,16 +42,29 @@ public class AppointmentListCommand extends AuthorizedUserCommand {
 
         AppointmentService service = serviceFactory.getAppointmentService();
         List<Appointment> appointments;
-        if (date != null && specialization != null) {
-            appointments = service.findByTimeAndSpecialization(date, specialization);
-        } else if (date != null && status != null && doctorId != 0) {
-            appointments = service.findByDateAndStatusAndDoctor(date, status, doctorId);
-        } else if (date != null) {
-            appointments = service.findByTime(date);
+
+        if (date != null) {
+            if (specialization != null) {
+                appointments = service.findByTimeAndSpecialization(date, specialization);
+            } else if (status != null && doctorId != null && authorizedUser.getRole().equals(Role.DOCTOR)) {
+                appointments = service.findByDateAndStatusAndDoctor(date, status, doctorId);
+            } else if (status != null) {
+                if (!(status.equals("All") || status.equals("Все"))) {
+                    appointments = service.findByDateAndStatus(date, status);
+                } else {
+                    appointments = service.findByTime(date);
+                }
+            } else {
+                appointments = service.findByTime(date);
+            }
         } else {
             appointments = service.findAll();
         }
-        request.setAttribute("appointments", appointments);
-        return null;
+
+        Forward forward = new Forward("/appointment/doctor/choice.html");
+        forward.getAttributes().put("appointments", appointments);
+        forward.setRedirect(true);
+        return forward;
+        //TODO different
     }
 }

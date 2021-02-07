@@ -9,7 +9,6 @@ import domain.enumeration.Status;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import service.exception.ServicePersistentException;
 
 import java.sql.*;
 import java.util.*;
@@ -45,9 +44,13 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             "JOIN doctor d on d.id = appointment.doctor_id WHERE d.specialization_id=? AND" +
             "`time` BETWEEN ? and ?";
 
-    private static final String READ_APPOINTMENTS_BY_TIME_AND_STATUS = "SELECT `id`, `approved`, `complaints`," +
+    private static final String READ_APPOINTMENTS_BY_TIME_AND_STATUS_AND_DOCTOR = "SELECT `id`, `approved`, `complaints`," +
             " `medical_report`, `time`,`recommendation`, `doctor_id`,  `patient_id` " +
             " FROM `appointment` WHERE `status`= ? AND `time` BETWEEN ? and ? AND `doctor_id`=?";
+
+    private static final String READ_APPOINTMENTS_BY_TIME_AND_STATUS = "SELECT `id`, `approved`, `complaints`," +
+            " `medical_report`, `time`,`recommendation`, `doctor_id`,  `patient_id` " +
+            " FROM `appointment` WHERE `status`= ? AND `time` BETWEEN ? and ?";
 
     private static final String READ_APPOINTMENT_BY_PATIENT_AND_DISEASE = "SELECT `time`, `complaints`, `medical_report`," +
             " `recommendation` FROM `appointment` JOIN patient_disease on appointment.id = patient_disease.appointment_id " +
@@ -480,7 +483,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            statement = connection.prepareStatement(READ_APPOINTMENTS_BY_TIME_AND_STATUS);
+            statement = connection.prepareStatement(READ_APPOINTMENTS_BY_TIME_AND_STATUS_AND_DOCTOR);
             Integer statusId;
             //TODO move
             if (status.equals("Не был")) {
@@ -530,6 +533,52 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 statement.close();
             } catch (SQLException | NullPointerException e) {
             }
+        }
+    }
+
+    @Override
+    public List<Appointment> readByDateAndStatus(Date date, String status) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENTS_BY_TIME_AND_STATUS);
+        ) {
+            Integer statusId;
+            //TODO move
+            if (status.equals("Не был")) {
+                statusId = Status.MISSED.getId();
+            } else {
+                statusId = Status.WAS.getId();
+            }
+            statement.setInt(1, statusId);
+            statement.setTimestamp(2, new Timestamp(date.getTime()));
+            statement.setTimestamp(3, new Timestamp(date.getTime() + TimeUnit.DAYS.toMillis(1)));
+            ResultSet resultSet = statement.executeQuery();
+            Appointment appointment = null;
+            List<Appointment> appointments = new ArrayList<>();
+            while (resultSet.next()) {
+                appointment = new Appointment();
+                appointment.setId(resultSet.getInt("id"));
+                appointment.setTime(resultSet.getTimestamp("time"));
+                appointment.setApproved(resultSet.getBoolean("approved"));
+                appointment.setStatus(Status.getById(statusId));
+                appointment.setComplaints(resultSet.getString("complaints"));
+                appointment.setMedicalReport(resultSet.getString("medical_report"));
+                appointment.setRecommendation(resultSet.getString("recommendation"));
+                Integer patientId = resultSet.getInt("patient_id");
+                if (!resultSet.wasNull()) {
+                    Patient patient = new Patient();
+                    patient.setId(patientId);
+                    appointment.setPatient(patient);
+                }
+                Integer doctorId = resultSet.getInt("doctor_id");
+                if (!resultSet.wasNull()) {
+                    Doctor doctor = new Doctor();
+                    doctor.setId(doctorId);
+                    appointment.setDoctor(doctor);
+                }
+                appointments.add(appointment);
+            }
+            return appointments;
+        } catch (SQLException e) {
+            throw new PersistentException("Appointments were not found", e);
         }
     }
 

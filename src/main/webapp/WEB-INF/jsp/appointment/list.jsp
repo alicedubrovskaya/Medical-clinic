@@ -28,60 +28,65 @@
 <fmt:message bundle="${textResources}" key="doctor" var="doctor"/>
 <fmt:message bundle="${textResources}" key="patient" var="patient"/>
 <fmt:message bundle="${textResources}" key="doctor.specialization" var="doctor_specialization"/>
+<fmt:message bundle="${textResources}" key="appointment.free" var="appointment_isFree"/>
 
-
-<u:html title="${appointment_list}" message="${message}">
-    <div class="container">
-        <div class="main-head">
-            <h2>${appointment_list}</h2>
-        </div>
-        <c:if test="${authorizedUser.role.name == 'Администратор'}">
-            <form action="/appointment/list.html" method="get">
-                <label for="date">${date}:</label>
-                <input type="date" id="date" name="date">
-                <script>
-                    getDate();
-                </script>
-                <input type="submit" class="btn btn-success" value="${find}">
-            </form>
-        </c:if>
-
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>${time}</th>
-                <th>${doctor}</th>
-                <th>${patient}</th>
-                <th>${doctor_specialization}</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:url value="/appointment/info.html" var="appointmentInfoUrl"/>
-            <c:forEach var="appointment" items="${appointments}" varStatus="status">
-                <tr onclick="submitFormById('form-${appointment.id}')">
-                    <td>
-                        <c:remove var="dateFormat"/>
-                        <fmt:formatDate value="${appointment.time}" var="dateFormat" pattern="yyyy-MM-dd HH:mm:ss"/>
-                            ${dateFormat}
-                        <form id="form-${appointment.id}" action="${appointmentInfoUrl}" method="post">
-                            <input type="hidden" name="id" value="${appointment.id}">
-                        </form>
-                    </td>
-                    <td>${appointment.doctor.surname} ${appointment.doctor.name}</td>
-
-                    <c:choose>
-                        <c:when test="${not empty appointment.patient}">
-                            <td>${appointment.patient.surname} ${appointment.patient.name}</td>
-                        </c:when>
-                        <c:otherwise>
-                            <td>Свободно</td>
-                        </c:otherwise>
-                    </c:choose>
-
-                    <td>${appointment.doctor.specialization}</td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
+<html>
+<head>
+    <title>${appointment_list}"> </title>
+</head>
+<body>
+<div class="container">
+    <div class="main-head">
+        <h4>${appointment_list}</h4>
     </div>
-</u:html>
+<%--    <c:if test="${authorizedUser.role.name == 'Администратор'}">--%>
+<%--        <form action="/appointment/list.html" method="get">--%>
+<%--            <label for="date">${date}:</label>--%>
+<%--            <input type="date" id="date" name="date">--%>
+<%--            <script>--%>
+<%--                getDate();--%>
+<%--            </script>--%>
+<%--            <input type="submit" class="btn btn-success" value="${find}">--%>
+<%--        </form>--%>
+<%--    </c:if>--%>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>${time}</th>
+            <th>${doctor}</th>
+            <th>${patient}</th>
+            <th>${doctor_specialization}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:url value="/appointment/info.html" var="appointmentInfoUrl"/>
+        <c:forEach var="appointment" items="${appointments}" varStatus="status">
+            <tr onclick="submitFormById('form-${appointment.id}')">
+                <td>
+                    <c:remove var="dateFormat"/>
+                    <fmt:formatDate value="${appointment.time}" var="dateFormat" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        ${dateFormat}
+                    <form id="form-${appointment.id}" action="${appointmentInfoUrl}" method="post">
+                        <input type="hidden" name="id" value="${appointment.id}">
+                    </form>
+                </td>
+                <td>${appointment.doctor.surname} ${appointment.doctor.name}</td>
+
+                <c:choose>
+                    <c:when test="${not empty appointment.patient}">
+                        <td>${appointment.patient.surname} ${appointment.patient.name}</td>
+                    </c:when>
+                    <c:otherwise>
+                        <td>${appointment_isFree}</td>
+                    </c:otherwise>
+                </c:choose>
+
+                <td>${appointment.doctor.specialization}</td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
