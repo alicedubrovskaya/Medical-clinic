@@ -61,7 +61,7 @@ public class AppointmentListCommand extends AuthorizedUserCommand {
             appointments = service.findAll();
         }
 
-        Forward forward = new Forward("/appointment/doctor/choice.html");
+        Forward forward = new Forward("/appointment/choice.html");
         forward.getAttributes().put("appointments", appointments);
         forward.setRedirect(true);
         return forward;

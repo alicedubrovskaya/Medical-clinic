@@ -33,7 +33,6 @@ public enum CommandType {
     APPOINTMENT_LIST("/appointment/list"),
     APPOINTMENT_GENERATE("/appointment/generate"),
     APPOINTMENT_CHOICE("/appointment/choice"),
-    APPOINTMENT_DOCTOR_CHOICE("/appointment/doctor/choice"),
     APPOINTMENT_MEDICAL_CARD("/appointment/medicalCard");
 
     private final String command;

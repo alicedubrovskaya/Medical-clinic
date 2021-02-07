@@ -3,7 +3,6 @@ package domain.enumeration;
 public enum Status {
     WAS("Был"),
     MISSED("Не был");
-    //TODO пропустил
 
     private String name;
 
