@@ -147,6 +147,27 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
     }
 
     /**
+     * Finds all diseases
+     *
+     * @return list of diseases
+     * @throws ServicePersistentException
+     */
+    @Override
+    public List<String> readDiseases() throws ServicePersistentException {
+        PatientDao patientDao = transaction.createPatientDao();
+        try {
+            List<String> diseases = patientDao.readDiseases();
+            if (!diseases.isEmpty()) {
+                return diseases;
+            } else {
+                throw new ServicePersistentException("List of diseases is empty");
+            }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
+        }
+    }
+
+    /**
      * Fills patients with corresponding fields
      *
      * @param patients

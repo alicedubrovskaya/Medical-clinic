@@ -22,7 +22,7 @@
     <%--    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" id="bootstrap-css">--%>
     <%--    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>--%>
 
-<%--    TODO--%>
+    <%--    TODO--%>
     <c:if test="${not empty cssFiles}">
         <c:forEach var="cssFileItem" items="${cssFiles}">
             <link href="<c:url value="/css/${cssFileItem}"/>" rel="stylesheet">
@@ -33,7 +33,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-
 
     <c:if test="${not empty validator}">
         <script type="text/javascript" src="${javascriptUrl}/validator.js"></script>

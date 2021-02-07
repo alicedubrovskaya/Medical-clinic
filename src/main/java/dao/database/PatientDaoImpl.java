@@ -18,6 +18,10 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             "INSERT INTO `patient`(`id`,`name`, `surname`, `email`, `phone_number`, `address`) " +
                     "VALUES (?,?,?,?,?,?)";
 
+    private static final String CREATE_PATIENT_DISEASE =
+            "INSERT INTO `patient_disease`(`patient_id`,`disease_id`, `appointment_id`) " +
+                    "VALUES (?,?,?)";
+
     private static final String READ_PATIENT = "SELECT `name`, `surname`, `email`, `phone_number`," +
             " `address` FROM `patient` WHERE `id`=? ";
 
@@ -32,11 +36,16 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
     private static final String READ_DISEASES_BY_PATIENT = "SELECT disease.name FROM disease JOIN patient_disease" +
             " ON disease.id = patient_disease.disease_id WHERE patient_id=?";
 
+    private static final String READ_DISEASE_BY_NAME = "SELECT `id` FROM `disease` " +
+            "WHERE `name`=?";
+
     private static final String UPDATE_PATIENT = "UPDATE `patient` " +
             "SET `name`=?, `surname`=?, `email`=?, `phone_number`=?, `address`=?" +
             " WHERE `id` = ?";
 
     private static final String DELETE_PATIENT = "DELETE FROM `patient` WHERE `id` = ?";
+
+    private static final String READ_DISEASES = "SELECT `id`, `name` FROM `disease`";
 
     @Override
     public Integer create(Patient patient) throws PersistentException {
@@ -176,6 +185,57 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             return patient;
         } catch (SQLException e) {
             throw new PersistentException(e);
+        }
+    }
+
+    /**
+     * Reads all diseases
+     *
+     * @return list of diseases' names
+     * @throws PersistentException if database error occurs
+     */
+    @Override
+    public List<String> readDiseases() throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_DISEASES)) {
+            ResultSet resultSet = statement.executeQuery();
+            List<String> diseases = new ArrayList<>();
+            while (resultSet.next()) {
+                diseases.add(resultSet.getString("name"));
+            }
+            logger.debug("Diseases were read");
+            return diseases;
+        } catch (SQLException e) {
+            throw new PersistentException("It is impossible to read diseases");
+        }
+    }
+
+    /**
+     * Saves patient's disease defined on appointment
+     *
+     * @param patientId
+     * @param appointmentId
+     * @param disease
+     * @throws PersistentException
+     */
+    @Override
+    public void saveDiseaseForPatient(Integer patientId, Integer appointmentId, String disease) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(CREATE_PATIENT_DISEASE);
+             PreparedStatement diseaseStatement = connection.prepareStatement(READ_DISEASE_BY_NAME)
+        ) {
+            diseaseStatement.setString(1, disease);
+            ResultSet resultSet = diseaseStatement.executeQuery();
+            Integer diseaseID = null;
+            if (resultSet.next()) {
+                diseaseID = resultSet.getInt("id");
+            }
+            statement.setInt(1, patientId);
+            statement.setInt(2, diseaseID);
+            statement.setInt(3, appointmentId);
+
+            statement.executeUpdate();
+            logger.debug("Patient's, whose id = {}, disease was created", patientId);
+        } catch (SQLException e) {
+            throw new PersistentException("Patient's disease wasn't created");
         }
     }
 }

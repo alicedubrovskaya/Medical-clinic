@@ -1,6 +1,7 @@
 package service;
 
 import domain.Patient;
+import exception.PersistentException;
 import service.exception.ServicePersistentException;
 
 import java.util.List;
@@ -15,4 +16,7 @@ public interface PatientService extends Service{
     Patient findByEmail(String email) throws ServicePersistentException;
 
     Patient findById(Integer id) throws ServicePersistentException;
+
+    List<String> readDiseases() throws ServicePersistentException;
+
 }

@@ -29,7 +29,8 @@
 <fmt:message bundle="${textResources}" key="button.save" var="button_save"/>
 <fmt:message bundle="${textResources}" key="button.reset" var="button_reset"/>
 <fmt:message bundle="${textResources}" key="appointment.whithoutPatient" var="withoutPatient"/>
-
+<fmt:message bundle="${textResources}" key="disease" var="diseaseDefinition"/>
+<fmt:message bundle="${textResources}" key="disease.undefined" var="diseaseUndefined"/>
 
 
 <%--TODO validatior--%>
@@ -92,6 +93,17 @@
                         <input type="text" class="form-control" id="recommendation" name="recommendation"
                                value="${appointment.recommendation}">
                     </div>
+
+                    <div class="form-group">
+                        <label for="diseases">${diseaseDefinition}</label>
+                        <select multiple class="form-control" size="3" id="diseases" name="diseases">
+                            <option>${diseaseUndefined}</option>
+                            <c:forEach items="${diseases}" var="disease">
+                                <option value="${disease}">${disease}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+
                     <div class="btn-group">
                         <div class="btn-group">
                             <input type="submit" class="btn btn-success" value="${button_save}">

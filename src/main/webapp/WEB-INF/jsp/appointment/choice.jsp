@@ -44,7 +44,7 @@
                     </c:forEach>
                 </select>
             </div>
-            <input type="submit" class="btn btn-default" value="${button_find}">
+            <input type="submit" class="btn btn-info" value="${button_find}">
         </form>
     </div>
 </u:html>

@@ -1,6 +1,5 @@
 package dao;
 
-import domain.Doctor;
 import domain.Patient;
 import exception.PersistentException;
 
@@ -11,4 +10,7 @@ public interface PatientDao extends Dao<Patient> {
 
     Patient readByEmail(String email) throws PersistentException;
 
+    List<String> readDiseases() throws PersistentException;
+
+    void saveDiseaseForPatient(Integer patientId, Integer appointmentId, String disease) throws PersistentException;
 }

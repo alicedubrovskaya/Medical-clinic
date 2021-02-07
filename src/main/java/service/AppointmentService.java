@@ -3,12 +3,15 @@ package service;
 import domain.Appointment;
 import domain.Doctor;
 import exception.PersistentException;
+import service.exception.ServicePersistentException;
 
 import java.util.Date;
 import java.util.List;
 
 public interface AppointmentService extends Service {
     void save(Appointment appointment) throws PersistentException;
+
+    void save(Appointment appointment, String disease) throws ServicePersistentException;
 
     Appointment findById(Integer id) throws PersistentException;
 

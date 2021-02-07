@@ -114,4 +114,3 @@ function getDate() {
     document.getElementById('date').value = today;
 }
 
-

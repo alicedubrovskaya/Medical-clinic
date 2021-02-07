@@ -7,13 +7,21 @@ import dao.VacationDao;
 import domain.Appointment;
 import domain.Doctor;
 import domain.Patient;
+import domain.User;
+import domain.enumeration.Role;
 import exception.PersistentException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import service.AppointmentService;
+import service.PasswordEncryption;
+import service.exception.ServicePersistentException;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class AppointmentServiceImpl extends ServiceImpl implements AppointmentService {
+    private static final Logger logger = LogManager.getLogger(AppointmentServiceImpl.class);
+
     @Override
     public void save(Appointment appointment) throws PersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
@@ -23,6 +31,26 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
             appointment.setId(appointmentDao.create(appointment));
         }
     }
+
+    @Override
+    public void save(Appointment appointment, String disease) throws ServicePersistentException {
+        transaction.setWithoutAutoCommit();
+        AppointmentDao appointmentDao = transaction.createAppointmentDao();
+        PatientDao patientDao = transaction.createPatientDao();
+        try {
+            appointmentDao.update(appointment);
+            patientDao.saveDiseaseForPatient(appointment.getPatient().getId(), appointment.getId(), disease);
+            transaction.commit();
+        } catch (PersistentException e) {
+            try {
+                transaction.rollback();
+            } catch (PersistentException ex) {
+                logger.warn("Transaction can not be rollbacked:{} ", ex.getMessage());
+            }
+            throw new ServicePersistentException(e);
+        }
+    }
+
 
     private void saveGenerated(Appointment appointment) throws PersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
@@ -134,7 +162,7 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         Date appointmentDate;
 
         try {
-            while (currentDate <= lastDate) {
+            while (currentDate < lastDate) {
                 appointmentDate = new Date(currentDate);
                 doctors = doctorDao.readWithoutVacation(appointmentDate);
                 for (Doctor doctor : doctors) {

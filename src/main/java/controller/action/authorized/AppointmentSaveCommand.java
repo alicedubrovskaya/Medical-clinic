@@ -3,6 +3,7 @@ package controller.action.authorized;
 import domain.Appointment;
 import domain.Patient;
 import domain.User;
+import domain.enumeration.Status;
 import exception.IncorrectFormDataException;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import service.AppointmentService;
 import service.PatientService;
 import service.exception.ServicePersistentException;
-import service.impl.DoctorServiceImpl;
 import validator.Validator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +47,7 @@ public class AppointmentSaveCommand extends AuthorizedUserCommand {
 
         try {
             String complaints = request.getParameter("complaints");
+            String disease = null;
             if (complaints == null) {
                 PatientService patientService = serviceFactory.getPatientService();
                 Patient patient = patientService.findById(patientId);
@@ -59,11 +60,18 @@ public class AppointmentSaveCommand extends AuthorizedUserCommand {
                     appointment.setStatus(appointmentFromRequest.getStatus());
                     appointment.setRecommendation(appointmentFromRequest.getRecommendation());
                     appointment.setMedicalReport(appointmentFromRequest.getMedicalReport());
+
+                    disease = request.getParameter("diseases");
                 } catch (IncorrectFormDataException e) {
                     e.printStackTrace();
                 }
             }
-            appointmentService.save(appointment);
+
+            if (disease == null) {
+                appointmentService.save(appointment);
+            } else {
+                appointmentService.save(appointment, disease);
+            }
             forward.getAttributes().put("message", "Прием у врача успешно сохранен");
         } catch (ServicePersistentException e) {
             logger.error(e);

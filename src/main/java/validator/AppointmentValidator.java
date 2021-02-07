@@ -48,7 +48,6 @@ public class AppointmentValidator implements Validator<Appointment> {
             }
         }
 
-
         return appointment;
     }
 }
