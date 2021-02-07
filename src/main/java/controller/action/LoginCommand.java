@@ -5,7 +5,6 @@ import domain.enumeration.Role;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import service.PasswordEncryption;
 import service.UserService;
 import service.exception.ServicePersistentException;
 import service.impl.UserServiceImpl;

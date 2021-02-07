@@ -18,7 +18,7 @@ public class UserListCommand extends AdministratorCommand {
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         int page = 1;
-        int recordsPerPage = 6;
+        int recordsPerPage = 3;
         String parameter = request.getParameter("page");
         if (parameter != null) {
             try {

@@ -31,10 +31,6 @@
     <c:url value="/js" var="javascriptUrl"/>
     <script type="text/javascript" src="${javascriptUrl}/main.js"></script>
 
-    <%--    <script type="text/javascript" src="/bootstrap/jQuery/jquery-3.5.1.min.js"></script>--%>
-    <%--    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" id="bootstrap-css">--%>
-    <%--    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>--%>
-
     <%--    TODO--%>
     <c:if test="${not empty cssFiles}">
         <c:forEach var="cssFileItem" items="${cssFiles}">
@@ -58,10 +54,6 @@
     <jsp:doBody/>
 </div>
 <c:if test="${not empty message}">
-    <%--        <script type="text/javascript">--%>
-    <%--            alert("${message}");--%>
-    <%--            startMessage = "${message}";--%>
-    <%--        </script>--%>
     <div class="alert alert-info alert-dismissible fade show" role="alert">
             ${message}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
