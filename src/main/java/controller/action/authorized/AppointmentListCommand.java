@@ -65,6 +65,5 @@ public class AppointmentListCommand extends AuthorizedUserCommand {
         forward.getAttributes().put("appointments", appointments);
         forward.setRedirect(true);
         return forward;
-        //TODO different
     }
 }

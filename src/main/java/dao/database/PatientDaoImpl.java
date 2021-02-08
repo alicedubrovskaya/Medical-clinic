@@ -39,6 +39,9 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
     private static final String READ_DISEASE_BY_NAME = "SELECT `id` FROM `disease` " +
             "WHERE `name`=?";
 
+    private static final String READ_DISEASE_BY_PATIENT_AND_APPOINTMENT = "SELECT disease.name FROM disease JOIN " +
+            "patient_disease pd on disease.id = pd.disease_id WHERE patient_id=? AND appointment_id=?";
+
     private static final String UPDATE_PATIENT = "UPDATE `patient` " +
             "SET `name`=?, `surname`=?, `email`=?, `phone_number`=?, `address`=?" +
             " WHERE `id` = ?";
@@ -206,6 +209,31 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             return diseases;
         } catch (SQLException e) {
             throw new PersistentException("It is impossible to read diseases");
+        }
+    }
+
+    /**
+     * Reads patient's disease established on appointment
+     *
+     * @param patientId
+     * @param appointmentId
+     * @return
+     * @throws PersistentException
+     */
+    @Override
+    public String readDiseaseByAppointment(Integer patientId, Integer appointmentId) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_DISEASE_BY_PATIENT_AND_APPOINTMENT)) {
+            statement.setInt(1, patientId);
+            statement.setInt(2, appointmentId);
+            ResultSet resultSet = statement.executeQuery();
+            String disease = null;
+            if (resultSet.next()) {
+                disease = resultSet.getString("name");
+            }
+            logger.debug("Disease was read");
+            return disease;
+        } catch (SQLException e) {
+            throw new PersistentException("It is impossible to read disease");
         }
     }
 

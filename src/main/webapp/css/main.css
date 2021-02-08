@@ -2,10 +2,18 @@
     color: #138f03;
 }
 
-.main-head h4 {
+.second-head h4 {
     color: #138f03;
 }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: #86cd81;
+}
+
+.list-group .list-group-item {
+    border-color: #0091b5;
+}
+
+.list-group .list-group-item:hover {
     background-color: #86cd81;
 }

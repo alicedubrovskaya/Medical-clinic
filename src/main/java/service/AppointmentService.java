@@ -29,7 +29,7 @@ public interface AppointmentService extends Service {
 
     Appointment findByPatientAndDisease(Integer patientId, String diseaseName) throws PersistentException;
 
-    List<Appointment> findByPatient(Integer patientId) throws PersistentException;
+    List<Appointment> findByPatient(Integer patientId) throws ServicePersistentException;
 
     void delete(Integer id) throws PersistentException;
 

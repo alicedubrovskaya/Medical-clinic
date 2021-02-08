@@ -132,13 +132,20 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
     }
 
     @Override
-    public List<Appointment> findByPatient(Integer patientId) throws PersistentException {
+    public List<Appointment> findByPatient(Integer patientId) throws ServicePersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
-        List<Appointment> appointments = appointmentDao.readByPatient(patientId);
-        if (appointments != null) {
-            buildAppointment(appointments);
+
+        try {
+            List<Appointment> appointments = appointmentDao.readByPatient(patientId);
+            if (!appointments.isEmpty()) {
+                buildAppointment(appointments);
+                return appointments;
+            } else {
+                throw new ServicePersistentException("List of appointments is empty");
+            }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
         }
-        return appointments;
     }
 
     @Override
@@ -196,6 +203,7 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         Map<Integer, Doctor> doctors = new HashMap<>();
         Map<Integer, Patient> patients = new HashMap<>();
         Integer id;
+        String disease;
         Doctor doctor;
         Patient patient;
 
@@ -220,6 +228,13 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
                     patients.put(patient.getId(), patient);
                 }
                 appointment.setPatient(patient);
+            }
+
+            if (appointment.getPatient() != null) {
+                disease = patientDao.readDiseaseByAppointment(appointment.getPatient().getId(), appointment.getId());
+                if (disease != null) {
+                    appointment.setDisease(disease);
+                }
             }
         }
     }

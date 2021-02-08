@@ -33,22 +33,13 @@
 <html>
 <head>
     <title>${appointment_list}"> </title>
+    <link href="<c:url value="/css/main.css"/>" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-    <div class="main-head">
+    <div class="second-head">
         <h4>${appointment_list}</h4>
     </div>
-<%--    <c:if test="${authorizedUser.role.name == 'Администратор'}">--%>
-<%--        <form action="/appointment/list.html" method="get">--%>
-<%--            <label for="date">${date}:</label>--%>
-<%--            <input type="date" id="date" name="date">--%>
-<%--            <script>--%>
-<%--                getDate();--%>
-<%--            </script>--%>
-<%--            <input type="submit" class="btn btn-success" value="${find}">--%>
-<%--        </form>--%>
-<%--    </c:if>--%>
 
     <table class="table table-hover">
         <thead>

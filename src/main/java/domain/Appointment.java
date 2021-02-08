@@ -11,6 +11,7 @@ public class Appointment extends Entity {
     private String complaints;
     private String medicalReport;
     private String recommendation;
+    private String disease;
     private Doctor doctor;
     private Patient patient;
 
@@ -32,6 +33,14 @@ public class Appointment extends Entity {
 
     public String getRecommendation() {
         return recommendation;
+    }
+
+    public String getDisease() {
+        return disease;
+    }
+
+    public void setDisease(String disease) {
+        this.disease = disease;
     }
 
     public void setTime(Date time) {

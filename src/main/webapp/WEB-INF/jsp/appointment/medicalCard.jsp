@@ -28,6 +28,7 @@
 <fmt:message bundle="${textResources}" key="appointment.complaints" var="doctor_complaints"/>
 <fmt:message bundle="${textResources}" key="appointment.recommendations" var="doctor_recommendations"/>
 <fmt:message bundle="${textResources}" key="appointment.medicalReport" var="doctor_medicalReport"/>
+<fmt:message bundle="${textResources}" key="patient.disease" var="patient_disease"/>
 
 
 <u:html title="${sppointment_history}" message="${message}">
@@ -78,6 +79,16 @@
                                    value="${appointment.recommendation}">
                         </div>
                     </div>
+
+                    <c:if test="${not empty appointment.disease}">
+                        <div class="form-group row">
+                            <label for="disease" class="col-sm-2 col-form-label">${patient_disease}:</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="disease"
+                                       value="${appointment.disease}">
+                            </div>
+                        </div>
+                    </c:if>
                 </li>
             </c:forEach>
         </ul>
