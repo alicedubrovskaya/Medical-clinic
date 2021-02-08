@@ -17,3 +17,15 @@
 .list-group .list-group-item:hover {
     background-color: #86cd81;
 }
+
+.container {
+    margin-top: 40px;
+}
+
+[name="info"] {
+    border: 2px groove #0091b5;
+}
+
+.btn-group {
+    margin-top: 10px;
+}

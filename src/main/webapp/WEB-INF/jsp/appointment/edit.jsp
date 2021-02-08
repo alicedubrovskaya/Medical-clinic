@@ -65,56 +65,49 @@
         </div>
 
         <form action="/appointment/save.html" method="post">
-            <c:choose>
-                <c:when test="${not empty appointment.patient}">
-                    <input type="hidden" name="patientId" value="${appointment.patient.id}">
-                    <input type="hidden" name="appointmentId" value="${appointment.id}">
+            <input type="hidden" name="patientId" value="${appointment.patient.id}">
+            <input type="hidden" name="appointmentId" value="${appointment.id}">
 
 
-                    <select class="form-control" id="status" name="status">
-                        <c:forEach items="${statuses}" var="status">
-                            <option value="${status}">${status}</option>
-                        </c:forEach>
-                    </select>
+            <select class="form-control" id="status" name="status">
+                <c:forEach items="${statuses}" var="status">
+                    <option value="${status}">${status}</option>
+                </c:forEach>
+            </select>
 
-                    <div class="form-group">
-                        <label for="complaints">${appointment_complaints}:</label>
-                        <input type="text" class="form-control" id="complaints" name="complaints"
-                               value="${appointment.complaints}">
-                    </div>
-                    <div class="form-group>">
-                        <label for="medicalReport">${appointment_medicalReport}:</label>
-                        <input type="text" class="form-control" id="medicalReport" name="medicalReport"
-                               value="${appointment.medicalReport}">
+            <div class="form-group">
+                <label for="complaints">${appointment_complaints}:</label>
+                <input type="text" class="form-control" id="complaints" name="complaints"
+                       value="${appointment.complaints}">
+            </div>
+            <div class="form-group>">
+                <label for="medicalReport">${appointment_medicalReport}:</label>
+                <input type="text" class="form-control" id="medicalReport" name="medicalReport"
+                       value="${appointment.medicalReport}">
 
-                    </div>
-                    <div class="form-group">
-                        <label for="recommendation">${appointment_recommendations}:</label>
-                        <input type="text" class="form-control" id="recommendation" name="recommendation"
-                               value="${appointment.recommendation}">
-                    </div>
+            </div>
+            <div class="form-group">
+                <label for="recommendation">${appointment_recommendations}:</label>
+                <input type="text" class="form-control" id="recommendation" name="recommendation"
+                       value="${appointment.recommendation}">
+            </div>
 
-                    <div class="form-group">
-                        <label for="diseases">${diseaseDefinition}</label>
-                        <select multiple class="form-control" size="3" id="diseases" name="diseases">
-                            <option>${diseaseUndefined}</option>
-                            <c:forEach items="${diseases}" var="disease">
-                                <option value="${disease}">${disease}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
+            <div class="form-group">
+                <label for="diseases">${diseaseDefinition}</label>
+                <select multiple class="form-control" size="3" id="diseases" name="diseases">
+                    <option>${diseaseUndefined}</option>
+                    <c:forEach items="${diseases}" var="disease">
+                        <option value="${disease}">${disease}</option>
+                    </c:forEach>
+                </select>
+            </div>
 
-                    <div class="btn-group">
-                        <div class="btn-group">
-                            <input type="submit" class="btn btn-success" value="${button_save}">
-                            <input type="reset" class="btn btn-warning" value="${button_reset}">
-                        </div>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <p class="text-info">${withoutPatient}</p>
-                </c:otherwise>
-            </c:choose>
+            <div class="btn-group">
+                <div class="btn-group">
+                    <input type="submit" class="btn btn-success" value="${button_save}">
+                    <input type="reset" class="btn btn-warning" value="${button_reset}">
+                </div>
+            </div>
         </form>
     </div>
 </u:html>

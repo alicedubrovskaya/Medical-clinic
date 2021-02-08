@@ -43,10 +43,11 @@ public class AppointmentListCommand extends AuthorizedUserCommand {
         AppointmentService service = serviceFactory.getAppointmentService();
         List<Appointment> appointments;
 
+        //TODO
         if (date != null) {
             if (specialization != null) {
                 appointments = service.findByTimeAndSpecialization(date, specialization);
-            } else if (status != null && doctorId != null && authorizedUser.getRole().equals(Role.DOCTOR)) {
+            } else if (!status.equals("All") && !status.equals("Все") && doctorId != null && authorizedUser.getRole().equals(Role.DOCTOR)) {
                 appointments = service.findByDateAndStatusAndDoctor(date, status, doctorId);
             } else if (status != null) {
                 if (!(status.equals("All") || status.equals("Все"))) {

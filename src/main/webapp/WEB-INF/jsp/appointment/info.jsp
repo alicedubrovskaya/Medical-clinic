@@ -28,11 +28,12 @@
 <fmt:message bundle="${textResources}" key="appointment.make" var="appointment_make"/>
 <fmt:message bundle="${textResources}" key="button.edit" var="button_edit"/>
 <fmt:message bundle="${textResources}" key="button.save" var="button_save"/>
+<fmt:message bundle="${textResources}" key="button.cancel" var="button_cancel"/>
 
 
 <u:html title="${appointment_making}" message="${message}">
     <div class="container">
-        <form>
+        <form name="info">
             <div class="form-group row">
                 <label for="time" class="col-sm-2 col-form-label">${appointment_date}:</label>
                 <div class="col-sm-10">
@@ -61,7 +62,8 @@
                             </input>
                         </c:when>
                         <c:otherwise>
-                            <input type="text" readonly class="form-control-plaintext" id="patient" value="${withoutPatient}">
+                            <input type="text" readonly class="form-control-plaintext" id="patient"
+                                   value="${withoutPatient}">
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -73,12 +75,17 @@
                     <input type="hidden" name="appointmentId" value="${appointment.id}">
                     <input type="submit" class="btn btn-success" value="${button_save}">
                 </form>
+
+                <form action="/appointment/choice.html" method="get">
+                    <input type="hidden" name="appointmentId" value="${appointment.id}">
+                    <input type="submit" class="btn btn-warning" value="${button_cancel}">
+                </form>
             </c:if>
 
-            <c:if test="${authorizedUser.role.name =='Врач'}">
-                <form action="/appointment/edit.html" method="post">
+            <c:if test="${(not empty appointment.patient)  && (authorizedUser.role.name=='Врач')}">
+                <form action="/appointment/edit.html" method="get">
                     <input type="hidden" name="appointmentId" value="${appointment.id}">
-                    <input type="submit" class="btn btn-default" value="${button_edit}">
+                    <input type="submit" class="btn btn-warning" value="${button_edit}">
                 </form>
             </c:if>
         </div>

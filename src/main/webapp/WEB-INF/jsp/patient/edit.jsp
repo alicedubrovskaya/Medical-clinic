@@ -34,7 +34,8 @@
 <fmt:message bundle="${textResources}" key="button.cancel" var="button_cancel"/>
 <fmt:message bundle="${textResources}" key="button.reset" var="button_reset"/>
 <fmt:message bundle="${textResources}" key="appointment.history" var="appointment_history"/>
-
+<fmt:message bundle="${textResources}" key="account.delete.question" var="delete_question"/>
+<fmt:message bundle="${textResources}" key="account.delete" var="delete_account"/>
 
 <c:choose>
     <c:when test="${not empty patient}">
@@ -53,71 +54,80 @@
 <u:html title="${title}" message="${message}">
     <div class="container">
         <H2>${title}</H2>
-        <form action="/patient/save.html" method="post">
-            <c:if test="${not empty patient}">
-                <input type="hidden" name="id" value="${patient.id}">
-            </c:if>
-            <c:if test="${not empty user}">
-<%--                <input type="hidden" name="user" value="${user}">--%>
-                <input type="hidden" name="password" value="${user.password}">
-                <input type="hidden" name="login" value="${user.login}">
-            </c:if>
-            <div class="form-group">
-                <label for="surname">${patient_surname}:</label>
-                <input type="text" pattern="^[A-ZА-Я][a-zа-я]+$" required class="form-control" id="surname"
-                       name="surname" value="${surname}">
-            </div>
-            <div class="form-group">
-                <label for="name">${patient_name}:</label>
-                <input type="text" pattern="^[A-ZА-Я][a-zа-я]+$" required class="form-control" id="name" name="name"
-                       value="${name}">
-            </div>
-            <div class="form-group">
-                <label for="email">${patient_email}:</label>
-                <input type="email" required class="form-control" id="email" name="email" value="${email}">
-            </div>
-            <div class="form-group">
-                <label for="phoneNumber">${patient_phoneNumber}:</label>
-                <input type="tel" required pattern="375\s[0-9]{2}\s[0-9]{3}\s[0-9]{2}\s[0-9]{2}"
-                       placeholder="375 29 894 20 43"
-                       class="form-control" id="phoneNumber" name="phoneNumber" value="${phoneNumber}">
-            </div>
-            <div class="form-group">
-                <label for="address">${patient_address}:</label>
-                <input type="text" class="form-control" id="address" name="address" value="${address}">
-            </div>
-            <div class="btn-group">
-                <input type="submit" class="btn btn-success" value="${button_save}">
-                <input type="reset" class="btn btn-warning" value="${button_reset}">
-            </div>
-        </form>
-        <c:if test="${not empty patient}">
-            <c:if test="${authorizedUser.role.name =='Пациент'}">
-                <button class="btn btn-danger"
-                        onclick="document.getElementById('delete').style.display='block'">${button_delete}</button>
-                <div id="delete" class="modal">
-                 <span onclick="document.getElementById('delete').style.display='none'" class="close"
-                       title="${button_delete}">&times;</span>
-                    <form class="modal-content" action="/patient/delete.html" method="post">
+        <div class="row">
+            <div class="col-8">
+                <form action="/patient/save.html" method="post">
+                    <c:if test="${not empty patient}">
                         <input type="hidden" name="id" value="${patient.id}">
-                        <div class="container">
-                            <h1>${delete_account}</h1>
-                            <p>${delete_question}</p>
-                            <div class="clearfix">
-                                <button type="button" onclick="document.getElementById('delete').style.display='none'"
-                                        class="btn btn-secondary">${button_cancel}
-                                </button>
-                                <input type="submit" onclick="document.getElementById('delete').style.display='none'"
-                                       class="btn btn-danger" value="${button_delete}">
+                    </c:if>
+                    <c:if test="${not empty user}">
+                        <%--                <input type="hidden" name="user" value="${user}">--%>
+                        <input type="hidden" name="password" value="${user.password}">
+                        <input type="hidden" name="login" value="${user.login}">
+                    </c:if>
+                    <div class="form-group">
+                        <label for="surname">${patient_surname}:</label>
+                        <input type="text" pattern="^[A-ZА-Я][a-zа-я]+$" required class="form-control" id="surname"
+                               name="surname" value="${surname}">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">${patient_name}:</label>
+                        <input type="text" pattern="^[A-ZА-Я][a-zа-я]+$" required class="form-control" id="name"
+                               name="name"
+                               value="${name}">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">${patient_email}:</label>
+                        <input type="email" required class="form-control" id="email" name="email" value="${email}">
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">${patient_phoneNumber}:</label>
+                        <input type="tel" required pattern="375\s[0-9]{2}\s[0-9]{3}\s[0-9]{2}\s[0-9]{2}"
+                               placeholder="375 29 894 20 43"
+                               class="form-control" id="phoneNumber" name="phoneNumber" value="${phoneNumber}">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">${patient_address}:</label>
+                        <input type="text" class="form-control" id="address" name="address" value="${address}">
+                    </div>
+                    <div class="btn-group">
+                        <input type="submit" class="btn btn-success" value="${button_save}">
+                        <input type="reset" class="btn btn-warning" value="${button_reset}">
+                    </div>
+                </form>
+                <c:if test="${authorizedUser.role.name =='Пациент'}">
+                    <button class="btn btn-danger"
+                            onclick="document.getElementById('delete').style.display='block'">${button_delete}</button>
+                    <div id="delete" class="modal">
+                            <span onclick="document.getElementById('delete').style.display='none'" class="close"
+                                  title="${button_delete}">&times;</span>
+                        <form class="modal-content" action="/doctor/delete.html" method="post">
+                            <input type="hidden" name="id" value="${doctor.id}">
+                            <div class="container">
+                                <h1>${delete_account}</h1>
+                                <p>${delete_question}</p>
+                                <div class="clearfix">
+                                    <button type="button"
+                                            onclick="document.getElementById('delete').style.display='none'"
+                                            class="btn btn-secondary">${button_cancel}
+                                    </button>
+                                    <input type="submit"
+                                           onclick="document.getElementById('delete').style.display='none'"
+                                           class="btn btn-danger" value="${button_delete}">
+                                </div>
                             </div>
-                        </div>
+                        </form>
+                    </div>
+                </c:if>
+            </div>
+            <c:if test="${not empty patient}">
+                <div class="col-4">
+                    <form action="/appointment/medicalCard.html" method="get">
+                        <input type="hidden" name="id" value="${patient.id}">
+                        <input type="submit" class="btn btn-outline-primary btn-lg" value="${appointment_history}">
                     </form>
                 </div>
             </c:if>
-            <form action="/appointment/medicalCard.html" method="get">
-                <input type="hidden" name="id" value="${patient.id}">
-                <input type="submit" class="btn btn-default" value="${appointment_history}">
-            </form>
-        </c:if>
+        </div>
     </div>
 </u:html>
