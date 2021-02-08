@@ -153,7 +153,7 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
      * @throws ServicePersistentException
      */
     @Override
-    public List<String> readDiseases() throws ServicePersistentException {
+    public List<String> findDiseases() throws ServicePersistentException {
         PatientDao patientDao = transaction.createPatientDao();
         try {
             List<String> diseases = patientDao.readDiseases();
@@ -161,6 +161,27 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
                 return diseases;
             } else {
                 throw new ServicePersistentException("List of diseases is empty");
+            }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
+        }
+    }
+
+    /**
+     * Finds all patient's diseases
+     *
+     * @return
+     * @throws ServicePersistentException
+     */
+    @Override
+    public List<String> findDiseasesByPatient(Integer patientId) throws ServicePersistentException {
+        PatientDao patientDao = transaction.createPatientDao();
+        try {
+            List<String> diseases = patientDao.readDiseasesByPatient(patientId);
+            if (!diseases.isEmpty()) {
+                return diseases;
+            } else {
+                throw new ServicePersistentException("List of patient's diseases is empty");
             }
         } catch (PersistentException e) {
             throw new ServicePersistentException(e);

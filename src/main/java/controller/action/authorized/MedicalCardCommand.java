@@ -7,6 +7,7 @@ import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.AppointmentService;
+import service.PatientService;
 import service.exception.ServicePersistentException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,8 @@ public class MedicalCardCommand extends AuthorizedUserCommand {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
-        AppointmentService service = serviceFactory.getAppointmentService();
+        AppointmentService appointmentService = serviceFactory.getAppointmentService();
+        PatientService patientService = serviceFactory.getPatientService();
         String parameter = request.getParameter("id");
         Integer id = null;
         if (parameter == null) {
@@ -34,9 +36,11 @@ public class MedicalCardCommand extends AuthorizedUserCommand {
 
         if (id != null) {
             try {
-                List<Appointment> appointments = service.findByPatient(id);
+                List<Appointment> appointments = appointmentService.findByPatient(id);
+                List<String> diseases = patientService.findDiseasesByPatient(id);
                 request.setAttribute("appointments", appointments);
-            } catch (ServicePersistentException e){
+                request.setAttribute("diseases", diseases);
+            } catch (ServicePersistentException e) {
                 logger.error(e);
             }
         }

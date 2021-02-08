@@ -17,6 +17,8 @@ public interface PatientService extends Service{
 
     Patient findById(Integer id) throws ServicePersistentException;
 
-    List<String> readDiseases() throws ServicePersistentException;
+    List<String> findDiseases() throws ServicePersistentException;
+
+    List<String> findDiseasesByPatient(Integer patientId) throws ServicePersistentException;
 
 }

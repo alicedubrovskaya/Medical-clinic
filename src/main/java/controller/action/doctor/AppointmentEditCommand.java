@@ -39,7 +39,7 @@ public class AppointmentEditCommand extends DoctorCommand {
         }
 
         try {
-            List<String> diseases = patientService.readDiseases();
+            List<String> diseases = patientService.findDiseases();
             request.setAttribute("diseases", diseases);
         } catch (ServicePersistentException e) {
             logger.error(e);

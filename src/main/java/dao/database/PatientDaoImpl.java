@@ -212,6 +212,22 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
         }
     }
 
+    @Override
+    public List<String> readDiseasesByPatient(Integer patientId) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_DISEASES_BY_PATIENT)) {
+            statement.setInt(1, patientId);
+            ResultSet resultSet = statement.executeQuery();
+            List<String> diseases = new ArrayList<>();
+            while (resultSet.next()) {
+                diseases.add(resultSet.getString("name"));
+            }
+            logger.debug("Diseases were read");
+            return diseases;
+        } catch (SQLException e) {
+            throw new PersistentException("It is impossible to read diseases");
+        }
+    }
+
     /**
      * Reads patient's disease established on appointment
      *
