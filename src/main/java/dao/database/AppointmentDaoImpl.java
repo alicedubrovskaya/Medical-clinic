@@ -23,7 +23,6 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     private static final String READ_APPOINTMENT = "SELECT `time`, `approved`,  `status`, `complaints`," +
             " `medical_report`,`recommendation`, `patient_id`, `doctor_id` FROM `appointment` WHERE `id`=?";
 
-
     private static final String READ_APPOINTMENTS = "SELECT `id`, `time`, `approved`,  `status`, `complaints`," +
             " `medical_report`,`recommendation`, `patient_id`, `doctor_id` FROM `appointment`";
 
@@ -69,7 +68,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
 
     @Override
     public Integer create(Appointment appointment) throws PersistentException {
-        try (PreparedStatement statement = connection.prepareStatement(CREATE_APPOINTMENT, Statement.RETURN_GENERATED_KEYS);
+        try (PreparedStatement statement = connection.prepareStatement(CREATE_APPOINTMENT, Statement.RETURN_GENERATED_KEYS)
         ) {
             statement.setTimestamp(1, new Timestamp(appointment.getTime().getTime()));
             statement.setBoolean(2, appointment.isApproved());
@@ -90,7 +89,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
 
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
-            Integer appointmentId = null;
+            Integer appointmentId;
             if (resultSet.next()) {
                 appointmentId = resultSet.getInt(1);
                 logger.debug("Appointment with id={} was created", appointmentId);

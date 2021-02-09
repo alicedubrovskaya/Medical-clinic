@@ -2,12 +2,10 @@ package dao.database;
 
 import dao.DoctorDao;
 import domain.Doctor;
-import domain.Patient;
 import domain.enumeration.Shift;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import service.exception.ServicePersistentException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,6 +19,16 @@ import java.util.List;
  */
 public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
     private static final Logger logger = LogManager.getLogger(DoctorDaoImpl.class);
+
+    private static final String ID = "id";
+    private static final String NAME = "name";
+    private static final String SURNAME = "surname";
+    private static final String WORKING_SHIFT = "working_shift";
+    private static final String SPECIALIZATION_ID = "specialization_id";
+    private static final String TYPE = "type";
+    private static final String SUCCESSFUL_READING_OF_DOCTORS = "Doctors were read";
+    private static final String UNSUCCESSFUL_READING_OF_DOCTORS = "It is impossible to read doctors";
+
 
     private static final String CREATE_DOCTOR = "INSERT INTO `doctor` (`id`, `name`, `surname`," +
             " `specialization_id`, `working_shift`) VALUES (?,?,?,?,?)";
@@ -56,29 +64,33 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
     /**
      * Creates doctor in database
      *
-     * @param doctor
+     * @param doctor that should be created
      * @return generated key
-     * @throws PersistentException
+     * @throws PersistentException if database error occurs
      */
     @Override
     public Integer create(Doctor doctor) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(CREATE_DOCTOR);
-             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_TYPE);
+             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_TYPE)
         ) {
             specializationStatement.setString(1, doctor.getSpecialization());
             ResultSet resultSet = specializationStatement.executeQuery();
             Integer specializationID = null;
             if (resultSet.next()) {
-                specializationID = resultSet.getInt("id");
+                specializationID = resultSet.getInt(ID);
             }
             statement.setInt(1, doctor.getId());
             statement.setString(2, doctor.getName());
             statement.setString(3, doctor.getSurname());
-            statement.setInt(4, specializationID);
+            if (specializationID != null) {
+                statement.setInt(4, specializationID);
+            } else {
+                throw new PersistentException("Specialization id is null");
+            }
             statement.setInt(5, doctor.getWorkingShift().getId());
 
             statement.executeUpdate();
-            logger.debug("Doctor with id={} was created", doctor.getId());
+            logger.debug("Doctor with id = {} was created", doctor.getId());
             return doctor.getId();
         } catch (SQLException e) {
             throw new PersistentException("Doctor wasn't created", e);
@@ -88,14 +100,14 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
     /**
      * Reads doctor with specified id
      *
-     * @param id
+     * @param id unique identifier
      * @return found doctor
      * @throws PersistentException if database error occurs
      */
     @Override
     public Doctor read(Integer id) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_DOCTOR_BY_ID);
-             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_ID);
+             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_ID)
         ) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -103,14 +115,14 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             if (resultSet.next()) {
                 doctor = new Doctor();
                 doctor.setId(id);
-                doctor.setName(resultSet.getString("name"));
-                doctor.setSurname(resultSet.getString("surname"));
-                doctor.setWorkingShift(Shift.getById(resultSet.getInt("working_shift")));
+                doctor.setName(resultSet.getString(NAME));
+                doctor.setSurname(resultSet.getString(SURNAME));
+                doctor.setWorkingShift(Shift.getById(resultSet.getInt(WORKING_SHIFT)));
 
-                specializationStatement.setInt(1, resultSet.getInt("specialization_id"));
+                specializationStatement.setInt(1, resultSet.getInt(SPECIALIZATION_ID));
                 resultSet = specializationStatement.executeQuery();
                 if (resultSet.next()) {
-                    doctor.setSpecialization(resultSet.getString("type"));
+                    doctor.setSpecialization(resultSet.getString(TYPE));
                 }
             }
             logger.debug("Doctor was read");
@@ -123,13 +135,13 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
     /**
      * Updates doctor
      *
-     * @param doctor
+     * @param doctor that should updated
      * @throws PersistentException if database error occurs
      */
     @Override
     public void update(Doctor doctor) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_DOCTOR);
-             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_TYPE);
+             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_TYPE)
         ) {
             statement.setString(1, doctor.getName());
             statement.setString(2, doctor.getSurname());
@@ -139,7 +151,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             specializationStatement.setString(1, doctor.getSpecialization());
             ResultSet resultSet = specializationStatement.executeQuery();
             if (resultSet.next()) {
-                statement.setInt(3, resultSet.getInt("id"));
+                statement.setInt(3, resultSet.getInt(ID));
             }
             statement.executeUpdate();
             logger.debug("Doctor with id={} was updated", doctor.getId());
@@ -151,7 +163,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
     /**
      * Deletes doctor with specified id
      *
-     * @param id
+     * @param id unique identifier
      * @throws PersistentException if database error occurs
      */
     @Override
@@ -174,67 +186,67 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
     @Override
     public List<Doctor> read() throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_DOCTOR);
-             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_ID);
+             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_ID)
         ) {
             ResultSet resultSet = statement.executeQuery();
             Doctor doctor;
             List<Doctor> doctors = new ArrayList<>();
             while (resultSet.next()) {
                 doctor = new Doctor();
-                doctor.setId(resultSet.getInt("id"));
-                doctor.setName(resultSet.getString("name"));
-                doctor.setSurname(resultSet.getString("surname"));
-                doctor.setWorkingShift(Shift.getById(resultSet.getInt("working_shift")));
+                doctor.setId(resultSet.getInt(ID));
+                doctor.setName(resultSet.getString(NAME));
+                doctor.setSurname(resultSet.getString(SURNAME));
+                doctor.setWorkingShift(Shift.getById(resultSet.getInt(WORKING_SHIFT)));
 
-                specializationStatement.setInt(1, resultSet.getInt("specialization_id"));
+                specializationStatement.setInt(1, resultSet.getInt(SPECIALIZATION_ID));
                 ResultSet resultSetSpecialization = specializationStatement.executeQuery();
                 if (resultSetSpecialization.next()) {
-                    doctor.setSpecialization(resultSetSpecialization.getString("type"));
+                    doctor.setSpecialization(resultSetSpecialization.getString(TYPE));
                 }
                 doctors.add(doctor);
             }
-            logger.debug("Doctors were read");
+            logger.debug(SUCCESSFUL_READING_OF_DOCTORS);
             return doctors;
         } catch (SQLException e) {
-            throw new PersistentException("It is impossible to read doctors");
+            throw new PersistentException(UNSUCCESSFUL_READING_OF_DOCTORS);
         }
     }
 
     /**
      * Reads all doctors without vacation at specified date
      *
-     * @param date
+     * @param date of vacation
      * @return list of doctors
      * @throws PersistentException if database error occurs
      */
     @Override
     public List<Doctor> readWithoutVacation(Date date) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_DOCTORS_WITHOUT_VACATION_DAY);
-             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_ID);
+             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_ID)
         ) {
             statement.setDate(1, new java.sql.Date(date.getTime()));
             ResultSet resultSet = statement.executeQuery();
 
             List<Doctor> doctors = new ArrayList<>();
-            Doctor doctor = null;
+            Doctor doctor;
             while (resultSet.next()) {
                 doctor = new Doctor();
-                doctor.setId(resultSet.getInt("id"));
-                doctor.setName(resultSet.getString("name"));
-                doctor.setSurname(resultSet.getString("surname"));
-                doctor.setWorkingShift(Shift.getById(resultSet.getInt("working_shift")));
+                doctor.setId(resultSet.getInt(ID));
+                doctor.setName(resultSet.getString(NAME));
+                doctor.setSurname(resultSet.getString(SURNAME));
+                doctor.setWorkingShift(Shift.getById(resultSet.getInt(WORKING_SHIFT)));
 
-                specializationStatement.setInt(1, resultSet.getInt("specialization_id"));
+                specializationStatement.setInt(1, resultSet.getInt(SPECIALIZATION_ID));
                 ResultSet resultSetSpecialization = specializationStatement.executeQuery();
                 if (resultSetSpecialization.next()) {
-                    doctor.setSpecialization(resultSetSpecialization.getString("type"));
+                    doctor.setSpecialization(resultSetSpecialization.getString(TYPE));
                 }
                 doctors.add(doctor);
             }
-            logger.debug("Doctors were read");
+            logger.debug(SUCCESSFUL_READING_OF_DOCTORS);
             return doctors;
         } catch (SQLException e) {
-            throw new PersistentException("It is impossible to read doctors");
+            throw new PersistentException(UNSUCCESSFUL_READING_OF_DOCTORS);
         }
     }
 
@@ -250,7 +262,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             ResultSet resultSet = statement.executeQuery();
             List<String> specializations = new ArrayList<>();
             while (resultSet.next()) {
-                specializations.add(resultSet.getString("type"));
+                specializations.add(resultSet.getString(TYPE));
             }
             logger.debug("Specializations were read");
             return specializations;
@@ -262,19 +274,19 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
     /**
      * Reads doctors by specialization
      *
-     * @param specialization
+     * @param specialization that has doctor
      * @return list of found doctors
      * @throws PersistentException if database error occurs
      */
     @Override
     public List<Doctor> readBySpecializationType(String specialization) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_DOCTOR_BY_SPECIALIZATION);
-             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_TYPE);
+             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_TYPE)
         ) {
             specializationStatement.setString(1, specialization);
             ResultSet resultSet = specializationStatement.executeQuery();
             if (resultSet.next()) {
-                statement.setInt(1, resultSet.getInt("id"));
+                statement.setInt(1, resultSet.getInt(ID));
             }
 
             resultSet = statement.executeQuery();
@@ -282,17 +294,17 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             Doctor doctor;
             while (resultSet.next()) {
                 doctor = new Doctor();
-                doctor.setId(resultSet.getInt("id"));
-                doctor.setName(resultSet.getString("name"));
-                doctor.setSurname(resultSet.getString("surname"));
+                doctor.setId(resultSet.getInt(ID));
+                doctor.setName(resultSet.getString(NAME));
+                doctor.setSurname(resultSet.getString(SURNAME));
                 doctor.setSpecialization(specialization);
-                doctor.setWorkingShift(Shift.getById(resultSet.getInt("working_shift")));
+                doctor.setWorkingShift(Shift.getById(resultSet.getInt(WORKING_SHIFT)));
                 doctors.add(doctor);
             }
-            logger.debug("Doctors were read");
+            logger.debug(SUCCESSFUL_READING_OF_DOCTORS);
             return doctors;
         } catch (SQLException e) {
-            throw new PersistentException("It is impossible to read doctors");
+            throw new PersistentException(UNSUCCESSFUL_READING_OF_DOCTORS);
         }
     }
 
@@ -307,7 +319,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
     @Override
     public Doctor readBySurnameAndName(String surname, String name) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_DOCTOR_BY_SURNAME_AND_NAME);
-             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_ID);
+             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_ID)
         ) {
             statement.setString(1, name);
             statement.setString(2, surname);
@@ -316,21 +328,21 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             Doctor doctor = null;
             if (resultSet.next()) {
                 doctor = new Doctor();
-                doctor.setId(resultSet.getInt("id"));
-                doctor.setName(resultSet.getString("name"));
-                doctor.setSurname(resultSet.getString("surname"));
-                doctor.setWorkingShift(Shift.getById(resultSet.getInt("working_shift")));
+                doctor.setId(resultSet.getInt(ID));
+                doctor.setName(resultSet.getString(NAME));
+                doctor.setSurname(resultSet.getString(SURNAME));
+                doctor.setWorkingShift(Shift.getById(resultSet.getInt(WORKING_SHIFT)));
 
-                specializationStatement.setInt(1, resultSet.getInt("specialization_id"));
+                specializationStatement.setInt(1, resultSet.getInt(SPECIALIZATION_ID));
                 ResultSet resultSetSpecialization = specializationStatement.executeQuery();
                 if (resultSetSpecialization.next()) {
-                    doctor.setSpecialization(resultSetSpecialization.getString("type"));
+                    doctor.setSpecialization(resultSetSpecialization.getString(TYPE));
                 }
             }
-            logger.debug("Doctors were read");
+            logger.debug(SUCCESSFUL_READING_OF_DOCTORS);
             return doctor;
         } catch (SQLException e) {
-            throw new PersistentException("It is impossible to read doctors");
+            throw new PersistentException(UNSUCCESSFUL_READING_OF_DOCTORS);
         }
     }
 }

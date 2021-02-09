@@ -14,6 +14,14 @@ import java.util.List;
 
 public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
     private final Logger logger = LogManager.getLogger(getClass().getName());
+
+    private static final String ID = "id";
+    private static final String NAME = "name";
+    private static final String SURNAME = "surname";
+    private static final String EMAIL = "email";
+    private static final String PHONE_NUMBER = "phone_number";
+    private static final String ADDRESS = "address";
+
     private static final String CREATE_PATIENT =
             "INSERT INTO `patient`(`id`,`name`, `surname`, `email`, `phone_number`, `address`) " +
                     "VALUES (?,?,?,?,?,?)";
@@ -50,6 +58,13 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
 
     private static final String READ_DISEASES = "SELECT `id`, `name` FROM `disease`";
 
+    /**
+     * Creates patient in database
+     *
+     * @param patient that should be created
+     * @return generated patient's id
+     * @throws PersistentException if database error occurs
+     */
     @Override
     public Integer create(Patient patient) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(CREATE_PATIENT)) {
@@ -68,29 +83,35 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
         }
     }
 
+    /**
+     * Reads all patients from database
+     *
+     * @return list of found patients
+     * @throws PersistentException if database error occurs
+     */
     @Override
     public List<Patient> read() throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_PATIENTS);
-             PreparedStatement diseasesStatement = connection.prepareStatement(READ_DISEASES_BY_PATIENT);
+             PreparedStatement diseasesStatement = connection.prepareStatement(READ_DISEASES_BY_PATIENT)
         ) {
             ResultSet resultSet = statement.executeQuery();
             Patient patient;
             List<Patient> patients = new ArrayList<>();
             while (resultSet.next()) {
                 patient = new Patient();
-                patient.setId(resultSet.getInt("id"));
-                patient.setName(resultSet.getString("name"));
-                patient.setSurname(resultSet.getString("surname"));
-                patient.setEmail(resultSet.getString("email"));
-                patient.setPhoneNumber(resultSet.getString("phone_number"));
-                patient.setAddress(resultSet.getString("address"));
+                patient.setId(resultSet.getInt(ID));
+                patient.setName(resultSet.getString(NAME));
+                patient.setSurname(resultSet.getString(SURNAME));
+                patient.setEmail(resultSet.getString(EMAIL));
+                patient.setPhoneNumber(resultSet.getString(PHONE_NUMBER));
+                patient.setAddress(resultSet.getString(ADDRESS));
 
                 //TODO
                 diseasesStatement.setInt(1, patient.getId());
                 ResultSet diseaseResultSet = diseasesStatement.executeQuery();
 
                 while (diseaseResultSet.next()) {
-                    patient.getDiseases().add(diseaseResultSet.getString("name"));
+                    patient.getDiseases().add(diseaseResultSet.getString(NAME));
                 }
                 patients.add(patient);
             }
@@ -101,6 +122,13 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
         }
     }
 
+    /**
+     * Reads patient by id
+     *
+     * @param id unique identifier
+     * @return found patient
+     * @throws PersistentException if database error occurs
+     */
     @Override
     public Patient read(Integer id) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_PATIENT);
@@ -112,17 +140,17 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             if (resultSet.next()) {
                 patient = new Patient();
                 patient.setId(id);
-                patient.setName(resultSet.getString("name"));
-                patient.setSurname(resultSet.getString("surname"));
-                patient.setEmail(resultSet.getString("email"));
-                patient.setPhoneNumber(resultSet.getString("phone_number"));
-                patient.setAddress(resultSet.getString("address"));
+                patient.setName(resultSet.getString(NAME));
+                patient.setSurname(resultSet.getString(SURNAME));
+                patient.setEmail(resultSet.getString(EMAIL));
+                patient.setPhoneNumber(resultSet.getString(PHONE_NUMBER));
+                patient.setAddress(resultSet.getString(ADDRESS));
 
                 diseasesStatement.setInt(1, patient.getId());
                 ResultSet diseaseResultSet = diseasesStatement.executeQuery();
 
                 while (diseaseResultSet.next()) {
-                    patient.getDiseases().add(diseaseResultSet.getString("name"));
+                    patient.getDiseases().add(diseaseResultSet.getString(NAME));
                 }
             }
             logger.debug("Patient with id = {} was read", id);
@@ -132,6 +160,12 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
         }
     }
 
+    /**
+     * Updates patient
+     *
+     * @param patient that should be updated
+     * @throws PersistentException if database error occurs
+     */
     @Override
     public void update(Patient patient) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_PATIENT)) {
@@ -149,6 +183,12 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
         }
     }
 
+    /**
+     * Deletes patient by id
+     *
+     * @param id unique identifier
+     * @throws PersistentException if database error occurs
+     */
     @Override
     public void delete(Integer id) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_PATIENT)) {
@@ -160,28 +200,35 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
         }
     }
 
+    /**
+     * Reads patient by email
+     *
+     * @param email
+     * @return found patient
+     * @throws PersistentException if database error occurs
+     */
     @Override
     public Patient readByEmail(String email) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_PATIENT_BY_EMAIL);
-             PreparedStatement diseaseStatement = connection.prepareStatement(READ_DISEASES_BY_PATIENT);
+             PreparedStatement diseaseStatement = connection.prepareStatement(READ_DISEASES_BY_PATIENT)
         ) {
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
             Patient patient = null;
             if (resultSet.next()) {
                 patient = new Patient();
-                patient.setId(resultSet.getInt("id"));
-                patient.setName(resultSet.getString("name"));
-                patient.setSurname(resultSet.getString("surname"));
+                patient.setId(resultSet.getInt(ID));
+                patient.setName(resultSet.getString(NAME));
+                patient.setSurname(resultSet.getString(SURNAME));
                 patient.setEmail(email);
-                patient.setPhoneNumber(resultSet.getString("phone_number"));
-                patient.setAddress(resultSet.getString("address"));
+                patient.setPhoneNumber(resultSet.getString(PHONE_NUMBER));
+                patient.setAddress(resultSet.getString(ADDRESS));
 
                 diseaseStatement.setInt(1, patient.getId());
                 ResultSet diseaseResultSet = diseaseStatement.executeQuery();
 
                 while (diseaseResultSet.next()) {
-                    patient.getDiseases().add(diseaseResultSet.getString("name"));
+                    patient.getDiseases().add(diseaseResultSet.getString(NAME));
                 }
             }
             logger.debug("Patient with email = {} was read", email);
@@ -203,7 +250,7 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             ResultSet resultSet = statement.executeQuery();
             List<String> diseases = new ArrayList<>();
             while (resultSet.next()) {
-                diseases.add(resultSet.getString("name"));
+                diseases.add(resultSet.getString(NAME));
             }
             logger.debug("Diseases were read");
             return diseases;
@@ -212,6 +259,13 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
         }
     }
 
+    /**
+     * Reads names of diseases by patient id
+     *
+     * @param patientId patient's id
+     * @return list of found patient's disease
+     * @throws PersistentException if database error occurs
+     */
     @Override
     public List<String> readDiseasesByPatient(Integer patientId) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_DISEASES_BY_PATIENT)) {
@@ -219,7 +273,7 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             ResultSet resultSet = statement.executeQuery();
             List<String> diseases = new ArrayList<>();
             while (resultSet.next()) {
-                diseases.add(resultSet.getString("name"));
+                diseases.add(resultSet.getString(NAME));
             }
             logger.debug("Diseases were read");
             return diseases;
@@ -231,10 +285,10 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
     /**
      * Reads patient's disease established on appointment
      *
-     * @param patientId
-     * @param appointmentId
-     * @return
-     * @throws PersistentException
+     * @param patientId     patient's id
+     * @param appointmentId id of appointment
+     * @return found disease
+     * @throws PersistentException if database error occurs
      */
     @Override
     public String readDiseaseByAppointment(Integer patientId, Integer appointmentId) throws PersistentException {
@@ -244,7 +298,7 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             ResultSet resultSet = statement.executeQuery();
             String disease = null;
             if (resultSet.next()) {
-                disease = resultSet.getString("name");
+                disease = resultSet.getString(NAME);
             }
             logger.debug("Disease was read");
             return disease;
@@ -256,10 +310,10 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
     /**
      * Saves patient's disease defined on appointment
      *
-     * @param patientId
-     * @param appointmentId
-     * @param disease
-     * @throws PersistentException
+     * @param patientId     patient's id
+     * @param appointmentId id of appointment
+     * @param disease       patient's disease
+     * @throws PersistentException if database error occurs
      */
     @Override
     public void saveDiseaseForPatient(Integer patientId, Integer appointmentId, String disease) throws PersistentException {
@@ -268,9 +322,11 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
         ) {
             diseaseStatement.setString(1, disease);
             ResultSet resultSet = diseaseStatement.executeQuery();
-            Integer diseaseID = null;
+            int diseaseID;
             if (resultSet.next()) {
-                diseaseID = resultSet.getInt("id");
+                diseaseID = resultSet.getInt(ID);
+            } else {
+                throw new PersistentException("Disease id not found");
             }
             statement.setInt(1, patientId);
             statement.setInt(2, diseaseID);
