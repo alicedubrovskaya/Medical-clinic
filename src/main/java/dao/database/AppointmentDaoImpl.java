@@ -16,6 +16,20 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
+    private static final Logger logger = LogManager.getLogger(AppointmentDaoImpl.class);
+
+    private static final String TIME = "time";
+    private static final String APPROVED = "approved";
+    private static final String STATUS = "status";
+    private static final String COMPLAINTS = "complaints";
+    private static final String MEDICAL_REPORT = "medical_report";
+    private static final String RECOMMENDATION = "recommendation";
+    private static final String ID = "id";
+    private static final String PATIENT_ID = "patient_id";
+    private static final String DOCTOR_ID = "doctor_id";
+    private static final String SUCCESSFUL_READING_OF_APPOINTMENT = "Appointment was read";
+    private static final String SUCCESSFUL_READING_OF_APPOINTMENTS = "Appointments were read";
+
     private static final String CREATE_APPOINTMENT = "INSERT INTO `appointment` (`time`, `approved`," +
             "`status`, `complaints`, `medical_report`, `recommendation`, `patient_id`, `doctor_id`)" +
             " VALUES (?,?,?,?,?,?,?,?)";
@@ -64,7 +78,6 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             " `doctor_id`=? WHERE `id` = ?";
 
     private static final String DELETE_APPOINTMENT = "DELETE FROM `appointment` WHERE `id`=?";
-    private final Logger logger = LogManager.getLogger(getClass().getName());
 
     @Override
     public Integer create(Appointment appointment) throws PersistentException {
@@ -94,65 +107,53 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 appointmentId = resultSet.getInt(1);
                 logger.debug("Appointment with id={} was created", appointmentId);
             } else {
-                throw new PersistentException("There is no autoincremented id after trying to add record into table `appointment`");
+                throw new PersistentException("There is no autoincrement id after trying to add record into table `appointment`");
             }
             return appointmentId;
         } catch (SQLException e) {
-            throw new PersistentException("Appointment wasn't created");
+            throw new PersistentException("Appointment cannot be created");
         }
     }
 
     @Override
     public Appointment read(Integer id) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(READ_APPOINTMENT);
+        try (PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENT)
+        ) {
             statement.setInt(1, id);
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             Appointment appointment = null;
             if (resultSet.next()) {
                 appointment = new Appointment();
                 appointment.setId(id);
-                appointment.setTime(resultSet.getTimestamp("time"));
-                appointment.setApproved(resultSet.getBoolean("approved"));
-                appointment.setStatus(Status.getById(resultSet.getInt("status")));
-                appointment.setComplaints(resultSet.getString("complaints"));
-                appointment.setMedicalReport(resultSet.getString("medical_report"));
-                appointment.setRecommendation(resultSet.getString("recommendation"));
-                Integer patientId = resultSet.getInt("patient_id");
+                appointment.setTime(resultSet.getTimestamp(TIME));
+                appointment.setApproved(resultSet.getBoolean(APPROVED));
+                appointment.setStatus(Status.getById(resultSet.getInt(STATUS)));
+                appointment.setComplaints(resultSet.getString(COMPLAINTS));
+                appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
+                appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                Integer patientId = resultSet.getInt(PATIENT_ID);
                 if (!resultSet.wasNull()) {
                     Patient patient = new Patient();
                     patient.setId(patientId);
                     appointment.setPatient(patient);
                 }
-                Integer doctorId = resultSet.getInt("doctor_id");
+                Integer doctorId = resultSet.getInt(DOCTOR_ID);
                 if (!resultSet.wasNull()) {
                     Doctor doctor = new Doctor();
                     doctor.setId(doctorId);
                     appointment.setDoctor(doctor);
                 }
             }
+            logger.debug(SUCCESSFUL_READING_OF_APPOINTMENT);
             return appointment;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Appointment cannot be found");
         }
     }
 
     @Override
     public void update(Appointment appointment) throws PersistentException {
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(UPDATE_APPOINTMENT);
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_APPOINTMENT)) {
             statement.setTimestamp(1, new Timestamp(appointment.getTime().getTime()));
             statement.setBoolean(2, appointment.isApproved());
             statement.setInt(3, appointment.getStatus().getId());
@@ -169,39 +170,27 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             } else {
                 statement.setNull(8, Types.INTEGER);
             }
-
             statement.setInt(9, appointment.getId());
-
             statement.executeUpdate();
+            logger.debug("Appointment was updated");
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Appointment cannot be updated");
         }
     }
 
     @Override
     public void delete(Integer id) throws PersistentException {
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(DELETE_APPOINTMENT);
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_APPOINTMENT)) {
             statement.setInt(1, id);
             statement.executeUpdate();
+            logger.debug("Appointment with id = {} was deleted", id);
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Appointment cannot be deleted");
         }
     }
 
     @Override
-    public List<Appointment> createAppointments(Date date, Doctor doctor) throws PersistentException {
+    public List<Appointment> createAppointments(Date date, Doctor doctor) {
         long start;
         long end;
         if (doctor.getWorkingShift().equals(Shift.FIRST)) {
@@ -230,30 +219,26 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
 
     @Override
     public List<Appointment> readAll() throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        ResultSet resultSetTimetable = null;
-        try {
-            statement = connection.prepareStatement(READ_APPOINTMENTS);
-            resultSet = statement.executeQuery();
-            Appointment appointment = null;
+        try (PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENTS)) {
+            ResultSet resultSet = statement.executeQuery();
+            Appointment appointment;
             List<Appointment> appointments = new ArrayList<>();
             while (resultSet.next()) {
                 appointment = new Appointment();
-                appointment.setId(resultSet.getInt("id"));
-                appointment.setTime(resultSet.getTimestamp("time"));
-                appointment.setApproved(resultSet.getBoolean("approved"));
-                appointment.setStatus(Status.getById(resultSet.getInt("status")));
-                appointment.setComplaints(resultSet.getString("complaints"));
-                appointment.setMedicalReport(resultSet.getString("medical_report"));
-                appointment.setRecommendation(resultSet.getString("recommendation"));
-                Integer patientId = resultSet.getInt("patient_id");
+                appointment.setId(resultSet.getInt(ID));
+                appointment.setTime(resultSet.getTimestamp(TIME));
+                appointment.setApproved(resultSet.getBoolean(APPROVED));
+                appointment.setStatus(Status.getById(resultSet.getInt(STATUS)));
+                appointment.setComplaints(resultSet.getString(COMPLAINTS));
+                appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
+                appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                Integer patientId = resultSet.getInt(PATIENT_ID);
                 if (!resultSet.wasNull()) {
                     Patient patient = new Patient();
                     patient.setId(patientId);
                     appointment.setPatient(patient);
                 }
-                Integer doctorId = resultSet.getInt("doctor_id");
+                Integer doctorId = resultSet.getInt(DOCTOR_ID);
                 if (!resultSet.wasNull()) {
                     Doctor doctor = new Doctor();
                     doctor.setId(doctorId);
@@ -261,51 +246,38 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 }
                 appointments.add(appointment);
             }
+            logger.debug(SUCCESSFUL_READING_OF_APPOINTMENTS);
             return appointments;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-                resultSetTimetable.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Appointments cannot be found");
         }
     }
 
     @Override
     public List<Appointment> readByTime(Date date) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        ResultSet resultSetTimetable = null;
-        try {
-            statement = connection.prepareStatement(READ_APPOINTMENT_BY_TIME);
+        try (PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENT_BY_TIME)) {
             statement.setTimestamp(1, new Timestamp(date.getTime()));
             statement.setTimestamp(2, new Timestamp(date.getTime() + TimeUnit.DAYS.toMillis(1)));
 
-            resultSet = statement.executeQuery();
-            Appointment appointment = null;
+            ResultSet resultSet = statement.executeQuery();
+            Appointment appointment;
             List<Appointment> appointments = new ArrayList<>();
             while (resultSet.next()) {
                 appointment = new Appointment();
-                appointment.setId(resultSet.getInt("id"));
+                appointment.setId(resultSet.getInt(ID));
                 appointment.setTime(date);
-                appointment.setApproved(resultSet.getBoolean("approved"));
-                appointment.setStatus(Status.getById(resultSet.getInt("status")));
-                appointment.setComplaints(resultSet.getString("complaints"));
-                appointment.setMedicalReport(resultSet.getString("medical_report"));
-                appointment.setRecommendation(resultSet.getString("recommendation"));
-                Integer patientId = resultSet.getInt("patient_id");
+                appointment.setApproved(resultSet.getBoolean(APPROVED));
+                appointment.setStatus(Status.getById(resultSet.getInt(STATUS)));
+                appointment.setComplaints(resultSet.getString(COMPLAINTS));
+                appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
+                appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                Integer patientId = resultSet.getInt(PATIENT_ID);
                 if (!resultSet.wasNull()) {
                     Patient patient = new Patient();
                     patient.setId(patientId);
                     appointment.setPatient(patient);
                 }
-                Integer doctorId = resultSet.getInt("doctor_id");
+                Integer doctorId = resultSet.getInt(DOCTOR_ID);
                 if (!resultSet.wasNull()) {
                     Doctor doctor = new Doctor();
                     doctor.setId(doctorId);
@@ -313,47 +285,34 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 }
                 appointments.add(appointment);
             }
+            logger.debug(SUCCESSFUL_READING_OF_APPOINTMENTS);
             return appointments;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-                resultSetTimetable.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Appointments cannot be found");
         }
     }
 
     @Override
     public List<Appointment> readByPatient(Integer patientId) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        ResultSet resultSetTimetable = null;
-        try {
-            statement = connection.prepareStatement(READ_APPOINTMENT_BY_PATIENT);
+        try (PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENT_BY_PATIENT)) {
             statement.setInt(1, patientId);
-            resultSet = statement.executeQuery();
-            Appointment appointment = null;
+            ResultSet resultSet = statement.executeQuery();
+            Appointment appointment;
             List<Appointment> appointments = new ArrayList<>();
             while (resultSet.next()) {
                 appointment = new Appointment();
-                appointment.setId(resultSet.getInt("id"));
-                appointment.setTime(resultSet.getTimestamp("time"));
-                appointment.setApproved(resultSet.getBoolean("approved"));
-                appointment.setComplaints(resultSet.getString("complaints"));
-                appointment.setMedicalReport(resultSet.getString("medical_report"));
-                appointment.setRecommendation(resultSet.getString("recommendation"));
+                appointment.setId(resultSet.getInt(ID));
+                appointment.setTime(resultSet.getTimestamp(TIME));
+                appointment.setApproved(resultSet.getBoolean(APPROVED));
+                appointment.setComplaints(resultSet.getString(COMPLAINTS));
+                appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
+                appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
 
                 Patient patient = new Patient();
                 patient.setId(patientId);
                 appointment.setPatient(patient);
 
-                Integer doctorId = resultSet.getInt("doctor_id");
+                Integer doctorId = resultSet.getInt(DOCTOR_ID);
                 if (!resultSet.wasNull()) {
                     Doctor doctor = new Doctor();
                     doctor.setId(doctorId);
@@ -361,43 +320,30 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 }
                 appointments.add(appointment);
             }
+            logger.debug(SUCCESSFUL_READING_OF_APPOINTMENTS);
             return appointments;
         } catch (SQLException e) {
-            throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-                resultSetTimetable.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
+            throw new PersistentException("Appointments were not found");
         }
     }
 
     @Override
     public Appointment readByTimeAndDoctor(Date date, Doctor doctor) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        ResultSet resultSetTimetable = null;
-        try {
-            statement = connection.prepareStatement(READ_APPOINTMENT_BY_TIME_AND_DOCTOR);
+        try (PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENT_BY_TIME_AND_DOCTOR)) {
             statement.setTimestamp(1, new Timestamp(date.getTime()));
             statement.setInt(2, doctor.getId());
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             Appointment appointment = null;
             if (resultSet.next()) {
                 appointment = new Appointment();
-                appointment.setId(resultSet.getInt("id"));
+                appointment.setId(resultSet.getInt(ID));
                 appointment.setTime(date);
-                appointment.setApproved(resultSet.getBoolean("approved"));
-                appointment.setStatus(Status.getById(resultSet.getInt("status")));
-                appointment.setComplaints(resultSet.getString("complaints"));
-                appointment.setMedicalReport(resultSet.getString("medical_report"));
-                appointment.setRecommendation(resultSet.getString("recommendation"));
-                Integer patientId = resultSet.getInt("patient_id");
+                appointment.setApproved(resultSet.getBoolean(APPROVED));
+                appointment.setStatus(Status.getById(resultSet.getInt(STATUS)));
+                appointment.setComplaints(resultSet.getString(COMPLAINTS));
+                appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
+                appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                Integer patientId = resultSet.getInt(PATIENT_ID);
                 if (!resultSet.wasNull()) {
                     Patient patient = new Patient();
                     patient.setId(patientId);
@@ -405,53 +351,41 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 }
                 appointment.setDoctor(doctor);
             }
+            logger.debug(SUCCESSFUL_READING_OF_APPOINTMENT);
             return appointment;
         } catch (SQLException e) {
             throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-                resultSetTimetable.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
         }
     }
 
     @Override
     public List<Appointment> readByTimeAndSpecialization(Date date, String specialization) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(READ_SPECIALIZATION_BY_NAME);
-            statement.setString(1, specialization);
-            resultSet = statement.executeQuery();
+        try (PreparedStatement statementSpecialization = connection.prepareStatement(READ_SPECIALIZATION_BY_NAME);
+             PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENTS_BY_TIME_AND_SPECIALIZATION)) {
+            statementSpecialization.setString(1, specialization);
+            ResultSet resultSet = statementSpecialization.executeQuery();
 
-            Integer specializationId = null;
+            int specializationId;
             List<Appointment> appointments = new ArrayList<>();
             if (resultSet.next()) {
-                specializationId = resultSet.getInt("id");
+                specializationId = resultSet.getInt(ID);
 
-                statement = connection.prepareStatement(READ_APPOINTMENTS_BY_TIME_AND_SPECIALIZATION);
                 statement.setInt(1, specializationId);
                 statement.setTimestamp(2, new Timestamp(date.getTime()));
                 statement.setTimestamp(3, new Timestamp(date.getTime() + TimeUnit.DAYS.toMillis(1)));
                 resultSet = statement.executeQuery();
-                Appointment appointment = null;
+                Appointment appointment;
                 while (resultSet.next()) {
                     appointment = new Appointment();
-                    appointment.setId(resultSet.getInt("id"));
-                    appointment.setTime(resultSet.getTimestamp("time"));
-                    appointment.setApproved(resultSet.getBoolean("approved"));
-                    appointment.setStatus(Status.getById(resultSet.getInt("status")));
-                    appointment.setComplaints(resultSet.getString("complaints"));
-                    appointment.setMedicalReport(resultSet.getString("medical_report"));
-                    appointment.setRecommendation(resultSet.getString("recommendation"));
-                    Integer patientId = resultSet.getInt("patient_id");
-                    Integer doctorId = resultSet.getInt("doctor_id");
+                    appointment.setId(resultSet.getInt(ID));
+                    appointment.setTime(resultSet.getTimestamp(TIME));
+                    appointment.setApproved(resultSet.getBoolean(APPROVED));
+                    appointment.setStatus(Status.getById(resultSet.getInt(STATUS)));
+                    appointment.setComplaints(resultSet.getString(COMPLAINTS));
+                    appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
+                    appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                    int patientId = resultSet.getInt(PATIENT_ID);
+                    Integer doctorId = resultSet.getInt(DOCTOR_ID);
                     if (!resultSet.wasNull()) {
                         Doctor doctor = new Doctor();
                         doctor.setId(doctorId);
@@ -465,54 +399,37 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             return appointments;
         } catch (SQLException e) {
             throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
         }
     }
 
 
     public List<Appointment> readByDateAndStatusAndDoctor(Date date, String status, Integer doctorId) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(READ_APPOINTMENTS_BY_TIME_AND_STATUS_AND_DOCTOR);
-            Integer statusId;
-            //TODO move
-            if (status.equals("Не был")) {
-                statusId = Status.MISSED.getId();
-            } else {
-                statusId = Status.WAS.getId();
-            }
+        try (PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENTS_BY_TIME_AND_STATUS_AND_DOCTOR)) {
+            Integer statusId = Status.getEnum(status).equals(Status.MISSED) ? Status.MISSED.getId() : Status.WAS.getId();
+
             statement.setInt(1, statusId);
             statement.setTimestamp(2, new Timestamp(date.getTime()));
             statement.setTimestamp(3, new Timestamp(date.getTime() + TimeUnit.DAYS.toMillis(1)));
             statement.setInt(4, doctorId);
-            resultSet = statement.executeQuery();
-            Appointment appointment = null;
+            ResultSet resultSet = statement.executeQuery();
+            Appointment appointment;
             List<Appointment> appointments = new ArrayList<>();
             while (resultSet.next()) {
                 appointment = new Appointment();
-                appointment.setId(resultSet.getInt("id"));
-                appointment.setTime(resultSet.getTimestamp("time"));
-                appointment.setApproved(resultSet.getBoolean("approved"));
+                appointment.setId(resultSet.getInt(ID));
+                appointment.setTime(resultSet.getTimestamp(TIME));
+                appointment.setApproved(resultSet.getBoolean(APPROVED));
                 appointment.setStatus(Status.getById(statusId));
-                appointment.setComplaints(resultSet.getString("complaints"));
-                appointment.setMedicalReport(resultSet.getString("medical_report"));
-                appointment.setRecommendation(resultSet.getString("recommendation"));
-                Integer patientId = resultSet.getInt("patient_id");
+                appointment.setComplaints(resultSet.getString(COMPLAINTS));
+                appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
+                appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                Integer patientId = resultSet.getInt(PATIENT_ID);
                 if (!resultSet.wasNull()) {
                     Patient patient = new Patient();
                     patient.setId(patientId);
                     appointment.setPatient(patient);
                 }
-                doctorId = resultSet.getInt("doctor_id");
+                doctorId = resultSet.getInt(DOCTOR_ID);
                 if (!resultSet.wasNull()) {
                     Doctor doctor = new Doctor();
                     doctor.setId(doctorId);
@@ -520,54 +437,40 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 }
                 appointments.add(appointment);
             }
+            logger.debug(SUCCESSFUL_READING_OF_APPOINTMENTS);
             return appointments;
         } catch (SQLException e) {
             throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
         }
     }
 
     @Override
     public List<Appointment> readByDateAndStatus(Date date, String status) throws PersistentException {
-        try (PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENTS_BY_TIME_AND_STATUS);
-        ) {
-            Integer statusId;
+        try (PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENTS_BY_TIME_AND_STATUS)) {
+            Integer statusId = Status.getEnum(status).equals(Status.MISSED) ? Status.MISSED.getId() : Status.WAS.getId();
             //TODO move
-            if (status.equals("Не был")) {
-                statusId = Status.MISSED.getId();
-            } else {
-                statusId = Status.WAS.getId();
-            }
             statement.setInt(1, statusId);
             statement.setTimestamp(2, new Timestamp(date.getTime()));
             statement.setTimestamp(3, new Timestamp(date.getTime() + TimeUnit.DAYS.toMillis(1)));
             ResultSet resultSet = statement.executeQuery();
-            Appointment appointment = null;
+            Appointment appointment;
             List<Appointment> appointments = new ArrayList<>();
             while (resultSet.next()) {
                 appointment = new Appointment();
-                appointment.setId(resultSet.getInt("id"));
-                appointment.setTime(resultSet.getTimestamp("time"));
-                appointment.setApproved(resultSet.getBoolean("approved"));
+                appointment.setId(resultSet.getInt(ID));
+                appointment.setTime(resultSet.getTimestamp(TIME));
+                appointment.setApproved(resultSet.getBoolean(APPROVED));
                 appointment.setStatus(Status.getById(statusId));
-                appointment.setComplaints(resultSet.getString("complaints"));
-                appointment.setMedicalReport(resultSet.getString("medical_report"));
-                appointment.setRecommendation(resultSet.getString("recommendation"));
-                Integer patientId = resultSet.getInt("patient_id");
+                appointment.setComplaints(resultSet.getString(COMPLAINTS));
+                appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
+                appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                Integer patientId = resultSet.getInt(PATIENT_ID);
                 if (!resultSet.wasNull()) {
                     Patient patient = new Patient();
                     patient.setId(patientId);
                     appointment.setPatient(patient);
                 }
-                Integer doctorId = resultSet.getInt("doctor_id");
+                Integer doctorId = resultSet.getInt(DOCTOR_ID);
                 if (!resultSet.wasNull()) {
                     Doctor doctor = new Doctor();
                     doctor.setId(doctorId);
@@ -575,6 +478,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 }
                 appointments.add(appointment);
             }
+            logger.debug(SUCCESSFUL_READING_OF_APPOINTMENTS);
             return appointments;
         } catch (SQLException e) {
             throw new PersistentException("Appointments were not found", e);
@@ -583,43 +487,31 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
 
     @Override
     public Appointment readByPatientAndDisease(Integer patientId, String diseaseName) throws PersistentException {
-        PreparedStatement statement = null;
-        ResultSet resultSetDisease = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(READ_DISEASE_BY_NAME);
-            statement.setString(1, diseaseName);
-            resultSetDisease = statement.executeQuery();
+        try (PreparedStatement statementDisease = connection.prepareStatement(READ_DISEASE_BY_NAME);
+             PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENT_BY_PATIENT_AND_DISEASE)
+        ) {
+            statementDisease.setString(1, diseaseName);
+            ResultSet resultSetDisease = statementDisease.executeQuery();
 
-            Integer diseaseId = null;
+            int diseaseId;
             Appointment appointment = null;
             if (resultSetDisease.next()) {
-                diseaseId = resultSetDisease.getInt("id");
-                statement = connection.prepareStatement(READ_APPOINTMENT_BY_PATIENT_AND_DISEASE);
+                diseaseId = resultSetDisease.getInt(ID);
                 statement.setInt(1, patientId);
                 statement.setInt(2, diseaseId);
-                resultSet = statement.executeQuery();
+                ResultSet resultSet = statement.executeQuery();
                 if (resultSet.next()) {
                     appointment = new Appointment();
-                    appointment.setTime(resultSet.getTimestamp("time"));
-                    appointment.setComplaints(resultSet.getString("complaints"));
-                    appointment.setMedicalReport(resultSet.getString("medical_report"));
-                    appointment.setRecommendation(resultSet.getString("recommendation"));
+                    appointment.setTime(resultSet.getTimestamp(TIME));
+                    appointment.setComplaints(resultSet.getString(COMPLAINTS));
+                    appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
+                    appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
                 }
             }
+            logger.debug(SUCCESSFUL_READING_OF_APPOINTMENT);
             return appointment;
         } catch (SQLException e) {
             throw new PersistentException(e);
-        } finally {
-            try {
-                resultSet.close();
-                resultSetDisease.close();
-            } catch (SQLException | NullPointerException e) {
-            }
-            try {
-                statement.close();
-            } catch (SQLException | NullPointerException e) {
-            }
         }
     }
 }

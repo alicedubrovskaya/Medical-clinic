@@ -5,7 +5,6 @@ import domain.Vacation;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import service.impl.DoctorServiceImpl;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,6 +15,7 @@ import java.util.List;
 
 public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
     private static final Logger logger = LogManager.getLogger(VacationDaoImpl.class);
+    private static final String START = "start";
 
     private static final String CREATE_VACATION = "INSERT INTO `vacation`(`doctor_id`, `start`, `end`) VALUES (?,?,?)";
 
@@ -32,9 +32,16 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
 
     private static final String DELETE_VACATION = "DELETE FROM `vacation` WHERE `doctor_id` = ?";
 
+    /**
+     * Creates vacation in database
+     *
+     * @param vacation that should be created
+     * @return generated id
+     * @throws PersistentException if database error occurs
+     */
     @Override
     public Integer create(Vacation vacation) throws PersistentException {
-        try (PreparedStatement statement = connection.prepareStatement(CREATE_VACATION);
+        try (PreparedStatement statement = connection.prepareStatement(CREATE_VACATION)
         ) {
             statement.setInt(1, vacation.getId());
             statement.setDate(2, new java.sql.Date(vacation.getStart().getTime()));
@@ -47,6 +54,13 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
         }
     }
 
+    /**
+     * Reads vacation from database by id
+     *
+     * @param id - unique identifier
+     * @return found vacation
+     * @throws PersistentException if database error occurs
+     */
     @Override
     public Vacation read(Integer id) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_VACATION)) {
@@ -56,7 +70,7 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
             if (resultSet.next()) {
                 vacation = new Vacation();
                 vacation.setId(id);
-                vacation.setStart(resultSet.getDate("start"));
+                vacation.setStart(resultSet.getDate(START));
                 vacation.setEnd(resultSet.getDate("end"));
             }
             logger.debug("Vacation was read");
@@ -66,6 +80,12 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
         }
     }
 
+    /**
+     * Updates vacation in database
+     *
+     * @param vacation that should be updated
+     * @throws PersistentException if database error occurs
+     */
     @Override
     public void update(Vacation vacation) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_VACATION)) {
@@ -80,9 +100,15 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
         }
     }
 
+    /**
+     * Deletes vacation by id
+     *
+     * @param id of needed to be deleted vacation
+     * @throws PersistentException if database error occurs
+     */
     @Override
     public void delete(Integer id) throws PersistentException {
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_VACATION);
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_VACATION)
         ) {
             statement.setInt(1, id);
             statement.executeUpdate();
@@ -92,16 +118,22 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
         }
     }
 
+    /**
+     * Reads all vacations from database
+     *
+     * @return list of found vacations
+     * @throws PersistentException if database error occurs
+     */
     @Override
     public List<Vacation> read() throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_VACATIONS)) {
             List<Vacation> vacations = new ArrayList<>();
             ResultSet resultSet = statement.executeQuery();
-            Vacation vacation = null;
+            Vacation vacation;
             while (resultSet.next()) {
                 vacation = new Vacation();
                 vacation.setId(resultSet.getInt("doctor_id"));
-                vacation.setStart(resultSet.getDate("start"));
+                vacation.setStart(resultSet.getDate(START));
                 vacation.setEnd(resultSet.getDate("end"));
                 vacations.add(vacation);
             }
@@ -112,17 +144,24 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
         }
     }
 
+    /**
+     * Reads vacation by date
+     *
+     * @param date of vacations
+     * @return list of found vacations
+     * @throws PersistentException if database error occurs
+     */
     @Override
     public List<Vacation> readByTime(Date date) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_VACATION_BY_TIME)) {
             List<Vacation> vacations = new ArrayList<>();
             statement.setDate(1, new java.sql.Date(date.getTime()));
             ResultSet resultSet = statement.executeQuery();
-            Vacation vacation = null;
+            Vacation vacation;
             while (resultSet.next()) {
                 vacation = new Vacation();
                 vacation.setId(resultSet.getInt("doctor_id"));
-                vacation.setStart(resultSet.getDate("start"));
+                vacation.setStart(resultSet.getDate(START));
                 vacation.setEnd(resultSet.getDate("end"));
                 vacations.add(vacation);
             }
@@ -133,6 +172,13 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
         }
     }
 
+    /**
+     * Reads vacation by specified date
+     *
+     * @param date of vacation
+     * @return found vacation
+     * @throws PersistentException if database error occurs
+     */
     @Override
     public Vacation readBySpecifiedDate(Date date) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_VACATION_FOR_ALL)) {

@@ -21,7 +21,6 @@ final public class ConnectionPool {
 
     private static final String PROPERTY_PATH = "database.properties";
 
-
     private static final ReentrantLock lock = new ReentrantLock();
     private String url;
     private String user;

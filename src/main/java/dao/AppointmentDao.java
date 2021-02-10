@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface AppointmentDao extends Dao<Appointment> {
-    List<Appointment> createAppointments(Date date, Doctor doctor) throws PersistentException;
+    List<Appointment> createAppointments(Date date, Doctor doctor);
 
     List<Appointment> readAll() throws PersistentException;
 
