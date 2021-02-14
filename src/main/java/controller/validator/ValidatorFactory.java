@@ -1,4 +1,4 @@
-package validator;
+package controller.validator;
 
 import domain.*;
 

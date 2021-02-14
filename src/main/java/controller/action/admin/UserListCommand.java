@@ -45,7 +45,7 @@ public class UserListCommand extends AdministratorCommand {
             request.setAttribute(AttributeType.NUMBER_OF_PAGES.getValue(), noOfPages);
             request.setAttribute(AttributeType.CURRENT_PAGE.getValue(), page);
         } catch (ServicePersistentException e) {
-            logger.error("Service can not perform operation with retrieving users");
+            logger.error(e);
         }
         return null;
     }

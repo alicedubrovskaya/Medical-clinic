@@ -12,7 +12,7 @@ import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.AppointmentService;
-import validator.DateValidator;
+import controller.validator.DateValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

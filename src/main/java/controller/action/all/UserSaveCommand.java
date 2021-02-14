@@ -10,18 +10,23 @@ import exception.IncorrectFormDataException;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import service.ResourceBundleUtil;
 import service.UserService;
 import service.exception.ServicePersistentException;
-import validator.Validator;
+import controller.validator.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 public class UserSaveCommand extends Command {
     private static final Logger logger = LogManager.getLogger(UserSaveCommand.class);
     private static final String HTML = ".html";
+    private static final String USER_WITH_SUCH_LOGIN_ALREADY_EXISTS = "message.user.exists";
+    private static final String SUCCESSFUL_PASSWORD_CHANGING = "message.user.password.changed";
+
 
     @Override
     public Set<Role> getAllowRoles() {
@@ -31,6 +36,8 @@ public class UserSaveCommand extends Command {
     @Override
     public Command.Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         Command.Forward forward = new Forward(CommandType.MAIN.getCommand() + HTML);
+        ResourceBundle rb = ResourceBundleUtil.getResourceBundle(request);
+
         try {
             Validator<User> validator = validatorFactory.createUserValidator();
             User user = validator.validate(request);
@@ -52,7 +59,7 @@ public class UserSaveCommand extends Command {
                 } else {
                     forward = new Command.Forward(CommandType.USER_EDIT.getCommand() + HTML);
                     forward.getAttributes().put(AttributeType.REGISTRATION.getValue(), true);
-                    forward.getAttributes().put("message", "Пользователь с данным логином уже существует");
+                    forward.getAttributes().put(AttributeType.MESSAGE.getValue(), rb.getString(USER_WITH_SUCH_LOGIN_ALREADY_EXISTS));
                 }
             } else {
                 String oldPassword = request.getParameter(ParameterType.PASSWORD_OLD.getValue());
@@ -60,7 +67,7 @@ public class UserSaveCommand extends Command {
                 service.save(user);
                 forward = new Command.Forward(CommandType.USER_EDIT.getCommand() + HTML);
                 forward.getAttributes().put(AttributeType.USER.getValue(), user);
-                forward.getAttributes().put("message", "Пароль успешно изменен");
+                forward.getAttributes().put(AttributeType.MESSAGE.getValue(), rb.getString(SUCCESSFUL_PASSWORD_CHANGING));
             }
         } catch (IncorrectFormDataException | ServicePersistentException e) {
             logger.error(e);

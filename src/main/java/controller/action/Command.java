@@ -3,7 +3,7 @@ package controller.action;
 import domain.enumeration.Role;
 import exception.PersistentException;
 import service.ServiceFactory;
-import validator.ValidatorFactory;
+import controller.validator.ValidatorFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

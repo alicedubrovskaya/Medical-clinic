@@ -1,8 +1,8 @@
-package validator;
+package controller.validator;
 
+import controller.enumeration.ParameterType;
 import domain.User;
 import domain.enumeration.Role;
-import domain.enumeration.Shift;
 import exception.IncorrectFormDataException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,39 +11,39 @@ public class UserValidator implements Validator<User> {
     @Override
     public User validate(HttpServletRequest request) throws IncorrectFormDataException {
         User user = new User();
-        String parameter = request.getParameter("id");
+        String parameter = request.getParameter(ParameterType.ID.getValue());
         if (parameter != null) {
             try {
                 user.setId(Integer.parseInt(parameter));
             } catch (NumberFormatException e) {
-                throw new IncorrectFormDataException("id", parameter);
+                throw new IncorrectFormDataException(ParameterType.ID.getValue(), parameter);
             }
         }
 
-        parameter = request.getParameter("login");
+        parameter = request.getParameter(ParameterType.LOGIN.getValue());
         if (parameter != null) {
             try {
                 user.setLogin(parameter);
             } catch (NumberFormatException e) {
-                throw new IncorrectFormDataException("login", parameter);
+                throw new IncorrectFormDataException(ParameterType.LOGIN.getValue(), parameter);
             }
         }
 
-        parameter = request.getParameter("password");
+        parameter = request.getParameter(ParameterType.PASSWORD.getValue());
         if (parameter != null) {
             try {
                 user.setPassword(parameter);
             } catch (NumberFormatException e) {
-                throw new IncorrectFormDataException("password", parameter);
+                throw new IncorrectFormDataException(ParameterType.PASSWORD.getValue(), parameter);
             }
         }
 
-        parameter = request.getParameter("role");
+        parameter = request.getParameter(ParameterType.ROLE.getValue());
         if (parameter != null) {
             try {
                 user.setRole(Role.getById(Integer.parseInt(parameter)));
             } catch (NumberFormatException e) {
-                throw new IncorrectFormDataException("role", parameter);
+                throw new IncorrectFormDataException(ParameterType.ROLE.getValue(), parameter);
             }
         }
 

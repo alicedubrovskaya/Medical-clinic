@@ -1,5 +1,6 @@
-package validator;
+package controller.validator;
 
+import controller.enumeration.ParameterType;
 import domain.Patient;
 import exception.IncorrectFormDataException;
 
@@ -9,57 +10,57 @@ public class PatientValidator implements Validator<Patient> {
     @Override
     public Patient validate(HttpServletRequest request) throws IncorrectFormDataException {
         Patient patient = new Patient();
-        String parameter = request.getParameter("id");
+        String parameter = request.getParameter(ParameterType.ID.getValue());
         if (parameter != null) {
             try {
                 patient.setId(Integer.parseInt(parameter));
             } catch (NumberFormatException e) {
-                throw new IncorrectFormDataException("id", parameter);
+                throw new IncorrectFormDataException(ParameterType.ID.getValue(), parameter);
             }
         }
 
-        parameter = request.getParameter("name");
+        parameter = request.getParameter(ParameterType.NAME.getValue());
         if (parameter != null) {
             try {
                 patient.setName(parameter);
             } catch (NumberFormatException e) {
-                throw new IncorrectFormDataException("name", parameter);
+                throw new IncorrectFormDataException(ParameterType.NAME.getValue(), parameter);
             }
         }
 
-        parameter = request.getParameter("surname");
+        parameter = request.getParameter(ParameterType.SURNAME.getValue());
         if (parameter != null) {
             try {
                 patient.setSurname(parameter);
             } catch (NumberFormatException e) {
-                throw new IncorrectFormDataException("surname", parameter);
+                throw new IncorrectFormDataException(ParameterType.SURNAME.getValue(), parameter);
             }
         }
 
-        parameter = request.getParameter("email");
+        parameter = request.getParameter(ParameterType.EMAIL.getValue());
         if (parameter != null) {
             try {
                 patient.setEmail(parameter);
             } catch (NumberFormatException e) {
-                throw new IncorrectFormDataException("email", parameter);
+                throw new IncorrectFormDataException(ParameterType.EMAIL.getValue(), parameter);
             }
         }
 
-        parameter = request.getParameter("phoneNumber");
+        parameter = request.getParameter(ParameterType.PHONE_NUMBER.getValue());
         if (parameter != null) {
             try {
                 patient.setPhoneNumber(parameter);
             } catch (NumberFormatException e) {
-                throw new IncorrectFormDataException("phoneNumber", parameter);
+                throw new IncorrectFormDataException(ParameterType.PHONE_NUMBER.getValue(), parameter);
             }
         }
 
-        parameter = request.getParameter("address");
+        parameter = request.getParameter(ParameterType.ADDRESS.getValue());
         if (parameter != null) {
             try {
                 patient.setAddress(parameter);
             } catch (NumberFormatException e) {
-                throw new IncorrectFormDataException("address", parameter);
+                throw new IncorrectFormDataException(ParameterType.ADDRESS.getValue(), parameter);
             }
         }
         return patient;

@@ -1,11 +1,15 @@
 package controller.action.all;
 
 import controller.action.Command;
+import controller.enumeration.AttributeType;
+import controller.enumeration.CommandType;
+import controller.enumeration.ParameterType;
 import domain.User;
 import domain.enumeration.Role;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import service.ResourceBundleUtil;
 import service.UserService;
 import service.exception.ServicePersistentException;
 
@@ -19,6 +23,8 @@ public class LoginCommand extends Command {
 
     private static final Logger logger = LogManager.getLogger(LoginCommand.class);
     private static final Map<Role, List<MenuItem>> menu = new ConcurrentHashMap<>();
+    private static final String HTML = ".html";
+    private static final String USER_UNRECOGNIZED = "user.unrecognized";
 
     static {
         menu.put(Role.ADMINISTRATOR, new ArrayList<>(Arrays.asList(
@@ -62,20 +68,22 @@ public class LoginCommand extends Command {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
-        String login = request.getParameter("login");
-        String password = request.getParameter("password");
+        ResourceBundle rb = ResourceBundleUtil.getResourceBundle(request);
+
+        String login = request.getParameter(ParameterType.LOGIN.getValue());
+        String password = request.getParameter(ParameterType.PASSWORD.getValue());
         if (login != null & password != null) {
             UserService service = serviceFactory.getUserService();
             try {
                 User user = service.findByLoginAndPassword(login, password);
                 HttpSession session = request.getSession();
-                session.setAttribute("authorizedUser", user);
-                session.setAttribute("menu", menu.get(user.getRole()));
-                session.setAttribute("language", "en");
-                return new Forward("/main.html");
+                session.setAttribute(AttributeType.USER_AUTHORIZED.getValue(), user);
+                session.setAttribute(AttributeType.MENU.getValue(), menu.get(user.getRole()));
+                session.setAttribute(AttributeType.LANGUAGE.getValue(), "en");
+                return new Forward(CommandType.MAIN.getCommand() + HTML);
             } catch (ServicePersistentException e) {
                 logger.error(e);
-                request.setAttribute("message", "Логин пользователя или пароль не опознанны");
+                request.setAttribute(AttributeType.MESSAGE.getValue(), rb.getString(USER_UNRECOGNIZED));
             }
         }
         return null;

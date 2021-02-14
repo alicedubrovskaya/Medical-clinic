@@ -1,6 +1,9 @@
 package controller.enumeration;
 
 public enum AttributeType {
+    MESSAGE("message"),
+    MENU("menu"),
+
     ID("id"),
     USER("user"),
     PATIENT("patient"),
@@ -17,6 +20,7 @@ public enum AttributeType {
     APPOINTMENT("appointment"),
     APPOINTMENTS("appointments"),
     APPOINTMENT_ID("appointmentId"),
+    PATIENT_ID("patientId"),
     STATUSES("statuses"),
     DISEASES("diseases"),
     SPECIALIZATIONS("specializations"),
