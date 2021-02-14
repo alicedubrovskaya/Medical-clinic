@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-abstract public class Command {
+public abstract class Command {
     private Set<Role> allowRoles = new HashSet<>();
     private String name;
 
@@ -39,7 +39,7 @@ abstract public class Command {
         this.name = name;
     }
 
-    abstract public Command.Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException;
+    public abstract Command.Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException;
 
     public static class Forward {
         private String forward;

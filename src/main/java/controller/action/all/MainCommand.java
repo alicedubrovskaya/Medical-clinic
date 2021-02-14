@@ -1,5 +1,6 @@
-package controller.action;
+package controller.action.all;
 
+import controller.action.Command;
 import domain.enumeration.Role;
 import exception.PersistentException;
 

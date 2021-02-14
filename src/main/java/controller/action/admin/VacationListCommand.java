@@ -1,5 +1,6 @@
 package controller.action.admin;
 
+import controller.enumeration.AttributeType;
 import domain.Vacation;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +20,7 @@ public class VacationListCommand extends AdministratorCommand {
         VacationService service = serviceFactory.getVacationService();
         try {
             List<Vacation> vacations = service.findAll();
-            request.setAttribute("vacations", vacations);
+            request.setAttribute(AttributeType.VACATIONS.getValue(), vacations);
         } catch (ServicePersistentException e) {
             logger.info(e);
         }

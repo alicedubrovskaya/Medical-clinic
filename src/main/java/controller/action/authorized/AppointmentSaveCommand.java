@@ -1,5 +1,6 @@
 package controller.action.authorized;
 
+import controller.enumeration.CommandType;
 import domain.Appointment;
 import domain.Patient;
 import domain.User;
@@ -19,10 +20,11 @@ import javax.servlet.http.HttpSession;
 
 public class AppointmentSaveCommand extends AuthorizedUserCommand {
     private static final Logger logger = LogManager.getLogger(AppointmentSaveCommand.class);
+    private static final String HTML = ".html";
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
-        Forward forward = new Forward("/appointment/list.html");
+        Forward forward = new Forward(CommandType.APPOINTMENT_LIST.getCommand()+"/appointment/list.html");
         HttpSession session = request.getSession(false);
         User authorizedUser = (User) session.getAttribute("authorizedUser");
 

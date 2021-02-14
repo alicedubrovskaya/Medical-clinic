@@ -1,5 +1,6 @@
 package controller.action.admin;
 
+import controller.enumeration.AttributeType;
 import domain.Doctor;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
@@ -19,9 +20,9 @@ public class DoctorListCommand extends AdministratorCommand {
         DoctorService service = serviceFactory.getDoctorService();
         try {
             List<Doctor> doctors = service.findAll();
-            request.setAttribute("doctors", doctors);
+            request.setAttribute(AttributeType.DOCTORS.getValue(), doctors);
         } catch (ServicePersistentException e) {
-            logger.info("Doctors were not found");
+            logger.info(e);
         }
         return null;
     }

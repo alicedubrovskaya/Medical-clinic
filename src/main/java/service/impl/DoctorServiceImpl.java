@@ -188,7 +188,7 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
             } catch (PersistentException ex) {
                 logger.warn("Transaction can not be rollbacked: {}", ex.getMessage());
             }
-            throw new ServicePersistentException(e);
+            throw new ServicePersistentException("Doctor wasn't deleted");
         }
     }
 

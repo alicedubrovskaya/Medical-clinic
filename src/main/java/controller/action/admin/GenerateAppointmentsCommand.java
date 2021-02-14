@@ -1,7 +1,7 @@
 package controller.action.admin;
 
 import controller.action.Command;
-import controller.action.admin.AdministratorCommand;
+import controller.enumeration.CommandType;
 import exception.IncorrectFormDataException;
 import exception.PersistentException;
 import service.AppointmentService;
@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 public class GenerateAppointmentsCommand extends AdministratorCommand {
+    private static final String HTML = ".html";
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
@@ -28,7 +29,7 @@ public class GenerateAppointmentsCommand extends AdministratorCommand {
         }
 
         if (calendar != null && countOfDays != 0) {
-            forward = new Command.Forward("/appointment/list.html");
+            forward = new Command.Forward(CommandType.APPOINTMENT_LIST.getCommand() + HTML);
             service.createAppointmentsForDoctors(calendar, countOfDays);
             forward.getAttributes().put("message", "Расписание врачей успешно сгенерировано");
         } else {

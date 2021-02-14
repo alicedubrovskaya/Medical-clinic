@@ -4,7 +4,9 @@ import controller.action.*;
 import controller.action.admin.*;
 import controller.action.authorized.*;
 import controller.action.doctor.AppointmentEditCommand;
+import controller.enumeration.CommandType;
 import controller.action.patient.PatientDeleteCommand;
+import controller.action.all.*;
 
 import java.util.HashMap;
 import java.util.Map;

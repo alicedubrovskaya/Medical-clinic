@@ -1,7 +1,7 @@
 package controller;
 
 import controller.action.Command;
-import controller.action.MainCommand;
+import controller.action.all.MainCommand;
 import domain.User;
 import domain.enumeration.Role;
 

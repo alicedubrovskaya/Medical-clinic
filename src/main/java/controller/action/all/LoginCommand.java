@@ -1,5 +1,6 @@
-package controller.action;
+package controller.action.all;
 
+import controller.action.Command;
 import domain.User;
 import domain.enumeration.Role;
 import exception.PersistentException;
@@ -7,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.UserService;
 import service.exception.ServicePersistentException;
-import service.impl.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,8 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LoginCommand extends Command {
 
-    private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
-    private static Map<Role, List<MenuItem>> menu = new ConcurrentHashMap<>();
+    private static final Logger logger = LogManager.getLogger(LoginCommand.class);
+    private static final Map<Role, List<MenuItem>> menu = new ConcurrentHashMap<>();
 
     static {
         menu.put(Role.ADMINISTRATOR, new ArrayList<>(Arrays.asList(
@@ -26,12 +26,8 @@ public class LoginCommand extends Command {
                         new MenuItem("/user/edit.html?registration=register", "Регистрация врача", "Doctor registration"),
                         new MenuItem("/doctor/list.html", "Список врачей", "Doctors list")
                 )),
-                new MenuItem("Пациенты", "Patients", Arrays.asList(
-                        new MenuItem("/patient/list.html", "Список пациентов", "Patient list")
-                )),
-                new MenuItem("Пользователи", "Users", Arrays.asList(
-                        new MenuItem("/user/list.html", "Список пользователей", "Users list")
-                )),
+                new MenuItem("/patient/list.html", "Пациенты", "Patients"),
+                new MenuItem("/user/list.html", "Пользователи", "Users"),
                 new MenuItem("Расписание", "Timetable", Arrays.asList(
                         new MenuItem("/appointment/generate.html", "Генерация расписания", "Timetable generation"),
                         new MenuItem("/appointment/list.html", "Приемы врачей", "Appointments")
@@ -63,7 +59,6 @@ public class LoginCommand extends Command {
     public Set<Role> getAllowRoles() {
         return null;
     }
-
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {

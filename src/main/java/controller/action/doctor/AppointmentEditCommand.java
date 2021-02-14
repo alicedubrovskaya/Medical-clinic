@@ -1,6 +1,9 @@
 package controller.action.doctor;
 
+import controller.enumeration.AttributeType;
+import controller.enumeration.ParameterType;
 import domain.Appointment;
+import domain.enumeration.Status;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,16 +26,15 @@ public class AppointmentEditCommand extends DoctorCommand {
         PatientService patientService = serviceFactory.getPatientService();
 
         try {
-            Integer id = (Integer) request.getAttribute("appointmentId");
+            Integer id = (Integer) request.getAttribute(AttributeType.APPOINTMENT_ID.getValue());
             if (id == null) {
-                id = Integer.parseInt(request.getParameter("appointmentId"));
+                id = Integer.parseInt(request.getParameter(ParameterType.APPOINTMENT_ID.getValue()));
             }
-
 
             Appointment appointment = service.findById(id);
             if (appointment != null) {
-                request.setAttribute("appointment", appointment);
-                request.setAttribute("statuses", Arrays.asList("Был", "Не был"));
+                request.setAttribute(AttributeType.APPOINTMENT.getValue(), appointment);
+                request.setAttribute(AttributeType.STATUSES.getValue(), Arrays.asList(Status.WAS.getName(), Status.MISSED.getName()));
             }
         } catch (NumberFormatException e) {
             logger.error(e);
@@ -40,7 +42,7 @@ public class AppointmentEditCommand extends DoctorCommand {
 
         try {
             List<String> diseases = patientService.findDiseases();
-            request.setAttribute("diseases", diseases);
+            request.setAttribute(AttributeType.DISEASES.getValue(), diseases);
         } catch (ServicePersistentException e) {
             logger.error(e);
         }

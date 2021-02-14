@@ -2,7 +2,7 @@ package controller;
 
 import controller.action.Command;
 import controller.action.CommandManager;
-import controller.action.CommandManagerFactory;
+import controller.action.factory.CommandManagerFactory;
 import dao.database.TransactionFactoryImpl;
 import dao.pool.ConnectionPool;
 import exception.PersistentException;

@@ -1,4 +1,4 @@
-package controller.action.factory;
+package controller.enumeration;
 
 public enum CommandType {
     MAIN("/main"),

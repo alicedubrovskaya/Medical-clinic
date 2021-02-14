@@ -1,5 +1,7 @@
 package controller.action.authorized;
 
+import controller.enumeration.AttributeType;
+import controller.enumeration.ParameterType;
 import domain.Appointment;
 import domain.User;
 import domain.enumeration.Role;
@@ -22,11 +24,11 @@ public class MedicalCardCommand extends AuthorizedUserCommand {
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         AppointmentService appointmentService = serviceFactory.getAppointmentService();
         PatientService patientService = serviceFactory.getPatientService();
-        String parameter = request.getParameter("id");
+        String parameter = request.getParameter(ParameterType.ID.getValue());
         Integer id = null;
         if (parameter == null) {
             HttpSession session = request.getSession(false);
-            User authorizedUser = (User) session.getAttribute("authorizedUser");
+            User authorizedUser = (User) session.getAttribute(AttributeType.USER_AUTHORIZED.getValue());
             if (authorizedUser.getRole().equals(Role.PATIENT)) {
                 id = authorizedUser.getId();
             }
@@ -38,8 +40,8 @@ public class MedicalCardCommand extends AuthorizedUserCommand {
             try {
                 List<Appointment> appointments = appointmentService.findByPatient(id);
                 List<String> diseases = patientService.findDiseasesByPatient(id);
-                request.setAttribute("appointments", appointments);
-                request.setAttribute("diseases", diseases);
+                request.setAttribute(AttributeType.APPOINTMENTS.getValue(), appointments);
+                request.setAttribute(AttributeType.DISEASES.getValue(), diseases);
             } catch (ServicePersistentException e) {
                 logger.error(e);
             }

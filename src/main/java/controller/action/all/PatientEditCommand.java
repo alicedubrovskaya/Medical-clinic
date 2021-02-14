@@ -1,5 +1,8 @@
-package controller.action;
+package controller.action.all;
 
+import controller.action.Command;
+import controller.enumeration.AttributeType;
+import controller.enumeration.ParameterType;
 import domain.Patient;
 import domain.User;
 import domain.enumeration.Role;
@@ -8,7 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.PatientService;
 import service.exception.ServicePersistentException;
-import service.impl.DoctorServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,12 +28,12 @@ public class PatientEditCommand extends Command {
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         HttpSession session = request.getSession(false);
-        User authorizedUser = (User) session.getAttribute("authorizedUser");
+        User authorizedUser = (User) session.getAttribute(AttributeType.USER_AUTHORIZED.getValue());
         try {
-            User user = (User) request.getAttribute("user");
+            User user = (User) request.getAttribute(AttributeType.USER.getValue());
             if (user == null) {
                 Integer id;
-                String parameter = request.getParameter("id");
+                String parameter = request.getParameter(ParameterType.ID.getValue());
                 if (parameter != null) {
                     id = Integer.parseInt(parameter);
                 } else {
@@ -39,9 +41,9 @@ public class PatientEditCommand extends Command {
                 }
                 PatientService service = serviceFactory.getPatientService();
                 Patient patient = service.findById(id);
-                request.setAttribute("patient", patient);
+                request.setAttribute(AttributeType.PATIENT.getValue(), patient);
             } else {
-                request.setAttribute("user", user);
+                request.setAttribute(AttributeType.USER.getValue(), user);
             }
         } catch (NumberFormatException | ServicePersistentException e) {
             logger.error(e);

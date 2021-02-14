@@ -1,5 +1,7 @@
 package controller.action.authorized;
 
+import controller.enumeration.AttributeType;
+import domain.enumeration.Status;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,13 +18,13 @@ public class AppointmentChoiceCommand extends AuthorizedUserCommand {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
-        List<String> statuses = Arrays.asList("Был", "Не был");
-        request.setAttribute("statuses", statuses);
+        List<String> statuses = Arrays.asList(Status.WAS.getName(), Status.MISSED.getName());
+        request.setAttribute(AttributeType.STATUSES.getValue(), statuses);
 
         DoctorService service = serviceFactory.getDoctorService();
         try {
             List<String> specializations = service.findAllSpecializations();
-            request.setAttribute("specializations", specializations);
+            request.setAttribute(AttributeType.SPECIALIZATIONS.getValue(), specializations);
         } catch (ServicePersistentException e) {
             logger.error(e);
         }

@@ -1,5 +1,7 @@
 package controller.action.admin;
 
+import controller.enumeration.AttributeType;
+import controller.enumeration.ParameterType;
 import domain.User;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +21,7 @@ public class UserListCommand extends AdministratorCommand {
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         int page = 1;
         int recordsPerPage = 10;
-        String parameter = request.getParameter("page");
+        String parameter = request.getParameter(ParameterType.PAGE.getValue());
         if (parameter != null) {
             try {
                 page = Integer.parseInt(parameter);
@@ -39,9 +41,9 @@ public class UserListCommand extends AdministratorCommand {
                 noOfRecords = key;
             }
             int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
-            request.setAttribute("users", map.get(noOfRecords));
-            request.setAttribute("noOfPages", noOfPages);
-            request.setAttribute("currentPage", page);
+            request.setAttribute(AttributeType.USERS.getValue(), map.get(noOfRecords));
+            request.setAttribute(AttributeType.NUMBER_OF_PAGES.getValue(), noOfPages);
+            request.setAttribute(AttributeType.CURRENT_PAGE.getValue(), page);
         } catch (ServicePersistentException e) {
             logger.error("Service can not perform operation with retrieving users");
         }

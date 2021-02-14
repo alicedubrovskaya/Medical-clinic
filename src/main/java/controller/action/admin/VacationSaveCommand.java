@@ -1,5 +1,7 @@
 package controller.action.admin;
 
+import controller.enumeration.AttributeType;
+import controller.enumeration.CommandType;
 import domain.Doctor;
 import domain.Vacation;
 import exception.IncorrectFormDataException;
@@ -16,10 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 
 public class VacationSaveCommand extends AdministratorCommand {
     private static final Logger logger = LogManager.getLogger(VacationSaveCommand.class);
+    private static final String HTML = ".html";
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
-        Forward forward = new Forward("/vacation/list.html");
+        Forward forward = new Forward(CommandType.VACATION_LIST.getCommand() + HTML);
         try {
             Validator<Vacation> validator = validatorFactory.createVacationValidator();
             Validator<Doctor> doctorValidator = validatorFactory.createDoctorValidator();
@@ -29,27 +32,22 @@ public class VacationSaveCommand extends AdministratorCommand {
             VacationService vacationService = serviceFactory.getVacationService();
             DoctorService doctorService = serviceFactory.getDoctorService();
 
-            Doctor doctor = null;
-            try {
-                if (vacation.getId() != null) {
-                    doctor = doctorService.findById(vacation.getId());
-                } else {
-                    //TODO can be doctors with the same name and surname
-                    doctor = doctorService.findBySurnameAndName(doctorFromRequest.getSurname(), doctorFromRequest.getName());
-                    vacation.setId(doctor.getId());
-                }
-                if (doctor != null) {
-                    vacation.setDoctor(doctor);
-                    vacationService.save(vacation);
-                    forward.getAttributes().put("id", vacation.getId());
-                    forward.getAttributes().put("message", "Данные об отпуске успешно сохранены");
-                }
-            } catch (ServicePersistentException e) {
-                logger.info("Doctor wasn't find");
+            Doctor doctor;
+            if (vacation.getId() != null) {
+                doctor = doctorService.findById(vacation.getId());
+            } else {
+                //TODO can be doctors with the same name and surname
+                doctor = doctorService.findBySurnameAndName(doctorFromRequest.getSurname(), doctorFromRequest.getName());
+                vacation.setId(doctor.getId());
             }
-        } catch (IncorrectFormDataException e) {
-            logger.warn("Incorrect data was found", e);
-            e.printStackTrace();
+            if (doctor != null) {
+                vacation.setDoctor(doctor);
+                vacationService.save(vacation);
+                forward.getAttributes().put(AttributeType.ID.getValue(), vacation.getId());
+                forward.getAttributes().put("message", "Данные об отпуске успешно сохранены");
+            }
+        } catch (IncorrectFormDataException | ServicePersistentException e) {
+            logger.error(e);
         }
         return forward;
     }

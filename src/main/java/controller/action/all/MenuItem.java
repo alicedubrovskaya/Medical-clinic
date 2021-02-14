@@ -1,4 +1,4 @@
-package controller.action;
+package controller.action.all;
 
 import java.io.Serializable;
 import java.util.ArrayList;

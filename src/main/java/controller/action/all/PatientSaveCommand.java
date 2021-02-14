@@ -1,5 +1,8 @@
-package controller.action;
+package controller.action.all;
 
+import controller.action.Command;
+import controller.enumeration.AttributeType;
+import controller.enumeration.CommandType;
 import domain.Patient;
 import domain.User;
 import domain.enumeration.Role;
@@ -9,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.PatientService;
 import service.exception.ServicePersistentException;
-import service.impl.DoctorServiceImpl;
 import validator.Validator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +20,7 @@ import java.util.Set;
 
 public class PatientSaveCommand extends Command {
     private static final Logger logger = LogManager.getLogger(PatientSaveCommand.class);
+    private static final String HTML = ".html";
 
     @Override
     public Set<Role> getAllowRoles() {
@@ -35,8 +38,8 @@ public class PatientSaveCommand extends Command {
 
             if (patient.getId() != null) {
                 service.save(patient);
-                forward = new Forward("/patient/edit.html");
-                forward.getAttributes().put("id", patient.getId());
+                forward = new Forward(CommandType.PATIENT_EDIT.getCommand() + HTML);
+                forward.getAttributes().put(AttributeType.ID.getValue(), patient.getId());
                 forward.getAttributes().put("message", "Данные пациента успешно обновлены");
             } else {
                 Validator<User> userValidator = validatorFactory.createUserValidator();
@@ -45,8 +48,8 @@ public class PatientSaveCommand extends Command {
                     patient.setLogin(user.getLogin());
                     patient.setPassword(user.getPassword());
                     service.save(patient);
-                    forward = new Forward("/login.html");
-                    forward.getAttributes().put("id", patient.getId());
+                    forward = new Forward(CommandType.LOGIN.getCommand() + HTML);
+                    forward.getAttributes().put(AttributeType.ID.getValue(), patient.getId());
                     forward.getAttributes().put("message", "Данные пациента успешно сохранены");
                 }
             }

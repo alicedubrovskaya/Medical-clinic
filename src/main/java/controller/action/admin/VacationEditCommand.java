@@ -1,5 +1,7 @@
 package controller.action.admin;
 
+import controller.enumeration.AttributeType;
+import controller.enumeration.ParameterType;
 import domain.Vacation;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
@@ -16,19 +18,16 @@ public class VacationEditCommand extends AdministratorCommand {
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
         try {
-            Integer id = (Integer) request.getAttribute("id");
+            Integer id = (Integer) request.getAttribute(AttributeType.ID.getValue());
             if (id == null) {
-                id = Integer.parseInt(request.getParameter("id"));
+                id = Integer.parseInt(request.getParameter(ParameterType.ID.getValue()));
             }
             VacationService service = serviceFactory.getVacationService();
-            try {
-                Vacation vacation = service.findById(id);
-                request.setAttribute("vacation", vacation);
-            } catch (ServicePersistentException e) {
-                logger.error(e);
-            }
-            request.setAttribute("id", id);
-        } catch (NumberFormatException e) {
+            Vacation vacation = service.findById(id);
+            request.setAttribute(AttributeType.VACATION.getValue(), vacation);
+            request.setAttribute(AttributeType.ID.getValue(), id);
+        } catch (NumberFormatException | ServicePersistentException e) {
+            logger.error(e);
         }
         return null;
     }

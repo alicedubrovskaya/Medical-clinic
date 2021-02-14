@@ -1,5 +1,7 @@
 package controller.action.admin;
 
+import controller.enumeration.AttributeType;
+import controller.enumeration.CommandType;
 import domain.Doctor;
 import domain.User;
 import exception.IncorrectFormDataException;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class DoctorSaveCommand extends AdministratorCommand {
     private static final Logger logger = LogManager.getLogger(DoctorSaveCommand.class);
+    private static final String HTML = ".html";
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) throws PersistentException {
@@ -26,32 +29,25 @@ public class DoctorSaveCommand extends AdministratorCommand {
             Doctor doctor = validator.validate(request);
 
             if (doctor.getId() != null) {
-                try {
-                    service.save(doctor);
-                    forward = new Forward("/doctor/list.html");
-                    forward.getAttributes().put("id", doctor.getId());
-                    forward.getAttributes().put("message", "Данные врача успешно обновлены");
-                } catch (ServicePersistentException e) {
-                    logger.info("Doctor with id={} wasn't update", doctor.getId());
-                }
+                service.save(doctor);
+                forward = new Forward(CommandType.DOCTOR_LIST.getCommand() + HTML);
+                forward.getAttributes().put(AttributeType.ID.getValue(), doctor.getId());
+                forward.getAttributes().put("message", "Данные врача успешно обновлены");
             } else {
                 Validator<User> userValidator = validatorFactory.createUserValidator();
                 User user = userValidator.validate(request);
                 if (user != null) {
                     doctor.setLogin(user.getLogin());
                     doctor.setPassword(user.getPassword());
-                    try {
-                        service.save(doctor);
-                        forward = new Forward("/doctor/list.html");
-                        forward.getAttributes().put("id", doctor.getId());
-                        forward.getAttributes().put("message", "Данные врача успешно сохранены");
-                    } catch (ServicePersistentException e) {
-                        logger.info("Doctor wasn't save");
-                    }
+
+                    service.save(doctor);
+                    forward = new Forward(CommandType.DOCTOR_LIST.getCommand() + HTML);
+                    forward.getAttributes().put(AttributeType.ID.getValue(), doctor.getId());
+                    forward.getAttributes().put("message", "Данные врача успешно сохранены");
                 }
             }
-        } catch (IncorrectFormDataException e) {
-            e.printStackTrace();
+        } catch (IncorrectFormDataException | ServicePersistentException e) {
+            logger.error(e);
         }
         return forward;
     }
