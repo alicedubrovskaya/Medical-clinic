@@ -1,4 +1,4 @@
-package controller.action.all;
+package controller.action.user;
 
 import controller.action.Command;
 import domain.enumeration.Role;

@@ -3,6 +3,9 @@ package controller.enumeration;
 public enum AttributeType {
     MESSAGE("message"),
     MENU("menu"),
+    REDIRECTED_DATA("redirectedData"),
+    ACTION("action"),
+    ERROR("error"),
 
     ID("id"),
     USER("user"),

@@ -6,7 +6,7 @@ import controller.action.authorized.*;
 import controller.action.doctor.AppointmentEditCommand;
 import controller.enumeration.CommandType;
 import controller.action.patient.PatientDeleteCommand;
-import controller.action.all.*;
+import controller.action.user.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,10 +49,6 @@ public class CommandFactory {
         commands.put(CommandType.APPOINTMENT_CHOICE, new AppointmentChoiceCommand());
         commands.put(CommandType.APPOINTMENT_MEDICAL_CARD, new MedicalCardCommand());
     }
-
-    //TODO
-//        commands.put(CommandType.ERROR, new )
-
 
     public static CommandFactory getInstance() {
         return instance;

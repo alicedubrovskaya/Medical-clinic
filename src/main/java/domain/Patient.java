@@ -9,7 +9,6 @@ public class Patient extends Person {
     private String email;
     private String phoneNumber;
     private String address;
-    //TODO class Disease (should contain Doctor, Appointment, Name)
     private List<String> diseases = new ArrayList<>();
 
     public static class Builder {
