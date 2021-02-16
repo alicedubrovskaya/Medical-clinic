@@ -24,7 +24,7 @@ public class DoctorServiceImplTest {
 
     @BeforeClass
     public void setUpBeforeClass() throws PersistentException {
-        ServiceFactory serviceFactory = new ServiceFactoryImpl(new TransactionFactoryImpl());
+        ServiceFactory serviceFactory = new ServiceFactoryImpl();
         doctorService = serviceFactory.getDoctorService();
     }
 

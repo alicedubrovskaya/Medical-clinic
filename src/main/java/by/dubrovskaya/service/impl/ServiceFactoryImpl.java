@@ -2,16 +2,25 @@ package by.dubrovskaya.service.impl;
 
 import by.dubrovskaya.dao.Transaction;
 import by.dubrovskaya.dao.TransactionFactory;
+import by.dubrovskaya.dao.impl.TransactionFactoryImpl;
+import by.dubrovskaya.exception.PersistentException;
 import by.dubrovskaya.service.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Service factory.
+ */
 public class ServiceFactoryImpl implements ServiceFactory {
-    private final TransactionFactory factory;
+    private TransactionFactory factory;
     private final Logger logger = LogManager.getLogger(getClass().getName());
 
-    public ServiceFactoryImpl(TransactionFactory factory) {
-        this.factory = factory;
+    public ServiceFactoryImpl() {
+        try {
+            this.factory = TransactionFactoryImpl.getInstance();
+        } catch (PersistentException e) {
+            logger.error(e);
+        }
     }
 
     @Override
@@ -54,6 +63,9 @@ public class ServiceFactoryImpl implements ServiceFactory {
         return (VacationService) service;
     }
 
+    /**
+     * Closes transaction factory
+     */
     @Override
     public void close() {
         factory.close();

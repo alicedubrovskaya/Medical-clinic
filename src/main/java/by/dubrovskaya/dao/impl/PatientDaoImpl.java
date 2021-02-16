@@ -1,6 +1,8 @@
 package by.dubrovskaya.dao.impl;
 
 import by.dubrovskaya.dao.PatientDao;
+import by.dubrovskaya.dao.extractor.Extractor;
+import by.dubrovskaya.dao.extractor.PatientExtractor;
 import by.dubrovskaya.domain.Patient;
 import by.dubrovskaya.exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
@@ -14,13 +16,13 @@ import java.util.List;
 
 public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
     private final Logger logger = LogManager.getLogger(getClass().getName());
+    private final Extractor<Patient> patientExtractor;
 
-    private static final String ID = "id";
+    public PatientDaoImpl() {
+        patientExtractor = new PatientExtractor();
+    }
+
     private static final String NAME = "name";
-    private static final String SURNAME = "surname";
-    private static final String EMAIL = "email";
-    private static final String PHONE_NUMBER = "phone_number";
-    private static final String ADDRESS = "address";
 
     private static final String CREATE_PATIENT =
             "INSERT INTO `patient`(`id`,`name`, `surname`, `email`, `phone_number`, `address`) " +
@@ -30,33 +32,26 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             "INSERT INTO `patient_disease`(`patient_id`,`disease_id`, `appointment_id`) " +
                     "VALUES (?,?,?)";
 
-    private static final String READ_PATIENT = "SELECT `name`, `surname`, `email`, `phone_number`," +
-            " `address` FROM `patient` WHERE `id`=? ";
-
     private static final String READ_PATIENTS = "SELECT `id`, `name`, `surname`, `email`, `phone_number`," +
             " `address` FROM `patient`";
 
+    private static final String READ_PATIENT_BY_ID = READ_PATIENTS + " WHERE `id`=? ";
 
-    private static final String READ_PATIENT_BY_EMAIL =
-            "SELECT `id`, `name`, `surname`, `phone_number`, `address` FROM `patient`" +
-                    " WHERE `email`=?  ";
+    private static final String READ_PATIENT_BY_EMAIL = READ_PATIENTS + " WHERE `email`=?";
+
+    private static final String READ_DISEASES = "SELECT `id`, `name` FROM `disease`";
+
+    private static final String READ_DISEASE_BY_NAME = READ_DISEASES + " WHERE `name`=?";
 
     private static final String READ_DISEASES_BY_PATIENT = "SELECT disease.name FROM disease JOIN patient_disease" +
             " ON disease.id = patient_disease.disease_id WHERE patient_id=?";
 
-    private static final String READ_DISEASE_BY_NAME = "SELECT `id` FROM `disease` " +
-            "WHERE `name`=?";
+    private static final String READ_DISEASE_BY_PATIENT_AND_APPOINTMENT = READ_DISEASES_BY_PATIENT + " AND appointment_id=?";
 
-    private static final String READ_DISEASE_BY_PATIENT_AND_APPOINTMENT = "SELECT disease.name FROM disease JOIN " +
-            "patient_disease pd on disease.id = pd.disease_id WHERE patient_id=? AND appointment_id=?";
-
-    private static final String UPDATE_PATIENT = "UPDATE `patient` " +
-            "SET `name`=?, `surname`=?, `email`=?, `phone_number`=?, `address`=?" +
-            " WHERE `id` = ?";
+    private static final String UPDATE_PATIENT = "UPDATE `patient` SET `name`=?, `surname`=?, `email`=?, `phone_number`=?," +
+            " `address`=? WHERE `id` = ?";
 
     private static final String DELETE_PATIENT = "DELETE FROM `patient` WHERE `id` = ?";
-
-    private static final String READ_DISEASES = "SELECT `id`, `name` FROM `disease`";
 
     /**
      * Creates patient in database
@@ -98,18 +93,9 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             Patient patient;
             List<Patient> patients = new ArrayList<>();
             while (resultSet.next()) {
-                patient = new Patient();
-                patient.setId(resultSet.getInt(ID));
-                patient.setName(resultSet.getString(NAME));
-                patient.setSurname(resultSet.getString(SURNAME));
-                patient.setEmail(resultSet.getString(EMAIL));
-                patient.setPhoneNumber(resultSet.getString(PHONE_NUMBER));
-                patient.setAddress(resultSet.getString(ADDRESS));
-
-                //TODO
+                patient = patientExtractor.extract(resultSet);
                 diseasesStatement.setInt(1, patient.getId());
                 ResultSet diseaseResultSet = diseasesStatement.executeQuery();
-
                 while (diseaseResultSet.next()) {
                     patient.getDiseases().add(diseaseResultSet.getString(NAME));
                 }
@@ -131,21 +117,14 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
      */
     @Override
     public Patient read(Integer id) throws PersistentException {
-        try (PreparedStatement statement = connection.prepareStatement(READ_PATIENT);
+        try (PreparedStatement statement = connection.prepareStatement(READ_PATIENT_BY_ID);
              PreparedStatement diseasesStatement = connection.prepareStatement(READ_DISEASES_BY_PATIENT)
         ) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             Patient patient = null;
             if (resultSet.next()) {
-                patient = new Patient();
-                patient.setId(id);
-                patient.setName(resultSet.getString(NAME));
-                patient.setSurname(resultSet.getString(SURNAME));
-                patient.setEmail(resultSet.getString(EMAIL));
-                patient.setPhoneNumber(resultSet.getString(PHONE_NUMBER));
-                patient.setAddress(resultSet.getString(ADDRESS));
-
+                patient = patientExtractor.extract(resultSet);
                 diseasesStatement.setInt(1, patient.getId());
                 ResultSet diseaseResultSet = diseasesStatement.executeQuery();
 
@@ -216,17 +195,10 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             ResultSet resultSet = statement.executeQuery();
             Patient patient = null;
             if (resultSet.next()) {
-                patient = new Patient();
-                patient.setId(resultSet.getInt(ID));
-                patient.setName(resultSet.getString(NAME));
-                patient.setSurname(resultSet.getString(SURNAME));
-                patient.setEmail(email);
-                patient.setPhoneNumber(resultSet.getString(PHONE_NUMBER));
-                patient.setAddress(resultSet.getString(ADDRESS));
+                patient = patientExtractor.extract(resultSet);
 
                 diseaseStatement.setInt(1, patient.getId());
                 ResultSet diseaseResultSet = diseaseStatement.executeQuery();
-
                 while (diseaseResultSet.next()) {
                     patient.getDiseases().add(diseaseResultSet.getString(NAME));
                 }
@@ -324,7 +296,7 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             ResultSet resultSet = diseaseStatement.executeQuery();
             int diseaseID;
             if (resultSet.next()) {
-                diseaseID = resultSet.getInt(ID);
+                diseaseID = resultSet.getInt("id");
             } else {
                 throw new PersistentException("Disease id not found");
             }

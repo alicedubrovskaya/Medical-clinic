@@ -20,7 +20,7 @@
 </c:choose>
 
 <fmt:setBundle basename="textResources" var="textResources" scope="session"/>
-<fmt:message bundle="${textResources}" key="appointment.history" var="sppointment_history"/>
+<fmt:message bundle="${textResources}" key="appointment.history" var="appointment_history"/>
 <fmt:message bundle="${textResources}" key="appointment" var="appointment_language"/>
 <fmt:message bundle="${textResources}" key="appointment.date" var="appointment_date"/>
 <fmt:message bundle="${textResources}" key="doctor" var="doctor_language"/>
@@ -32,7 +32,7 @@
 <fmt:message bundle="${textResources}" key="patient.diseases" var="patient_diseases"/>
 
 
-<u:html title="${sppointment_history}" message="${message}">
+<u:html title="${appointment_history}" message="${message}">
     <div class="container">
         <div class="row">
             <div class="col-sm-8">
@@ -102,14 +102,16 @@
                 </ul>
             </div>
 
-            <div class="col-4">
-                <label for="patient-disease">${patient_diseases}:</label>
-                <ul class="list-group" id="patient-disease">
-                    <c:forEach var="disease" items="${diseases}" varStatus="status">
-                        <li class="list-group-item">${disease}</li>
-                    </c:forEach>
-                </ul>
-            </div>
+            <c:if test="${not empty diseases}">
+                <div class="col-4">
+                    <label for="patient-disease">${patient_diseases}:</label>
+                    <ul class="list-group" id="patient-disease">
+                        <c:forEach var="disease" items="${diseases}" varStatus="status">
+                            <li class="list-group-item">${disease}</li>
+                        </c:forEach>
+                    </ul>
+                </div>
+            </c:if>
         </div>
     </div>
 </u:html>

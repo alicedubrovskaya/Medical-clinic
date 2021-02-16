@@ -3,14 +3,13 @@ package by.dubrovskaya.controller;
 import by.dubrovskaya.command.Command;
 import by.dubrovskaya.command.CommandManager;
 import by.dubrovskaya.command.factory.CommandManagerFactory;
-import by.dubrovskaya.domain.enumeration.AttributeType;
-import by.dubrovskaya.dao.impl.TransactionFactoryImpl;
 import by.dubrovskaya.dao.pool.ConnectionPool;
+import by.dubrovskaya.domain.enumeration.AttributeType;
 import by.dubrovskaya.exception.PersistentException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import by.dubrovskaya.service.ServiceFactory;
 import by.dubrovskaya.service.impl.ServiceFactoryImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +24,7 @@ public class DispatcherServlet extends HttpServlet {
     private static final String JSP = ".jsp";
 
     public ServiceFactory getFactory() throws PersistentException {
-        return new ServiceFactoryImpl(new TransactionFactoryImpl());
+        return new ServiceFactoryImpl();
     }
 
     @Override
@@ -72,7 +71,7 @@ public class DispatcherServlet extends HttpServlet {
                 } else {
                     jspPage = command.getName() + JSP;
                 }
-                jspPage = "/WEB-INF/jsp"+ jspPage;
+                jspPage = "/WEB-INF/jsp" + jspPage;
                 logger.debug("Request for URI {} is forwarded to JSP {}", requestedUri, jspPage);
                 getServletContext().getRequestDispatcher(jspPage).forward(request, response);
             }

@@ -11,16 +11,19 @@ import java.sql.SQLException;
 
 public class TransactionFactoryImpl implements TransactionFactory {
     private final Connection connection;
+    private static TransactionFactoryImpl instance;
+
     private static final Logger logger = LogManager.getLogger(TransactionFactoryImpl.class);
 
-    public TransactionFactoryImpl() throws PersistentException {
-        try {
-            connection = ConnectionPool.getInstance().getConnection();
-            connection.setAutoCommit(true);
-        } catch (SQLException e) {
-            logger.error("Can't initialize transactions");
-            throw new PersistentException(e);
+    private TransactionFactoryImpl() throws PersistentException {
+        this.connection = ConnectionPool.getInstance().getConnection();
+    }
+
+    public static TransactionFactoryImpl getInstance() throws PersistentException {
+        if (instance == null) {
+            instance = new TransactionFactoryImpl();
         }
+        return instance;
     }
 
     @Override
@@ -33,6 +36,7 @@ public class TransactionFactoryImpl implements TransactionFactory {
         try {
             connection.close();
         } catch (SQLException e) {
+            logger.error("Connection cannot be closed");
         }
     }
 }

@@ -1,8 +1,9 @@
 package by.dubrovskaya.dao.impl;
 
 import by.dubrovskaya.dao.UserDao;
+import by.dubrovskaya.dao.extractor.Extractor;
+import by.dubrovskaya.dao.extractor.UserExtractor;
 import by.dubrovskaya.domain.User;
-import by.dubrovskaya.domain.enumeration.Role;
 import by.dubrovskaya.exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,25 +18,24 @@ import java.util.List;
 import java.util.Map;
 
 public class UserDaoImpl extends BaseDaoImpl implements UserDao {
-    private static final String ID = "id";
-    private static final String ROLE = "role";
-    private static final String LOGIN = "login";
-    private static final String PASSWORD = "password";
+    private final Extractor<User> userExtractor;
+    private final Logger logger = LogManager.getLogger(getClass().getName());
+
+    public UserDaoImpl() {
+        userExtractor = new UserExtractor();
+    }
 
     private static final String CREATE_USER = "INSERT INTO `user` (`login`, `password`, `role`)" +
             " VALUES (?, ?, ?)";
 
-    private static final String READ_USER = "SELECT `login`, `password`, `role` " +
-            "FROM `user` WHERE `id` = ?";
-
     private static final String READ_USERS = "SELECT `id`, `login`, `password`, `role`" +
             "FROM `user`";
 
-    private static final String READ_USER_BY_PASSWORD_AND_LOGIN =
-            "SELECT `id`, `role` FROM `user` WHERE `login` = ? AND `password` = ?";
+    private static final String READ_USER_BY_ID = READ_USERS + " WHERE `id` = ?";
 
-    private static final String READ_USER_BY_LOGIN =
-            "SELECT `id`, `role`, `password` FROM `user` WHERE `login` = ?";
+    private static final String READ_USER_BY_PASSWORD_AND_LOGIN = READ_USERS + " WHERE `login` = ? AND `password` = ?";
+
+    private static final String READ_USER_BY_LOGIN = READ_USERS + " WHERE `login` = ?";
 
     private static final String READ_USERS_LIMIT = "SELECT SQL_CALC_FOUND_ROWS `id`,`login`, `password`, `role` FROM `user` LIMIT ? ,?";
 
@@ -45,8 +45,6 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
             " `role` = ? WHERE `id` = ?";
 
     private static final String DELETE_USER = "DELETE FROM `user` WHERE `id` = ?";
-
-    private final Logger logger = LogManager.getLogger(getClass().getName());
 
     /**
      * Creates user in database
@@ -85,16 +83,12 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public User read(Integer id) throws PersistentException {
-        try (PreparedStatement statement = connection.prepareStatement(READ_USER)) {
+        try (PreparedStatement statement = connection.prepareStatement(READ_USER_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             User user = null;
             if (resultSet.next()) {
-                user = new User();
-                user.setId(id);
-                user.setLogin(resultSet.getString(LOGIN));
-                user.setPassword(resultSet.getString(PASSWORD));
-                user.setRole(Role.getById(resultSet.getInt(ROLE)));
+                user = userExtractor.extract(resultSet);
             }
             logger.debug("User was read");
             return user;
@@ -153,12 +147,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
             User user;
             List<User> users = new ArrayList<>();
             while (resultSet.next()) {
-                user = new User();
-                user.setId(resultSet.getInt("id"));
-                user.setLogin(resultSet.getString(LOGIN));
-                user.setPassword(resultSet.getString(PASSWORD));
-                user.setRole(Role.getById(resultSet.getInt(ROLE)));
-
+                user = userExtractor.extract(resultSet);
                 users.add(user);
             }
             logger.debug("Users were read");
@@ -184,11 +173,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
             ResultSet resultSet = statement.executeQuery();
             User user = null;
             if (resultSet.next()) {
-                user = new User();
-                user.setId(resultSet.getInt(ID));
-                user.setLogin(login);
-                user.setPassword(password);
-                user.setRole(Role.getById(resultSet.getInt(ROLE)));
+                user = userExtractor.extract(resultSet);
             }
             logger.debug("User was read");
             return user;
@@ -211,11 +196,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
             ResultSet resultSet = statement.executeQuery();
             User user = null;
             if (resultSet.next()) {
-                user = new User();
-                user.setId(resultSet.getInt(ID));
-                user.setLogin(login);
-                user.setPassword(resultSet.getString(PASSWORD));
-                user.setRole(Role.getById(resultSet.getInt(ROLE)));
+                user = userExtractor.extract(resultSet);
                 logger.debug("User with login={} was read", login);
             }
             return user;
@@ -243,11 +224,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
             Map<Integer, List<User>> map = new HashMap<>();
             List<User> users = new ArrayList<>();
             while (resultSet.next()) {
-                user = new User();
-                user.setId(resultSet.getInt(ID));
-                user.setLogin(resultSet.getString(LOGIN));
-                user.setPassword(resultSet.getString(PASSWORD));
-                user.setRole(Role.getById(resultSet.getInt(ROLE)));
+                user = userExtractor.extract(resultSet);
                 users.add(user);
             }
             resultSet = statement.executeQuery(SQL_NUMBER_OF_RECORDS);

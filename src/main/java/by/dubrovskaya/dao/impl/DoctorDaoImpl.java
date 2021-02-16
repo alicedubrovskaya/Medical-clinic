@@ -1,8 +1,11 @@
 package by.dubrovskaya.dao.impl;
 
 import by.dubrovskaya.dao.DoctorDao;
+import by.dubrovskaya.dao.extractor.DoctorExtractor;
+import by.dubrovskaya.dao.extractor.Extractor;
+import by.dubrovskaya.dao.extractor.UserExtractor;
 import by.dubrovskaya.domain.Doctor;
-import by.dubrovskaya.domain.enumeration.Shift;
+import by.dubrovskaya.domain.User;
 import by.dubrovskaya.exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,43 +21,40 @@ import java.util.List;
  * Data access object for doctor
  */
 public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
+    private final Extractor<Doctor> doctorExtractor;
     private static final Logger logger = LogManager.getLogger(DoctorDaoImpl.class);
 
+
+    public DoctorDaoImpl() {
+        doctorExtractor = new DoctorExtractor();
+    }
+
     private static final String ID = "id";
-    private static final String NAME = "name";
-    private static final String SURNAME = "surname";
-    private static final String WORKING_SHIFT = "working_shift";
     private static final String SPECIALIZATION_ID = "specialization_id";
     private static final String TYPE = "type";
     private static final String SUCCESSFUL_READING_OF_DOCTORS = "Doctors were read";
     private static final String UNSUCCESSFUL_READING_OF_DOCTORS = "It is impossible to read doctors";
 
-
     private static final String CREATE_DOCTOR = "INSERT INTO `doctor` (`id`, `name`, `surname`," +
             " `specialization_id`, `working_shift`) VALUES (?,?,?,?,?)";
-
-    private static final String READ_DOCTOR_BY_ID = "SELECT `name`, `surname`, `specialization_id`," +
-            "`working_shift` FROM `doctor` WHERE id=?";
 
     private static final String READ_DOCTOR = "SELECT `id`, `name`, `surname`, `specialization_id`," +
             "`working_shift` FROM `doctor`";
 
+    private static final String READ_DOCTOR_BY_ID = READ_DOCTOR + " WHERE id=?";
+
     private static final String READ_DOCTORS_WITHOUT_VACATION_DAY = "SELECT * from `doctor` LEFT JOIN vacation v " +
             "ON doctor.id = v.doctor_id WHERE doctor_id is NULL OR (? NOT BETWEEN `start` AND `end`)";
 
-    private static final String READ_DOCTOR_BY_SURNAME_AND_NAME = "SELECT `id`, `name`, `surname`, " +
-            "`working_shift`, `specialization_id` FROM `doctor` WHERE name=? AND surname=?";
+    private static final String READ_DOCTOR_BY_SURNAME_AND_NAME = READ_DOCTOR + " WHERE name=? AND surname=?";
 
-    private static final String READ_DOCTOR_BY_SPECIALIZATION = "SELECT `id`, `name`, `surname` " +
-            "`working_shift` FROM `doctor` WHERE specialization_id=?";
+    private static final String READ_DOCTOR_BY_SPECIALIZATION = READ_DOCTOR + " WHERE specialization_id=?";
 
-    private static final String READ_SPECIALIZATION_BY_TYPE = "SELECT `id` FROM `specialization` " +
-            "WHERE `type`=?";
+    private static final String READ_SPECIALIZATIONS = "SELECT `id`, `type` FROM specialization";
 
-    private static final String READ_SPECIALIZATION_BY_ID = "SELECT `type` FROM `specialization` " +
-            "WHERE `id`=?";
+    private static final String READ_SPECIALIZATION_BY_TYPE = READ_SPECIALIZATIONS + " WHERE `type`=?";
 
-    private static final String READ_SPECIALIZATIONS = "SELECT `type` FROM specialization";
+    private static final String READ_SPECIALIZATION_BY_ID = READ_SPECIALIZATIONS + " WHERE `id`=?";
 
     private static final String UPDATE_DOCTOR = "UPDATE `doctor` " +
             "SET `name`=?, `surname`=?, `specialization_id`=?, `working_shift`=? WHERE `id` = ?";
@@ -113,12 +113,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             ResultSet resultSet = statement.executeQuery();
             Doctor doctor = null;
             if (resultSet.next()) {
-                doctor = new Doctor();
-                doctor.setId(id);
-                doctor.setName(resultSet.getString(NAME));
-                doctor.setSurname(resultSet.getString(SURNAME));
-                doctor.setWorkingShift(Shift.getById(resultSet.getInt(WORKING_SHIFT)));
-
+                doctor = doctorExtractor.extract(resultSet);
                 specializationStatement.setInt(1, resultSet.getInt(SPECIALIZATION_ID));
                 resultSet = specializationStatement.executeQuery();
                 if (resultSet.next()) {
@@ -192,12 +187,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             Doctor doctor;
             List<Doctor> doctors = new ArrayList<>();
             while (resultSet.next()) {
-                doctor = new Doctor();
-                doctor.setId(resultSet.getInt(ID));
-                doctor.setName(resultSet.getString(NAME));
-                doctor.setSurname(resultSet.getString(SURNAME));
-                doctor.setWorkingShift(Shift.getById(resultSet.getInt(WORKING_SHIFT)));
-
+                doctor = doctorExtractor.extract(resultSet);
                 specializationStatement.setInt(1, resultSet.getInt(SPECIALIZATION_ID));
                 ResultSet resultSetSpecialization = specializationStatement.executeQuery();
                 if (resultSetSpecialization.next()) {
@@ -230,12 +220,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             List<Doctor> doctors = new ArrayList<>();
             Doctor doctor;
             while (resultSet.next()) {
-                doctor = new Doctor();
-                doctor.setId(resultSet.getInt(ID));
-                doctor.setName(resultSet.getString(NAME));
-                doctor.setSurname(resultSet.getString(SURNAME));
-                doctor.setWorkingShift(Shift.getById(resultSet.getInt(WORKING_SHIFT)));
-
+                doctor = doctorExtractor.extract(resultSet);
                 specializationStatement.setInt(1, resultSet.getInt(SPECIALIZATION_ID));
                 ResultSet resultSetSpecialization = specializationStatement.executeQuery();
                 if (resultSetSpecialization.next()) {
@@ -293,12 +278,8 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             List<Doctor> doctors = new ArrayList<>();
             Doctor doctor;
             while (resultSet.next()) {
-                doctor = new Doctor();
-                doctor.setId(resultSet.getInt(ID));
-                doctor.setName(resultSet.getString(NAME));
-                doctor.setSurname(resultSet.getString(SURNAME));
+                doctor = doctorExtractor.extract(resultSet);
                 doctor.setSpecialization(specialization);
-                doctor.setWorkingShift(Shift.getById(resultSet.getInt(WORKING_SHIFT)));
                 doctors.add(doctor);
             }
             logger.debug(SUCCESSFUL_READING_OF_DOCTORS);
@@ -327,12 +308,7 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             ResultSet resultSet = statement.executeQuery();
             Doctor doctor = null;
             if (resultSet.next()) {
-                doctor = new Doctor();
-                doctor.setId(resultSet.getInt(ID));
-                doctor.setName(resultSet.getString(NAME));
-                doctor.setSurname(resultSet.getString(SURNAME));
-                doctor.setWorkingShift(Shift.getById(resultSet.getInt(WORKING_SHIFT)));
-
+                doctor = doctorExtractor.extract(resultSet);
                 specializationStatement.setInt(1, resultSet.getInt(SPECIALIZATION_ID));
                 ResultSet resultSetSpecialization = specializationStatement.executeQuery();
                 if (resultSetSpecialization.next()) {
