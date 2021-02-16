@@ -8,7 +8,7 @@ import domain.enumeration.Role;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import service.PasswordEncryption;
+import service.util.PasswordEncryptionUtil;
 import service.PatientService;
 import service.exception.ServicePersistentException;
 
@@ -35,7 +35,7 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
         try {
             if (patient.getId() == null) {
                 Integer userId = userDao.create(new User(patient.getLogin(),
-                        PasswordEncryption.encrypt(patient.getPassword()), Role.PATIENT)
+                        PasswordEncryptionUtil.encrypt(patient.getPassword()), Role.PATIENT)
                 );
                 patient.setId(userId);
                 patientDao.create(patient);

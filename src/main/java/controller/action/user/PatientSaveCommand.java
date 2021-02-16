@@ -11,7 +11,7 @@ import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.PatientService;
-import service.ResourceBundleUtil;
+import service.util.ResourceBundleUtil;
 import service.exception.ServicePersistentException;
 import controller.validator.Validator;
 

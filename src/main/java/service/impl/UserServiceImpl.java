@@ -5,7 +5,7 @@ import domain.User;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import service.PasswordEncryption;
+import service.util.PasswordEncryptionUtil;
 import service.UserService;
 import service.exception.ServicePersistentException;
 
@@ -26,11 +26,11 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
         UserDao userDao = transaction.createUserDao();
         try {
             if (user.getId() == null) {
-                user.setPassword(PasswordEncryption.encrypt(user.getPassword()));
+                user.setPassword(PasswordEncryptionUtil.encrypt(user.getPassword()));
                 user.setId(userDao.create(user));
             } else {
                 if (user.getPassword() != null) {
-                    user.setPassword(PasswordEncryption.encrypt(user.getPassword()));
+                    user.setPassword(PasswordEncryptionUtil.encrypt(user.getPassword()));
                 } else {
                     User existingUser = userDao.read(user.getId());
                     user.setPassword(existingUser.getPassword());
@@ -72,7 +72,7 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
         try {
             User user = userDao.read(login);
             if (user != null) {
-                if (PasswordEncryption.checkPassword(password, user.getPassword())) {
+                if (PasswordEncryptionUtil.checkPassword(password, user.getPassword())) {
                     return user;
                 } else {
                     throw new ServicePersistentException("There is no user with such password");

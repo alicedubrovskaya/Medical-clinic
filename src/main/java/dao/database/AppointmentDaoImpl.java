@@ -32,7 +32,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
 
     private static final String CREATE_APPOINTMENT = "INSERT INTO `appointment` (`time`, `approved`," +
             "`status`, `complaints`, `medical_report`, `recommendation`, `patient_id`, `doctor_id`)" +
-            " VALUES (?,?,?,?,?,?,?,?)";
+            " VALUES (:dasd,?,?,?,?,?,?,?)";
 
     private static final String READ_APPOINTMENT = "SELECT `time`, `approved`,  `status`, `complaints`," +
             " `medical_report`,`recommendation`, `patient_id`, `doctor_id` FROM `appointment` WHERE `id`=?";

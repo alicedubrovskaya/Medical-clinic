@@ -13,7 +13,6 @@ public class TransactionFactoryImpl implements TransactionFactory {
     private final Connection connection;
     private static final Logger logger = LogManager.getLogger(TransactionFactoryImpl.class);
 
-
     public TransactionFactoryImpl() throws PersistentException {
         try {
             connection = ConnectionPool.getInstance().getConnection();

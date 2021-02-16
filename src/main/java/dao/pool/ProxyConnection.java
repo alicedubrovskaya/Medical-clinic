@@ -5,10 +5,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-public class PooledConnection implements Connection, Comparable<PooledConnection> {
+public class ProxyConnection implements Connection, Comparable<ProxyConnection> {
 	private Connection connection;
 
-	public PooledConnection(Connection connection) {
+	public ProxyConnection(Connection connection) {
 		this.connection = connection;
 	}
 
@@ -287,7 +287,7 @@ public class PooledConnection implements Connection, Comparable<PooledConnection
 	}
 
 	@Override
-	public int compareTo(PooledConnection connection) {
+	public int compareTo(ProxyConnection connection) {
 		return hashCode() - connection.hashCode();
 	}
 }

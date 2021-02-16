@@ -9,7 +9,7 @@ import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.DoctorService;
-import service.PasswordEncryption;
+import service.util.PasswordEncryptionUtil;
 import service.exception.ServicePersistentException;
 
 import java.util.Collections;
@@ -35,7 +35,7 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
         try {
             if (doctor.getId() == null) {
                 Integer userId = userDao.create(new User(doctor.getLogin(),
-                        PasswordEncryption.encrypt(doctor.getPassword()), Role.DOCTOR)
+                        PasswordEncryptionUtil.encrypt(doctor.getPassword()), Role.DOCTOR)
                 );
                 doctor.setId(userId);
                 doctorDao.create(doctor);

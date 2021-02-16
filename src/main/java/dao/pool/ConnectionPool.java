@@ -4,12 +4,9 @@ import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -18,84 +15,53 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public final class ConnectionPool {
     private final Logger logger = LogManager.getLogger(getClass().getName());
-
-    private static final String PROPERTY_PATH = "database.properties";
-    private static final String DB_DRIVER = "db.driver";
-    private static final String DB_URL = "db.url";
-    private static final String DB_USER = "db.user";
-    private static final String DB_PASSWORD = "db.password";
-    private static final String DB_POOL_START_SIZE = "db.poolStartSize";
-    private static final String DB_POOL_MAX_SIZE = "db.poolMaxSize";
-    private static final String DB_CHECK_CONNECTION_TIME_OUT = "db.poolCheckConnectionTimeOut";
     private static final String UNABLE_TO_CONNECT = "It is impossible to connect to a database";
 
     private static final ReentrantLock lock = new ReentrantLock();
-    private String url;
-    private String user;
-    private String password;
-    private int maxSize;
-    private int checkConnectionTimeout;
+    protected String url;
+    protected String user;
+    protected String password;
+    protected Integer startSize;
+    protected Integer maxSize;
+    protected Integer checkConnectionTimeout;
 
-    private final BlockingQueue<PooledConnection> freeConnections = new LinkedBlockingQueue<>();
-    private final Set<PooledConnection> usedConnections = new ConcurrentSkipListSet<>();
+    protected final BlockingQueue<ProxyConnection> freeConnections = new LinkedBlockingQueue<>();
+    private final Set<ProxyConnection> usedConnections = new ConcurrentSkipListSet<>();
+    //    private Semaphore semaphore = new Semaphore(maxSize);
+    private final ConnectionFactory connectionFactory = new ConnectionFactory();
 
-    private static ConnectionPool instance = new ConnectionPool();
+    private static volatile ConnectionPool instance = null;
 
     public static ConnectionPool getInstance() {
-        try {
-            lock.lock();
-            if (instance == null) {
-                instance = new ConnectionPool();
+        if (instance == null) {
+            try {
+                lock.lock();
+                if (instance == null) {
+                    instance = new ConnectionPool();
+                }
+            } finally {
+                lock.unlock();
             }
-        } finally {
-            lock.unlock();
         }
         return instance;
     }
 
     private ConnectionPool() {
-        Properties properties = new Properties();
         try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            InputStream inputStream = classLoader.getResourceAsStream(PROPERTY_PATH);
-            properties.load(inputStream);
-        } catch (IOException e) {
-            logger.error("Error while reading properties", e);
-        }
-        String driverClass = properties.getProperty(DB_DRIVER);
-        String urlProperty = properties.getProperty(DB_URL);
-        String userProperty = properties.getProperty(DB_USER);
-        String passwordProperty = properties.getProperty(DB_PASSWORD);
-        int startSizeProperty = Integer.parseInt(properties.getProperty(DB_POOL_START_SIZE));
-        int maxSizeProperty = Integer.parseInt(properties.getProperty(DB_POOL_MAX_SIZE));
-        int checkConnectionTimeOutProperty = Integer.parseInt(properties.getProperty(DB_CHECK_CONNECTION_TIME_OUT));
-
-        try {
-            init(driverClass, urlProperty, userProperty, passwordProperty, startSizeProperty, maxSizeProperty, checkConnectionTimeOutProperty);
-        } catch (PersistentException e) {
+            connectionFactory.init(this);
+            for (int counter = 0; counter < startSize; counter++) {
+                freeConnections.put(createConnection());
+            }
+        } catch (SQLException | InterruptedException e) {
             logger.error(e);
         }
     }
 
-    public void init(String driverClass, String url, String user, String password, int startSize, int maxSize, int checkConnectionTimeout) throws PersistentException {
-        try {
-            Class.forName(driverClass);
-            this.url = url;
-            this.user = user;
-            this.password = password;
-            this.maxSize = maxSize;
-            this.checkConnectionTimeout = checkConnectionTimeout;
-            for (int counter = 0; counter < startSize; counter++) {
-                freeConnections.put(createConnection());
-            }
-        } catch (ClassNotFoundException | SQLException | InterruptedException e) {
-            logger.fatal("It is impossible to initialize connection pool", e);
-            throw new PersistentException(e);
-        }
-    }
-
     public Connection getConnection() throws PersistentException {
-        PooledConnection connection = null;
+        //Semaphore.acquire()
+        //use poll or pull instead of take
+
+        ProxyConnection connection = null;
         while (connection == null) {
             try {
                 if (!freeConnections.isEmpty()) {
@@ -125,7 +91,7 @@ public final class ConnectionPool {
         return connection;
     }
 
-    void freeConnection(PooledConnection connection) {
+    void freeConnection(ProxyConnection connection) {
         try {
             if (connection.isValid(checkConnectionTimeout)) {
                 connection.clearWarnings();
@@ -146,14 +112,14 @@ public final class ConnectionPool {
     }
 
 
-    private PooledConnection createConnection() throws SQLException {
-        return new PooledConnection(DriverManager.getConnection(url, user, password));
+    private ProxyConnection createConnection() throws SQLException {
+        return new ProxyConnection(DriverManager.getConnection(url, user, password));
     }
 
     public void destroy() {
         usedConnections.addAll(freeConnections);
         freeConnections.clear();
-        for (PooledConnection connection : usedConnections) {
+        for (ProxyConnection connection : usedConnections) {
             try {
                 connection.getConnection().close();
             } catch (SQLException e) {

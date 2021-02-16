@@ -13,7 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.AppointmentService;
 import service.PatientService;
-import service.ResourceBundleUtil;
+import service.util.ResourceBundleUtil;
 import service.exception.ServicePersistentException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +40,7 @@ public class AppointmentSaveCommand extends AuthorizedUserCommand {
                 patientId = Integer.parseInt(parameter);
             }
         }
+
         if (patientId == null) {
             patientId = authorizedUser.getId();
         }

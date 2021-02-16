@@ -27,7 +27,8 @@ public class ChangeLanguageCommand extends Command {
         String language = request.getParameter(ParameterType.LANGUAGE.getValue());
         if (language != null) {
             request.getSession().setAttribute(AttributeType.LANGUAGE.getValue(), language);
-            response.addCookie(new Cookie(AttributeType.LANGUAGE.getValue(), language));
+            //TODO
+//            response.addCookie(new Cookie(AttributeType.LANGUAGE.getValue(), language));
         }
         return forward;
     }

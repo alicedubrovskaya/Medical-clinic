@@ -7,13 +7,10 @@ import dao.VacationDao;
 import domain.Appointment;
 import domain.Doctor;
 import domain.Patient;
-import domain.User;
-import domain.enumeration.Role;
 import exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.AppointmentService;
-import service.PasswordEncryption;
 import service.exception.ServicePersistentException;
 
 import java.util.*;

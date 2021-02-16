@@ -7,7 +7,7 @@ import exception.IncorrectFormDataException;
 import exception.PersistentException;
 import service.AppointmentService;
 import controller.validator.DateValidator;
-import service.ResourceBundleUtil;
+import service.util.ResourceBundleUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -1,4 +1,4 @@
-package service;
+package service.util;
 
 import controller.enumeration.AttributeType;
 
