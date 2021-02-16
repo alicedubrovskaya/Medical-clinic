@@ -7,10 +7,11 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Set;
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 public final class ConnectionPool {
@@ -18,17 +19,14 @@ public final class ConnectionPool {
     private static final String UNABLE_TO_CONNECT = "It is impossible to connect to a database";
 
     private static final ReentrantLock lock = new ReentrantLock();
+    private Semaphore semaphore;
     protected String url;
     protected String user;
     protected String password;
-    protected Integer startSize;
-    protected Integer maxSize;
-    protected Integer checkConnectionTimeout;
+    protected Integer size;
 
     protected final BlockingQueue<ProxyConnection> freeConnections = new LinkedBlockingQueue<>();
-    private final Set<ProxyConnection> usedConnections = new ConcurrentSkipListSet<>();
-    //    private Semaphore semaphore = new Semaphore(maxSize);
-    private final ConnectionFactory connectionFactory = new ConnectionFactory();
+    private final BlockingQueue<ProxyConnection> usedConnections = new LinkedBlockingQueue<>();
 
     private static volatile ConnectionPool instance = null;
 
@@ -48,44 +46,33 @@ public final class ConnectionPool {
 
     private ConnectionPool() {
         try {
+            ConnectionFactory connectionFactory = new ConnectionFactory();
             connectionFactory.init(this);
-            for (int counter = 0; counter < startSize; counter++) {
+            for (int counter = 0; counter < size; counter++) {
                 freeConnections.put(createConnection());
             }
+            this.semaphore = new Semaphore(size);
         } catch (SQLException | InterruptedException e) {
             logger.error(e);
         }
     }
 
     public Connection getConnection() throws PersistentException {
-        //Semaphore.acquire()
-        //use poll or pull instead of take
-
-        ProxyConnection connection = null;
-        while (connection == null) {
-            try {
-                if (!freeConnections.isEmpty()) {
-                    connection = freeConnections.take();
-                    if (!connection.isValid(checkConnectionTimeout)) {
-                        try {
-                            connection.getConnection().close();
-                        } catch (SQLException e) {
-                            logger.error(UNABLE_TO_CONNECT, e);
-                        }
-                        connection = null;
-                    }
-                } else if (usedConnections.size() < maxSize) {
-                    connection = createConnection();
-                } else {
-                    logger.error("The limit of number of database connections is exceeded");
-                    throw new PersistentException();
-                }
-            } catch (InterruptedException | SQLException e) {
-                logger.error(UNABLE_TO_CONNECT, e);
-                throw new PersistentException(e);
+        ProxyConnection connection;
+        boolean permit;
+        try {
+            permit = semaphore.tryAcquire(1, TimeUnit.SECONDS);
+            if (permit) {
+                connection = freeConnections.poll();
+                usedConnections.put(Objects.requireNonNull(connection));
+            } else {
+                throw new PersistentException("Time of waiting to acquire semaphore is exceeded");
             }
+        } catch (InterruptedException e) {
+            logger.error(UNABLE_TO_CONNECT, e);
+            throw new PersistentException(e);
+
         }
-        usedConnections.add(connection);
         logger.debug("Connection was received from pool. Current pool size: {} used connections; {} free connection",
                 usedConnections.size(), freeConnections.size());
         return connection;
@@ -93,16 +80,18 @@ public final class ConnectionPool {
 
     void freeConnection(ProxyConnection connection) {
         try {
-            if (connection.isValid(checkConnectionTimeout)) {
-                connection.clearWarnings();
-                connection.setAutoCommit(true);
-                usedConnections.remove(connection);
-                freeConnections.put(connection);
-                logger.debug("Connection was returned into pool. Current pool size: {} used connections; {} free connection",
-                        usedConnections.size(), freeConnections.size());
+            connection.clearWarnings();
+            connection.setAutoCommit(true);
+            boolean isRemoved = usedConnections.remove(connection);
+            freeConnections.put(connection);
+            logger.debug("Connection was returned into pool. Current pool size: {} used connections; {} free connection",
+                    usedConnections.size(), freeConnections.size());
+            semaphore.release();
+            if (!isRemoved) {
+                logger.warn("Connection wasn't removed from used connections");
             }
-        } catch (SQLException | InterruptedException e1) {
-            logger.warn("It is impossible to return database connection into pool", e1);
+        } catch (InterruptedException | SQLException e) {
+            logger.warn("It is impossible to return database connection into pool", e);
             try {
                 connection.getConnection().close();
             } catch (SQLException e2) {
@@ -110,7 +99,6 @@ public final class ConnectionPool {
             }
         }
     }
-
 
     private ProxyConnection createConnection() throws SQLException {
         return new ProxyConnection(DriverManager.getConnection(url, user, password));

@@ -73,7 +73,7 @@ public class DispatcherServlet extends HttpServlet {
                     jspPage = command.getName() + JSP;
                 }
                 jspPage = "/WEB-INF/jsp"+ jspPage;
-                logger.debug("Request for URI {}} is forwarded to JSP {}", requestedUri, jspPage);
+                logger.debug("Request for URI {} is forwarded to JSP {}", requestedUri, jspPage);
                 getServletContext().getRequestDispatcher(jspPage).forward(request, response);
             }
 

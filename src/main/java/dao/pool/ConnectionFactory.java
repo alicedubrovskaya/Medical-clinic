@@ -13,9 +13,7 @@ public class ConnectionFactory {
     private static final String DB_URL = "db.url";
     private static final String DB_USER = "db.user";
     private static final String DB_PASSWORD = "db.password";
-    private static final String DB_POOL_START_SIZE = "db.poolStartSize";
-    private static final String DB_POOL_MAX_SIZE = "db.poolMaxSize";
-    private static final String DB_CHECK_CONNECTION_TIME_OUT = "db.poolCheckConnectionTimeOut";
+    private static final String DB_POOL_SIZE = "db.poolSize";
     private final Logger logger = LogManager.getLogger(getClass().getName());
 
     public void init(ConnectionPool connectionPool) {
@@ -29,9 +27,7 @@ public class ConnectionFactory {
             connectionPool.url = properties.getProperty(DB_URL);
             connectionPool.user = properties.getProperty(DB_USER);
             connectionPool.password = properties.getProperty(DB_PASSWORD);
-            connectionPool.maxSize = Integer.parseInt(properties.getProperty(DB_POOL_MAX_SIZE));
-            connectionPool.checkConnectionTimeout = Integer.parseInt(properties.getProperty(DB_CHECK_CONNECTION_TIME_OUT));
-            connectionPool.startSize = Integer.parseInt(properties.getProperty(DB_POOL_START_SIZE));
+            connectionPool.size = Integer.parseInt(properties.getProperty(DB_POOL_SIZE));
         } catch (ClassNotFoundException | IOException e) {
             logger.error(e);
         }
