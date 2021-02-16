@@ -1,21 +1,19 @@
 package medical_clinic.service;
 
-import dao.database.TransactionFactoryImpl;
-import domain.Doctor;
-import domain.Patient;
-import domain.User;
-import domain.enumeration.Role;
-import domain.enumeration.Shift;
-import exception.PersistentException;
+import by.dubrovskaya.dao.impl.TransactionFactoryImpl;
+import by.dubrovskaya.domain.Doctor;
+import by.dubrovskaya.domain.enumeration.Role;
+import by.dubrovskaya.domain.enumeration.Shift;
+import by.dubrovskaya.exception.PersistentException;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import service.DoctorService;
-import service.ServiceFactory;
-import service.exception.ServicePersistentException;
-import service.impl.ServiceFactoryImpl;
+import by.dubrovskaya.service.DoctorService;
+import by.dubrovskaya.service.ServiceFactory;
+import by.dubrovskaya.exception.ServicePersistentException;
+import by.dubrovskaya.service.impl.ServiceFactoryImpl;
 
 import java.util.List;
 

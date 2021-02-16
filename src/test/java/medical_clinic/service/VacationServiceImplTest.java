@@ -1,18 +1,18 @@
 package medical_clinic.service;
 
-import dao.database.TransactionFactoryImpl;
-import domain.Doctor;
-import domain.Vacation;
-import domain.enumeration.Shift;
-import exception.PersistentException;
+import by.dubrovskaya.dao.impl.TransactionFactoryImpl;
+import by.dubrovskaya.domain.Doctor;
+import by.dubrovskaya.domain.Vacation;
+import by.dubrovskaya.domain.enumeration.Shift;
+import by.dubrovskaya.exception.PersistentException;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import service.ServiceFactory;
-import service.VacationService;
-import service.exception.ServicePersistentException;
-import service.impl.ServiceFactoryImpl;
+import by.dubrovskaya.service.ServiceFactory;
+import by.dubrovskaya.service.VacationService;
+import by.dubrovskaya.exception.ServicePersistentException;
+import by.dubrovskaya.service.impl.ServiceFactoryImpl;
 
 import java.util.Calendar;
 import java.util.Date;
