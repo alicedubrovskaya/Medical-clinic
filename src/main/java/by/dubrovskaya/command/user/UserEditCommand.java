@@ -1,15 +1,14 @@
 package by.dubrovskaya.command.user;
 
 import by.dubrovskaya.command.Command;
+import by.dubrovskaya.domain.User;
 import by.dubrovskaya.domain.enumeration.AttributeType;
 import by.dubrovskaya.domain.enumeration.ParameterType;
-import by.dubrovskaya.domain.User;
 import by.dubrovskaya.domain.enumeration.Role;
-import by.dubrovskaya.exception.PersistentException;
+import by.dubrovskaya.exception.ServicePersistentException;
+import by.dubrovskaya.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import by.dubrovskaya.service.UserService;
-import by.dubrovskaya.exception.ServicePersistentException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

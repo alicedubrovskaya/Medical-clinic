@@ -10,16 +10,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class TransactionFactoryImpl implements TransactionFactory {
-    private final Connection connection;
     private static TransactionFactoryImpl instance;
 
     private static final Logger logger = LogManager.getLogger(TransactionFactoryImpl.class);
 
-    private TransactionFactoryImpl() throws PersistentException {
-        this.connection = ConnectionPool.getInstance().getConnection();
+    private TransactionFactoryImpl() {
     }
 
-    public static TransactionFactoryImpl getInstance() throws PersistentException {
+    public static TransactionFactoryImpl getInstance() {
         if (instance == null) {
             instance = new TransactionFactoryImpl();
         }
@@ -27,16 +25,8 @@ public class TransactionFactoryImpl implements TransactionFactory {
     }
 
     @Override
-    public TransactionImpl createTransaction() {
+    public TransactionImpl createTransaction(Connection connection) {
         return new TransactionImpl(connection);
     }
 
-    @Override
-    public void close() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            logger.error("Connection cannot be closed");
-        }
-    }
 }
