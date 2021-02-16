@@ -1,6 +1,9 @@
 package by.dubrovskaya.dao.impl;
 
 import by.dubrovskaya.dao.AppointmentDao;
+import by.dubrovskaya.dao.extractor.AppointmentExtractor;
+import by.dubrovskaya.dao.extractor.Extractor;
+import by.dubrovskaya.dao.extractor.PatientExtractor;
 import by.dubrovskaya.domain.Appointment;
 import by.dubrovskaya.domain.Doctor;
 import by.dubrovskaya.domain.Patient;
@@ -16,14 +19,13 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
+    private final Extractor<Appointment> appointmentExtractor;
     private static final Logger logger = LogManager.getLogger(AppointmentDaoImpl.class);
 
-    private static final String TIME = "time";
-    private static final String APPROVED = "approved";
-    private static final String STATUS = "status";
-    private static final String COMPLAINTS = "complaints";
-    private static final String MEDICAL_REPORT = "medical_report";
-    private static final String RECOMMENDATION = "recommendation";
+    public AppointmentDaoImpl() {
+        appointmentExtractor = new AppointmentExtractor();
+    }
+
     private static final String ID = "id";
     private static final String PATIENT_ID = "patient_id";
     private static final String DOCTOR_ID = "doctor_id";
@@ -33,45 +35,36 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     private static final String CREATE_APPOINTMENT = "INSERT INTO `appointment` (`time`, `approved`," +
             "`status`, `complaints`, `medical_report`, `recommendation`, `patient_id`, `doctor_id`)" +
             " VALUES (:dasd,?,?,?,?,?,?,?)";
-
-    private static final String READ_APPOINTMENT = "SELECT `time`, `approved`,  `status`, `complaints`," +
-            " `medical_report`,`recommendation`, `patient_id`, `doctor_id` FROM `appointment` WHERE `id`=?";
+    //TODO
 
     private static final String READ_APPOINTMENTS = "SELECT `id`, `time`, `approved`,  `status`, `complaints`," +
             " `medical_report`,`recommendation`, `patient_id`, `doctor_id` FROM `appointment`";
 
-    private static final String READ_APPOINTMENT_BY_TIME = "SELECT `id`, `approved`, `status`, `complaints`," +
-            " `medical_report`, `recommendation`, `patient_id`, `doctor_id` " +
-            " FROM `appointment` WHERE `time` BETWEEN ? and ?";
+    private static final String READ_APPOINTMENT_BY_ID = READ_APPOINTMENTS + " WHERE `id`=?";
 
-    private static final String READ_APPOINTMENT_BY_PATIENT = "SELECT `id`, `approved`, `complaints`," +
-            " `medical_report`, `time`,`recommendation`, `doctor_id` " +
-            " FROM `appointment` WHERE `patient_id`=? AND `status`= 0";
+    private static final String READ_APPOINTMENT_BY_TIME = READ_APPOINTMENTS + " WHERE `time` BETWEEN ? and ?";
 
-    private static final String READ_APPOINTMENT_BY_TIME_AND_DOCTOR = "SELECT `id`, `approved`, `status`, `complaints`," +
-            " `medical_report`, `recommendation`, `patient_id` " +
-            " FROM `appointment` WHERE `time`=? AND `doctor_id`=?";
+    private static final String READ_APPOINTMENT_BY_PATIENT = READ_APPOINTMENTS + " WHERE `patient_id`=? AND `status`= 0";
+
+    private static final String READ_APPOINTMENT_BY_TIME_AND_DOCTOR = READ_APPOINTMENTS + " WHERE `time`=? AND `doctor_id`=?";
+
+    private static final String READ_APPOINTMENTS_BY_TIME_AND_STATUS_AND_DOCTOR = READ_APPOINTMENTS +
+            " WHERE `status`= ? AND `time` BETWEEN ? and ? AND `doctor_id`=?";
+
+    private static final String READ_APPOINTMENTS_BY_TIME_AND_STATUS = READ_APPOINTMENTS +
+            " WHERE `status`= ? AND `time` BETWEEN ? and ?";
+
+    private static final String READ_APPOINTMENT_BY_PATIENT_AND_DISEASE = "SELECT `time`, `complaints`, `medical_report`," +
+            " `recommendation` FROM `appointment` JOIN patient_disease on appointment.id = patient_disease.appointment_id " +
+            "WHERE patient_disease.patient_id = ? AND disease_id=?";
 
     private static final String READ_APPOINTMENTS_BY_TIME_AND_SPECIALIZATION = "SELECT appointment.id, `approved`, `status`," +
             " `complaints`, `medical_report`, `recommendation`, `patient_id`, `doctor_id`, `time` FROM `appointment`" +
             "JOIN doctor d on d.id = appointment.doctor_id WHERE d.specialization_id=? AND" +
             "`time` BETWEEN ? and ?";
 
-    private static final String READ_APPOINTMENTS_BY_TIME_AND_STATUS_AND_DOCTOR = "SELECT `id`, `approved`, `complaints`," +
-            " `medical_report`, `time`,`recommendation`, `doctor_id`,  `patient_id` " +
-            " FROM `appointment` WHERE `status`= ? AND `time` BETWEEN ? and ? AND `doctor_id`=?";
-
-    private static final String READ_APPOINTMENTS_BY_TIME_AND_STATUS = "SELECT `id`, `approved`, `complaints`," +
-            " `medical_report`, `time`,`recommendation`, `doctor_id`,  `patient_id` " +
-            " FROM `appointment` WHERE `status`= ? AND `time` BETWEEN ? and ?";
-
-    private static final String READ_APPOINTMENT_BY_PATIENT_AND_DISEASE = "SELECT `time`, `complaints`, `medical_report`," +
-            " `recommendation` FROM `appointment` JOIN patient_disease on appointment.id = patient_disease.appointment_id " +
-            "WHERE patient_disease.patient_id = ? AND disease_id=?";
-
     private static final String READ_DISEASE_BY_NAME = "SELECT `id` FROM `disease` WHERE `name` =?";
     private static final String READ_SPECIALIZATION_BY_NAME = "SELECT `id` FROM `specialization` WHERE `type` =?";
-
 
     private static final String UPDATE_APPOINTMENT = "UPDATE `appointment` SET `time` =?,`approved`=?," +
             " `status`=?, `complaints`=?, `medical_report`=?, `recommendation`=?, `patient_id`=?," +
@@ -131,20 +124,13 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
      */
     @Override
     public Appointment read(Integer id) throws PersistentException {
-        try (PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENT)
+        try (PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENT_BY_ID)
         ) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             Appointment appointment = null;
             if (resultSet.next()) {
-                appointment = new Appointment();
-                appointment.setId(id);
-                appointment.setTime(resultSet.getTimestamp(TIME));
-                appointment.setApproved(resultSet.getBoolean(APPROVED));
-                appointment.setStatus(Status.getById(resultSet.getInt(STATUS)));
-                appointment.setComplaints(resultSet.getString(COMPLAINTS));
-                appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
-                appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                appointment = appointmentExtractor.extract(resultSet);
                 Integer patientId = resultSet.getInt(PATIENT_ID);
                 if (!resultSet.wasNull()) {
                     Patient patient = new Patient();
@@ -263,14 +249,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             Appointment appointment;
             List<Appointment> appointments = new ArrayList<>();
             while (resultSet.next()) {
-                appointment = new Appointment();
-                appointment.setId(resultSet.getInt(ID));
-                appointment.setTime(resultSet.getTimestamp(TIME));
-                appointment.setApproved(resultSet.getBoolean(APPROVED));
-                appointment.setStatus(Status.getById(resultSet.getInt(STATUS)));
-                appointment.setComplaints(resultSet.getString(COMPLAINTS));
-                appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
-                appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                appointment = appointmentExtractor.extract(resultSet);
                 Integer patientId = resultSet.getInt(PATIENT_ID);
                 if (!resultSet.wasNull()) {
                     Patient patient = new Patient();
@@ -309,14 +288,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             Appointment appointment;
             List<Appointment> appointments = new ArrayList<>();
             while (resultSet.next()) {
-                appointment = new Appointment();
-                appointment.setId(resultSet.getInt(ID));
-                appointment.setTime(date);
-                appointment.setApproved(resultSet.getBoolean(APPROVED));
-                appointment.setStatus(Status.getById(resultSet.getInt(STATUS)));
-                appointment.setComplaints(resultSet.getString(COMPLAINTS));
-                appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
-                appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                appointment = appointmentExtractor.extract(resultSet);
                 Integer patientId = resultSet.getInt(PATIENT_ID);
                 if (!resultSet.wasNull()) {
                     Patient patient = new Patient();
@@ -353,13 +325,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             Appointment appointment;
             List<Appointment> appointments = new ArrayList<>();
             while (resultSet.next()) {
-                appointment = new Appointment();
-                appointment.setId(resultSet.getInt(ID));
-                appointment.setTime(resultSet.getTimestamp(TIME));
-                appointment.setApproved(resultSet.getBoolean(APPROVED));
-                appointment.setComplaints(resultSet.getString(COMPLAINTS));
-                appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
-                appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                appointment = appointmentExtractor.extract(resultSet);
 
                 Patient patient = new Patient();
                 patient.setId(patientId);
@@ -396,14 +362,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             ResultSet resultSet = statement.executeQuery();
             Appointment appointment = null;
             if (resultSet.next()) {
-                appointment = new Appointment();
-                appointment.setId(resultSet.getInt(ID));
-                appointment.setTime(date);
-                appointment.setApproved(resultSet.getBoolean(APPROVED));
-                appointment.setStatus(Status.getById(resultSet.getInt(STATUS)));
-                appointment.setComplaints(resultSet.getString(COMPLAINTS));
-                appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
-                appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                appointment = appointmentExtractor.extract(resultSet);
                 Integer patientId = resultSet.getInt(PATIENT_ID);
                 if (!resultSet.wasNull()) {
                     Patient patient = new Patient();
@@ -445,14 +404,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 resultSet = statement.executeQuery();
                 Appointment appointment;
                 while (resultSet.next()) {
-                    appointment = new Appointment();
-                    appointment.setId(resultSet.getInt(ID));
-                    appointment.setTime(resultSet.getTimestamp(TIME));
-                    appointment.setApproved(resultSet.getBoolean(APPROVED));
-                    appointment.setStatus(Status.getById(resultSet.getInt(STATUS)));
-                    appointment.setComplaints(resultSet.getString(COMPLAINTS));
-                    appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
-                    appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                    appointment = appointmentExtractor.extract(resultSet);
                     int patientId = resultSet.getInt(PATIENT_ID);
                     Integer doctorId = resultSet.getInt(DOCTOR_ID);
                     if (!resultSet.wasNull()) {
@@ -492,14 +444,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             Appointment appointment;
             List<Appointment> appointments = new ArrayList<>();
             while (resultSet.next()) {
-                appointment = new Appointment();
-                appointment.setId(resultSet.getInt(ID));
-                appointment.setTime(resultSet.getTimestamp(TIME));
-                appointment.setApproved(resultSet.getBoolean(APPROVED));
-                appointment.setStatus(Status.getById(statusId));
-                appointment.setComplaints(resultSet.getString(COMPLAINTS));
-                appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
-                appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                appointment = appointmentExtractor.extract(resultSet);
                 Integer patientId = resultSet.getInt(PATIENT_ID);
                 if (!resultSet.wasNull()) {
                     Patient patient = new Patient();
@@ -541,14 +486,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
             Appointment appointment;
             List<Appointment> appointments = new ArrayList<>();
             while (resultSet.next()) {
-                appointment = new Appointment();
-                appointment.setId(resultSet.getInt(ID));
-                appointment.setTime(resultSet.getTimestamp(TIME));
-                appointment.setApproved(resultSet.getBoolean(APPROVED));
-                appointment.setStatus(Status.getById(statusId));
-                appointment.setComplaints(resultSet.getString(COMPLAINTS));
-                appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
-                appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                appointment = appointmentExtractor.extract(resultSet);
                 Integer patientId = resultSet.getInt(PATIENT_ID);
                 if (!resultSet.wasNull()) {
                     Patient patient = new Patient();
@@ -594,11 +532,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 statement.setInt(2, diseaseId);
                 ResultSet resultSet = statement.executeQuery();
                 if (resultSet.next()) {
-                    appointment = new Appointment();
-                    appointment.setTime(resultSet.getTimestamp(TIME));
-                    appointment.setComplaints(resultSet.getString(COMPLAINTS));
-                    appointment.setMedicalReport(resultSet.getString(MEDICAL_REPORT));
-                    appointment.setRecommendation(resultSet.getString(RECOMMENDATION));
+                    appointment = appointmentExtractor.extract(resultSet);
                 }
             }
             logger.debug(SUCCESSFUL_READING_OF_APPOINTMENT);

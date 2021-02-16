@@ -1,6 +1,10 @@
 package by.dubrovskaya.dao.impl;
 
 import by.dubrovskaya.dao.VacationDao;
+import by.dubrovskaya.dao.extractor.Extractor;
+import by.dubrovskaya.dao.extractor.PatientExtractor;
+import by.dubrovskaya.dao.extractor.VacationExtractor;
+import by.dubrovskaya.domain.Patient;
 import by.dubrovskaya.domain.Vacation;
 import by.dubrovskaya.exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
@@ -17,16 +21,21 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
     private static final Logger logger = LogManager.getLogger(VacationDaoImpl.class);
     private static final String START = "start";
 
-    private static final String CREATE_VACATION = "INSERT INTO `vacation`(`doctor_id`, `start`, `end`) VALUES (?,?,?)";
+    private final Extractor<Vacation> vacationExtractor;
 
-    private static final String READ_VACATION = "SELECT `start`, `end` FROM vacation WHERE `doctor_id`=?";
+    public VacationDaoImpl() {
+        vacationExtractor = new VacationExtractor();
+    }
+
+    private static final String CREATE_VACATION = "INSERT INTO `vacation`(`doctor_id`, `start`, `end`) VALUES (?,?,?)";
 
     private static final String READ_VACATIONS = "SELECT `doctor_id`, `start`, `end` FROM vacation";
 
+    private static final String READ_VACATION = READ_VACATIONS + " WHERE `doctor_id`=?";
 
-    private static final String READ_VACATION_BY_TIME = "SELECT * FROM vacation WHERE ? BETWEEN `start` and `end`";
+    private static final String READ_VACATION_BY_TIME = READ_VACATIONS + " WHERE ? BETWEEN `start` and `end`";
 
-    private static final String READ_VACATION_FOR_ALL = "SELECT * FROM holiday WHERE `day` = ? ";
+    private static final String READ_VACATION_FOR_ALL = "SELECT `id`,`name`, `day` FROM holiday WHERE `day` = ? ";
 
     private static final String UPDATE_VACATION = "UPDATE `vacation` SET `start`=?, `end`=? WHERE `doctor_id`=?";
 
@@ -68,10 +77,7 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
             ResultSet resultSet = statement.executeQuery();
             Vacation vacation = null;
             if (resultSet.next()) {
-                vacation = new Vacation();
-                vacation.setId(id);
-                vacation.setStart(resultSet.getDate(START));
-                vacation.setEnd(resultSet.getDate("end"));
+                vacation = vacationExtractor.extract(resultSet);
             }
             logger.debug("Vacation was read");
             return vacation;
@@ -131,10 +137,7 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
             ResultSet resultSet = statement.executeQuery();
             Vacation vacation;
             while (resultSet.next()) {
-                vacation = new Vacation();
-                vacation.setId(resultSet.getInt("doctor_id"));
-                vacation.setStart(resultSet.getDate(START));
-                vacation.setEnd(resultSet.getDate("end"));
+                vacation = vacationExtractor.extract(resultSet);
                 vacations.add(vacation);
             }
             logger.debug("Vacations were read");
@@ -159,10 +162,7 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
             ResultSet resultSet = statement.executeQuery();
             Vacation vacation;
             while (resultSet.next()) {
-                vacation = new Vacation();
-                vacation.setId(resultSet.getInt("doctor_id"));
-                vacation.setStart(resultSet.getDate(START));
-                vacation.setEnd(resultSet.getDate("end"));
+                vacation = vacationExtractor.extract(resultSet);
                 vacations.add(vacation);
             }
             logger.debug("Vacations were read");
@@ -187,9 +187,7 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
 
             Vacation vacation = null;
             if (resultSet.next()) {
-                vacation = new Vacation();
-                vacation.setStart(resultSet.getDate("day"));
-                vacation.setEnd(resultSet.getDate("day"));
+                vacation = vacationExtractor.extract(resultSet);
             }
             logger.debug("Vacation was read");
             return vacation;
