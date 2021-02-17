@@ -4,6 +4,7 @@ import by.dubrovskaya.dao.DoctorDao;
 import by.dubrovskaya.dao.UserDao;
 import by.dubrovskaya.domain.Doctor;
 import by.dubrovskaya.domain.User;
+import by.dubrovskaya.domain.Vacation;
 import by.dubrovskaya.domain.enumeration.Role;
 import by.dubrovskaya.exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
@@ -180,7 +181,17 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
     public Map<Integer, List<Doctor>> find(int offset, int noOfRecords) throws ServicePersistentException {
         try {
             DoctorDao doctorDao = transaction.createDoctorDao();
-            return doctorDao.read(offset, noOfRecords);
+            Map<Integer, List<Doctor>> map = doctorDao.read(offset, noOfRecords);
+            if (!map.isEmpty()) {
+                int count = 1;
+                for (Integer key : map.keySet()) {
+                    count = key;
+                }
+                buildDoctor(map.get(count));
+                return map;
+            } else {
+                throw new ServicePersistentException("Empty list of vacations");
+            }
         } catch (PersistentException e) {
             throw new ServicePersistentException(e);
         }

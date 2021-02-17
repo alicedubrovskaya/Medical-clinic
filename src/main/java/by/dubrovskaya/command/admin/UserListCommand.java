@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 public class UserListCommand extends AdministratorCommand {
     private static final Logger logger = LogManager.getLogger(UserListCommand.class);
     private static final String USERS_NOT_FOUND = "message.user.notFound";
-    private static final int RECORDS_PER_PAGE = 1;
+    private static final int RECORDS_PER_PAGE = 5;
     private int page = 1;
 
     @Override

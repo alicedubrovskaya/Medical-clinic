@@ -270,7 +270,8 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
      */
     @Override
     public Map<Integer, List<Doctor>> read(int offset, int noOfRecords) throws PersistentException {
-        try (PreparedStatement statement = connection.prepareStatement(READ_DOCTORS_LIMIT)) {
+        try (PreparedStatement statement = connection.prepareStatement(READ_DOCTORS_LIMIT);
+             PreparedStatement specializationStatement = connection.prepareStatement(READ_SPECIALIZATION_BY_ID)) {
             statement.setInt(1, offset);
             statement.setInt(2, noOfRecords);
             ResultSet resultSet = statement.executeQuery();
@@ -280,6 +281,11 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             List<Doctor> doctors = new ArrayList<>();
             while (resultSet.next()) {
                 doctor = doctorExtractor.extract(resultSet);
+                specializationStatement.setInt(1, resultSet.getInt(SPECIALIZATION_ID));
+                ResultSet resultSetSpecialization = specializationStatement.executeQuery();
+                if (resultSetSpecialization.next()) {
+                    doctor.setSpecialization(resultSetSpecialization.getString(TYPE));
+                }
                 doctors.add(doctor);
             }
             resultSet = statement.executeQuery(SQL_NUMBER_OF_RECORDS);

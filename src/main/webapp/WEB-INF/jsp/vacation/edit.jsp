@@ -74,7 +74,6 @@
                        value="${start}">
                 <c:if test="${empty start}">
                     <script>
-                        alert('empty');
                         setStartDate();
                     </script>
                 </c:if>

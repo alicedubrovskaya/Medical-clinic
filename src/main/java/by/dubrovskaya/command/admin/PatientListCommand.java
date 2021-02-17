@@ -1,19 +1,15 @@
 package by.dubrovskaya.command.admin;
 
 import by.dubrovskaya.command.Command;
-import by.dubrovskaya.domain.User;
-import by.dubrovskaya.domain.enumeration.AttributeType;
 import by.dubrovskaya.domain.Patient;
-import by.dubrovskaya.domain.enumeration.ParameterType;
+import by.dubrovskaya.domain.enumeration.AttributeType;
 import by.dubrovskaya.exception.IncorrectFormDataException;
-import by.dubrovskaya.exception.PersistentException;
-import by.dubrovskaya.service.UserService;
+import by.dubrovskaya.exception.ServicePersistentException;
+import by.dubrovskaya.service.PatientService;
+import by.dubrovskaya.service.util.ResourceBundleUtil;
 import by.dubrovskaya.service.validator.PaginationValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import by.dubrovskaya.service.PatientService;
-import by.dubrovskaya.service.util.ResourceBundleUtil;
-import by.dubrovskaya.exception.ServicePersistentException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +20,7 @@ import java.util.ResourceBundle;
 public class PatientListCommand extends AdministratorCommand {
     private static final Logger logger = LogManager.getLogger(PatientListCommand.class);
     private static final String PATIENTS_NOT_FOUND = "message.patient.notFound";
-    private static final int RECORDS_PER_PAGE = 1;
+    private static final int RECORDS_PER_PAGE = 3;
     private int page = 1;
 
     @Override

@@ -17,8 +17,8 @@ import java.util.Map;
 
 public class DoctorListCommand extends AdministratorCommand {
     private static final Logger logger = LogManager.getLogger(DoctorListCommand.class);
-    private static final int RECORDS_PER_PAGE = 1;
-    private int page = 1;
+    private static final int RECORDS_PER_PAGE = 3;
+    int page = 1;
 
     @Override
     public Command.Forward exec(HttpServletRequest request, HttpServletResponse response) {

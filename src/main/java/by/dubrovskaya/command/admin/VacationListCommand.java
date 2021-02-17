@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class VacationListCommand extends AdministratorCommand {
     private static final Logger logger = LogManager.getLogger(VacationListCommand.class);
-    private static final int RECORDS_PER_PAGE = 1;
+    private static final int RECORDS_PER_PAGE = 5;
     private int page = 1;
 
     @Override
