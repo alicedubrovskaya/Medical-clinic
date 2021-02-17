@@ -2,12 +2,10 @@ package by.dubrovskaya.command.admin;
 
 import by.dubrovskaya.command.Command;
 import by.dubrovskaya.domain.Doctor;
-import by.dubrovskaya.domain.User;
 import by.dubrovskaya.domain.enumeration.AttributeType;
 import by.dubrovskaya.exception.IncorrectFormDataException;
 import by.dubrovskaya.exception.ServicePersistentException;
 import by.dubrovskaya.service.DoctorService;
-import by.dubrovskaya.service.UserService;
 import by.dubrovskaya.service.validator.PaginationValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,12 +24,12 @@ public class DoctorListCommand extends AdministratorCommand {
     public Command.Forward exec(HttpServletRequest request, HttpServletResponse response) {
         PaginationValidator validator = validatorFactory.createPaginationValidator();
 
+        DoctorService service = serviceFactory.getDoctorService();
         try {
             Integer currentPage = validator.validatePage(request);
             if (currentPage != null) {
                 page = validator.validatePage(request);
             }
-            DoctorService service = serviceFactory.getDoctorService();
             Map<Integer, List<Doctor>> map = service.find((page - 1) * RECORDS_PER_PAGE, RECORDS_PER_PAGE);
             int noOfRecords = 1;
             for (Integer key : map.keySet()) {

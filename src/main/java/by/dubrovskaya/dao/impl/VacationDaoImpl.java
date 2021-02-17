@@ -2,9 +2,7 @@ package by.dubrovskaya.dao.impl;
 
 import by.dubrovskaya.dao.VacationDao;
 import by.dubrovskaya.dao.extractor.Extractor;
-import by.dubrovskaya.dao.extractor.PatientExtractor;
 import by.dubrovskaya.dao.extractor.VacationExtractor;
-import by.dubrovskaya.domain.Patient;
 import by.dubrovskaya.domain.Vacation;
 import by.dubrovskaya.exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
@@ -13,9 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
     private static final Logger logger = LogManager.getLogger(VacationDaoImpl.class);
@@ -34,6 +30,11 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
     private static final String READ_VACATION = READ_VACATIONS + " WHERE `doctor_id`=?";
 
     private static final String READ_VACATION_BY_TIME = READ_VACATIONS + " WHERE ? BETWEEN `start` and `end`";
+
+    private static final String READ_VACATIONS_LIMIT = "SELECT SQL_CALC_FOUND_ROWS `doctor_id`, `start`, `end`" +
+            " FROM `vacation` LIMIT ? ,?";
+
+    private static final String SQL_NUMBER_OF_RECORDS = "SELECT FOUND_ROWS()";
 
     private static final String READ_VACATION_FOR_ALL = "SELECT `id`,`name`, `day` FROM holiday WHERE `day` = ? ";
 
@@ -193,6 +194,41 @@ public class VacationDaoImpl extends BaseDaoImpl implements VacationDao {
             return vacation;
         } catch (SQLException e) {
             throw new PersistentException("Vacation cannot be read");
+        }
+    }
+
+    /**
+     * Reads vacations with specified offset number of records
+     *
+     * @param offset      starting from
+     * @param noOfRecords amount of vacations
+     * @return Map<K, V> , K- number of found rows, V- list of vacations with offset
+     * @throws PersistentException if database error occurs
+     */
+    @Override
+    public Map<Integer, List<Vacation>> read(int offset, int noOfRecords) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_VACATIONS_LIMIT)) {
+            statement.setInt(1, offset);
+            statement.setInt(2, noOfRecords);
+            ResultSet resultSet = statement.executeQuery();
+
+            Vacation vacation;
+            Map<Integer, List<Vacation>> map = new HashMap<>();
+            List<Vacation> vacations = new ArrayList<>();
+            while (resultSet.next()) {
+                vacation = vacationExtractor.extract(resultSet);
+                vacations.add(vacation);
+            }
+            resultSet = statement.executeQuery(SQL_NUMBER_OF_RECORDS);
+            Integer sqlNoOfRecords = null;
+            if (resultSet.next()) {
+                sqlNoOfRecords = resultSet.getInt(1);
+            }
+            map.put(sqlNoOfRecords, vacations);
+            logger.debug("Vacations were read");
+            return map;
+        } catch (SQLException e) {
+            throw new PersistentException("Vacations cannot be read", e);
         }
     }
 }

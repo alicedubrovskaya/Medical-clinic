@@ -11,6 +11,7 @@ import by.dubrovskaya.exception.ServicePersistentException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Vacation by.dubrovskaya.service
@@ -100,6 +101,34 @@ public class VacationServiceImpl extends ServiceImpl implements VacationService 
                 return vacation;
             } else {
                 throw new ServicePersistentException("Vacation wasn't found");
+            }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
+        }
+    }
+
+    /**
+     * Finds all vacations with specified offset and number of records
+     *
+     * @param offset
+     * @param noOfRecords
+     * @return
+     * @throws ServicePersistentException
+     */
+    @Override
+    public Map<Integer, List<Vacation>> find(int offset, int noOfRecords) throws ServicePersistentException {
+        try {
+            VacationDao vacationDao = transaction.createVacationDao();
+            Map<Integer, List<Vacation>> map = vacationDao.read(offset, noOfRecords);
+            if (!map.isEmpty()) {
+                int count = 1;
+                for (Integer key : map.keySet()) {
+                    count = key;
+                }
+                buildVacation(map.get(count));
+                return map;
+            } else {
+                throw new ServicePersistentException("Empty list of vacations");
             }
         } catch (PersistentException e) {
             throw new ServicePersistentException(e);
