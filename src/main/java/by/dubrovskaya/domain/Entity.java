@@ -1,6 +1,7 @@
 package by.dubrovskaya.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public abstract class Entity implements Serializable {
     private Integer id;
@@ -14,23 +15,15 @@ public abstract class Entity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object object) {
-        if(object != null) {
-            if(object != this) {
-                if(object.getClass() == getClass() && id != null) {
-                    return id.equals(((Entity)object).id);
-                }
-                return false;
-            }
-            return true;
-        }
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Entity)) return false;
+        Entity entity = (Entity) o;
+        return Objects.equals(id, entity.id);
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return Objects.hash(id);
     }
-
-
 }

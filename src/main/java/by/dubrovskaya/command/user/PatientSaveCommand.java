@@ -1,22 +1,21 @@
 package by.dubrovskaya.command.user;
 
 import by.dubrovskaya.command.Command;
-import by.dubrovskaya.domain.enumeration.AttributeType;
-import by.dubrovskaya.domain.enumeration.CommandType;
 import by.dubrovskaya.domain.Patient;
 import by.dubrovskaya.domain.User;
+import by.dubrovskaya.domain.enumeration.AttributeType;
+import by.dubrovskaya.domain.enumeration.CommandType;
 import by.dubrovskaya.domain.enumeration.Role;
 import by.dubrovskaya.exception.IncorrectFormDataException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import by.dubrovskaya.exception.ServicePersistentException;
 import by.dubrovskaya.service.PatientService;
 import by.dubrovskaya.service.util.ResourceBundleUtil;
-import by.dubrovskaya.exception.ServicePersistentException;
 import by.dubrovskaya.service.validator.Validator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 

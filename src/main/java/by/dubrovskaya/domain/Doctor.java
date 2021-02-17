@@ -3,6 +3,8 @@ package by.dubrovskaya.domain;
 import by.dubrovskaya.domain.enumeration.Role;
 import by.dubrovskaya.domain.enumeration.Shift;
 
+import java.util.Objects;
+
 public class Doctor extends Person {
     private String specialization;
     private Shift workingShift;
@@ -60,8 +62,6 @@ public class Doctor extends Person {
 
     }
 
-    //TODO
-
     public String getSpecialization() {
         return specialization;
     }
@@ -76,5 +76,19 @@ public class Doctor extends Person {
 
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Doctor)) return false;
+        if (!super.equals(o)) return false;
+        Doctor doctor = (Doctor) o;
+        return Objects.equals(specialization, doctor.specialization) && workingShift == doctor.workingShift;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), specialization, workingShift);
     }
 }

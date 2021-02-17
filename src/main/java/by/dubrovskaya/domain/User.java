@@ -2,6 +2,8 @@ package by.dubrovskaya.domain;
 
 import by.dubrovskaya.domain.enumeration.Role;
 
+import java.util.Objects;
+
 public class User extends Entity {
     private String login;
     private String password;
@@ -45,5 +47,19 @@ public class User extends Entity {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return Objects.equals(login, user.login) && Objects.equals(password, user.password) && role == user.role;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), login, password, role);
     }
 }

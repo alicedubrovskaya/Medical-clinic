@@ -3,6 +3,7 @@ package by.dubrovskaya.domain;
 import by.dubrovskaya.domain.enumeration.Status;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Appointment extends Entity {
     private Date time;
@@ -85,5 +86,19 @@ public class Appointment extends Entity {
 
     public void setApproved(boolean approved) {
         isApproved = approved;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Appointment)) return false;
+        if (!super.equals(o)) return false;
+        Appointment that = (Appointment) o;
+        return isApproved == that.isApproved && Objects.equals(time, that.time) && status == that.status && Objects.equals(complaints, that.complaints) && Objects.equals(medicalReport, that.medicalReport) && Objects.equals(recommendation, that.recommendation) && Objects.equals(disease, that.disease) && Objects.equals(doctor, that.doctor) && Objects.equals(patient, that.patient);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), time, status, isApproved, complaints, medicalReport, recommendation, disease, doctor, patient);
     }
 }
