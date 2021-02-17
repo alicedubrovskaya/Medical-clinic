@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Patient by.dubrovskaya.service
+ * Patient service
  */
 public class PatientServiceImpl extends ServiceImpl implements PatientService {
     private static final Logger logger = LogManager.getLogger(PatientServiceImpl.class);

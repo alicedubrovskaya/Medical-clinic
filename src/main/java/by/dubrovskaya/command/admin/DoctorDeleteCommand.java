@@ -24,7 +24,7 @@ public class DoctorDeleteCommand extends AdministratorCommand {
     private static final String SUCCESSFUL_DELETING = "message.doctor.deleted";
 
     @Override
-    public Command.Forward exec(HttpServletRequest request, HttpServletResponse response){
+    public Command.Forward exec(HttpServletRequest request, HttpServletResponse response) {
         Command.Forward forward = new Command.Forward(CommandType.DOCTOR_LIST.getCommand() + HTML);
         ResourceBundle rb = ResourceBundleUtil.getResourceBundle(request);
         try {

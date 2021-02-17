@@ -101,8 +101,8 @@
                     <div id="delete" class="modal">
                             <span onclick="document.getElementById('delete').style.display='none'" class="close"
                                   title="${button_delete}">&times;</span>
-                        <form class="modal-content" action="/doctor/delete.html" method="post">
-                            <input type="hidden" name="id" value="${doctor.id}">
+                        <form class="modal-content" action="/patient/delete.html" method="post">
+                            <input type="hidden" name="id" value="${patient.id}">
                             <div class="container">
                                 <h1>${delete_account}</h1>
                                 <p>${delete_question}</p>

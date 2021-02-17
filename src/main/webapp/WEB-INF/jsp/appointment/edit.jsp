@@ -77,25 +77,25 @@
 
             <div class="form-group">
                 <label for="complaints">${appointment_complaints}:</label>
-                <input type="text" class="form-control" id="complaints" name="complaints"
+                <input type="text" required class="form-control" id="complaints" name="complaints"
                        value="${appointment.complaints}">
             </div>
             <div class="form-group>">
                 <label for="medicalReport">${appointment_medicalReport}:</label>
-                <input type="text" class="form-control" id="medicalReport" name="medicalReport"
+                <input type="text" required class="form-control" id="medicalReport" name="medicalReport"
                        value="${appointment.medicalReport}">
 
             </div>
             <div class="form-group">
                 <label for="recommendation">${appointment_recommendations}:</label>
-                <input type="text" class="form-control" id="recommendation" name="recommendation"
+                <input type="text" required class="form-control" id="recommendation" name="recommendation"
                        value="${appointment.recommendation}">
             </div>
 
             <div class="form-group">
                 <label for="diseases">${diseaseDefinition}</label>
                 <select multiple class="form-control" size="3" id="diseases" name="diseases">
-                    <option>${diseaseUndefined}</option>
+                    <option value="Undefined">${diseaseUndefined}</option>
                     <c:forEach items="${diseases}" var="disease">
                         <option value="${disease}">${disease}</option>
                     </c:forEach>

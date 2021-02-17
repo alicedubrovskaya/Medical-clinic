@@ -12,6 +12,9 @@ import by.dubrovskaya.exception.ServicePersistentException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * User service
+ */
 public class UserServiceImpl extends ServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 

@@ -23,7 +23,6 @@ public class MenuItem implements Serializable {
         this.menuItemsDropDown = menuItems;
     }
 
-    //TODO
     public MenuItem(String url, String russianName, String englishName) {
         this.url = url;
         this.russianName = russianName;

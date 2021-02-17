@@ -48,6 +48,7 @@ public class CommandFactory {
         commands.put(CommandType.APPOINTMENT_GENERATE, new GenerateAppointmentsCommand());
         commands.put(CommandType.APPOINTMENT_CHOICE, new AppointmentChoiceCommand());
         commands.put(CommandType.APPOINTMENT_MEDICAL_CARD, new MedicalCardCommand());
+        commands.put(CommandType.APPOINTMENT_CURRENT, new PatientCurrentAppointmentsCommand());
     }
 
     public static CommandFactory getInstance() {

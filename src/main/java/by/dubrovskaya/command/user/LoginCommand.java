@@ -53,7 +53,10 @@ public class LoginCommand extends Command {
 
         menu.put(Role.PATIENT, new ArrayList<>(Arrays.asList(
                 new MenuItem("/appointment/choice.html", "Записаться к врачу", "To make an appointment"),
-                new MenuItem("/appointment/medicalCard.html", "История посещений врачей", "History of appointments"),
+                new MenuItem("Записи на приемы", "Appointments", Arrays.asList(
+                        new MenuItem("/appointment/medicalCard.html", "История посещений врачей", "History of appointments"),
+                        new MenuItem("/appointment/current.html", "Текущие приемы", "Current appointments")
+                )),
                 new MenuItem("Личная информация", "Personal information", Arrays.asList(
                         new MenuItem("/patient/edit.html", "Мой профиль", "My profile"),
                         new MenuItem("/user/edit.html", "Учетная запись", "Account")
@@ -67,7 +70,7 @@ public class LoginCommand extends Command {
     }
 
     @Override
-    public Forward exec(HttpServletRequest request, HttpServletResponse response){
+    public Forward exec(HttpServletRequest request, HttpServletResponse response) {
         ResourceBundle rb = ResourceBundleUtil.getResourceBundle(request);
 
         String login = request.getParameter(ParameterType.LOGIN.getValue());

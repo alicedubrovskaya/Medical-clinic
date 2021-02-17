@@ -53,6 +53,9 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     private static final String READ_APPOINTMENTS_BY_TIME_AND_STATUS = READ_APPOINTMENTS +
             " WHERE `status`= ? AND `time` BETWEEN ? and ?";
 
+    private static final String READ_APPOINTMENTS_BY_PATIENT_AND_STATUS = READ_APPOINTMENTS +
+            " WHERE `status`= ? AND `patient_id`=?";
+
     private static final String READ_APPOINTMENT_BY_PATIENT_AND_DISEASE = "SELECT `time`, `complaints`, `medical_report`," +
             " `recommendation` FROM `appointment` JOIN patient_disease on appointment.id = patient_disease.appointment_id " +
             "WHERE patient_disease.patient_id = ? AND disease_id=?";
@@ -477,7 +480,6 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
     public List<Appointment> readByDateAndStatus(Date date, String status) throws PersistentException {
         try (PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENTS_BY_TIME_AND_STATUS)) {
             Integer statusId = Status.getEnum(status).equals(Status.MISSED) ? Status.MISSED.getId() : Status.WAS.getId();
-            //TODO move
             statement.setInt(1, statusId);
             statement.setTimestamp(2, new Timestamp(date.getTime()));
             statement.setTimestamp(3, new Timestamp(date.getTime() + TimeUnit.DAYS.toMillis(1)));
@@ -490,6 +492,38 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
                 if (!resultSet.wasNull()) {
                     Patient patient = new Patient();
                     patient.setId(patientId);
+                    appointment.setPatient(patient);
+                }
+                Integer doctorId = resultSet.getInt(DOCTOR_ID);
+                if (!resultSet.wasNull()) {
+                    Doctor doctor = new Doctor();
+                    doctor.setId(doctorId);
+                    appointment.setDoctor(doctor);
+                }
+                appointments.add(appointment);
+            }
+            logger.debug(SUCCESSFUL_READING_OF_APPOINTMENTS);
+            return appointments;
+        } catch (SQLException e) {
+            throw new PersistentException("Appointments were not found", e);
+        }
+    }
+
+    @Override
+    public List<Appointment> readByPatientAndStatus(Integer patientId, String status) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_APPOINTMENTS_BY_PATIENT_AND_STATUS)) {
+            Integer statusId = Status.getEnum(status).equals(Status.MISSED) ? Status.MISSED.getId() : Status.WAS.getId();
+            statement.setInt(1, statusId);
+            statement.setInt(2, patientId);
+            ResultSet resultSet = statement.executeQuery();
+            Appointment appointment;
+            List<Appointment> appointments = new ArrayList<>();
+            while (resultSet.next()) {
+                appointment = appointmentExtractor.extract(resultSet);
+                Integer patientFoundId = resultSet.getInt(PATIENT_ID);
+                if (!resultSet.wasNull()) {
+                    Patient patient = new Patient();
+                    patient.setId(patientFoundId);
                     appointment.setPatient(patient);
                 }
                 Integer doctorId = resultSet.getInt(DOCTOR_ID);

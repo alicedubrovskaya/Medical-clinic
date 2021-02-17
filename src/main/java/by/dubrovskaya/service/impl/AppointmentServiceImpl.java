@@ -19,6 +19,12 @@ import java.util.concurrent.TimeUnit;
 public class AppointmentServiceImpl extends ServiceImpl implements AppointmentService {
     private static final Logger logger = LogManager.getLogger(AppointmentServiceImpl.class);
 
+    /**
+     * Saves appointment
+     *
+     * @param appointment that should be saved
+     * @throws ServicePersistentException
+     */
     @Override
     public void save(Appointment appointment) throws ServicePersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
@@ -33,6 +39,13 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         }
     }
 
+    /**
+     * Saves appointment with established disease
+     *
+     * @param appointment that should be saved
+     * @param disease     that should be saved
+     * @throws ServicePersistentException
+     */
     @Override
     public void save(Appointment appointment, String disease) throws ServicePersistentException {
         transaction.setWithoutAutoCommit();
@@ -40,7 +53,10 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         PatientDao patientDao = transaction.createPatientDao();
         try {
             appointmentDao.update(appointment);
-            patientDao.saveDiseaseForPatient(appointment.getPatient().getId(), appointment.getId(), disease);
+            List<String> diseases = patientDao.readDiseasesByPatient(appointment.getPatient().getId());
+            if (!diseases.contains(disease)) {
+                patientDao.saveDiseaseForPatient(appointment.getPatient().getId(), appointment.getId(), disease);
+            }
             transaction.commit();
         } catch (PersistentException e) {
             try {
@@ -52,6 +68,12 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         }
     }
 
+    /**
+     * Finds all appointments
+     *
+     * @return found appointments
+     * @throws ServicePersistentException
+     */
     @Override
     public List<Appointment> findAll() throws ServicePersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
@@ -68,6 +90,13 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         }
     }
 
+    /**
+     * Finds appointments by id
+     *
+     * @param id unique identifier
+     * @return
+     * @throws ServicePersistentException
+     */
     @Override
     public Appointment findById(Integer id) throws ServicePersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
@@ -84,6 +113,13 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         }
     }
 
+    /**
+     * Finds appointments by date
+     *
+     * @param date
+     * @return found appointments
+     * @throws ServicePersistentException
+     */
     @Override
     public List<Appointment> findByTime(Date date) throws ServicePersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
@@ -100,22 +136,14 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         }
     }
 
-    @Override
-    public Appointment findByTimeAndDoctor(Date date, Doctor doctor) throws ServicePersistentException {
-        AppointmentDao appointmentDao = transaction.createAppointmentDao();
-        try {
-            Appointment appointment = appointmentDao.readByTimeAndDoctor(date, doctor);
-            if (appointment != null) {
-                buildAppointment(Collections.singletonList(appointment));
-                return appointment;
-            } else {
-                throw new ServicePersistentException("Appointment is not found");
-            }
-        } catch (PersistentException e) {
-            throw new ServicePersistentException(e);
-        }
-    }
-
+    /**
+     * Finds appointments by time and specialization
+     *
+     * @param date
+     * @param specialization
+     * @return found appointments
+     * @throws ServicePersistentException
+     */
     @Override
     public List<Appointment> findByTimeAndSpecialization(Date date, String specialization) throws ServicePersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
@@ -132,6 +160,15 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         }
     }
 
+    /**
+     * Finds appointments by date, status and doctor
+     *
+     * @param date
+     * @param status
+     * @param doctorId
+     * @return
+     * @throws ServicePersistentException
+     */
     public List<Appointment> findByDateAndStatusAndDoctor(Date date, String status, Integer doctorId) throws
             ServicePersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
@@ -148,6 +185,14 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         }
     }
 
+    /**
+     * Finds appointments by date and status
+     *
+     * @param date
+     * @param status
+     * @return
+     * @throws ServicePersistentException
+     */
     @Override
     public List<Appointment> findByDateAndStatus(Date date, String status) throws ServicePersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
@@ -164,6 +209,37 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         }
     }
 
+    /**
+     * Finds appointments by patient and status
+     *
+     * @param patientId patient's unique identifier
+     * @param status    of attendance
+     * @return found appointments
+     * @throws ServicePersistentException
+     */
+    @Override
+    public List<Appointment> findByPatientAndStatus(Integer patientId, String status) throws ServicePersistentException {
+        AppointmentDao appointmentDao = transaction.createAppointmentDao();
+        try {
+            List<Appointment> appointments = appointmentDao.readByPatientAndStatus(patientId, status);
+            if (!appointments.isEmpty()) {
+                buildAppointment(appointments);
+                return appointments;
+            } else {
+                throw new ServicePersistentException("Empty list of appointments");
+            }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
+        }
+    }
+
+    /**
+     * Finds appointments by patient
+     *
+     * @param patientId patient's unique identifier
+     * @return found appointments
+     * @throws ServicePersistentException
+     */
     @Override
     public List<Appointment> findByPatient(Integer patientId) throws ServicePersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
@@ -180,6 +256,12 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         }
     }
 
+    /**
+     * Deletes appointment by id
+     *
+     * @param id unique identifier
+     * @throws ServicePersistentException
+     */
     @Override
     public void delete(Integer id) throws ServicePersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
@@ -190,6 +272,14 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         }
     }
 
+    /**
+     * Creates appointments by date and doctor
+     *
+     * @param date   appointments should be created for this date
+     * @param doctor for whom should be created appointments
+     * @return appointents that should be created
+     * @throws ServicePersistentException
+     */
     private List<Appointment> createAppointments(Date date, Doctor doctor) throws ServicePersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
         VacationDao vacationDao = transaction.createVacationDao();
@@ -208,7 +298,13 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         }
     }
 
-
+    /**
+     * Created appointments for doctors at current date for specified count of days
+     *
+     * @param date        on what should be created appointments
+     * @param countOfDays after current date
+     * @throws ServicePersistentException
+     */
     @Override
     public void createAppointmentsForDoctors(Date date, int countOfDays) throws ServicePersistentException {
         transaction.setWithoutAutoCommit();

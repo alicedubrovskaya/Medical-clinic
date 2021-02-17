@@ -18,15 +18,15 @@ public interface AppointmentService extends Service {
 
     List<Appointment> findByTime(Date date) throws ServicePersistentException;
 
-    Appointment findByTimeAndDoctor(Date date, Doctor doctor) throws ServicePersistentException;
-
     List<Appointment> findByTimeAndSpecialization(Date date, String specialization) throws ServicePersistentException;
 
     List<Appointment> findByDateAndStatusAndDoctor(Date date, String status, Integer doctorId) throws ServicePersistentException;
 
+    List<Appointment> findByPatient(Integer patientId) throws ServicePersistentException;
+
     List<Appointment> findByDateAndStatus(Date date, String status) throws ServicePersistentException;
 
-    List<Appointment> findByPatient(Integer patientId) throws ServicePersistentException;
+    List<Appointment> findByPatientAndStatus(Integer patientId, String status) throws ServicePersistentException;
 
     void delete(Integer id) throws ServicePersistentException;
 

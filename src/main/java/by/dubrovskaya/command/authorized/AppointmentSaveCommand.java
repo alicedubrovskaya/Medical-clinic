@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 public class AppointmentSaveCommand extends AuthorizedUserCommand {
     private static final Logger logger = LogManager.getLogger(AppointmentSaveCommand.class);
     private static final String HTML = ".html";
+    private static final String UNDEFINED = "Undefined";
     private static final String SUCCESSFUL_SAVING = "message.appointment.saved";
 
     @Override
@@ -73,7 +74,11 @@ public class AppointmentSaveCommand extends AuthorizedUserCommand {
             if (disease == null) {
                 appointmentService.save(appointment);
             } else {
-                appointmentService.save(appointment, disease);
+                if (!disease.equals(UNDEFINED)) {
+                    appointmentService.save(appointment, disease);
+                } else {
+                    appointmentService.save(appointment);
+                }
             }
             forward.getAttributes().put(AttributeType.MESSAGE.getValue(), rb.getString(SUCCESSFUL_SAVING));
         } catch (ServicePersistentException | IncorrectFormDataException e) {
