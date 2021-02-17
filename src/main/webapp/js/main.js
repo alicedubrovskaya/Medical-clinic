@@ -96,7 +96,7 @@ function dropMenu(e) {
     return false;
 }
 
-function getDate() {
+function getCurrentDate() {
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1; //January is 0!
@@ -109,8 +109,17 @@ function getDate() {
     if (mm < 10) {
         mm = '0' + mm
     }
-
     today = yyyy + '-' + mm + '-' + dd;
+    return today;
+}
+
+function setCurrentDate() {
+    var today = getCurrentDate();
     document.getElementById('date').value = today;
+}
+
+function setStartDate() {
+    var today = getCurrentDate();
+    document.getElementById('start').value = today;
 }
 

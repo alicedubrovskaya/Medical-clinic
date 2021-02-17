@@ -26,19 +26,15 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>${clinic} - ${title}</title>
-    <%--	<c:url value="/main.css" var="cssUrl"/>--%>
-    <%--	<LINK rel="stylesheet" type="text/css" href="${cssUrl}">--%>
     <c:url value="/js" var="javascriptUrl"/>
     <script type="text/javascript" src="${javascriptUrl}/main.js"></script>
 
-    <%--    TODO--%>
     <c:if test="${not empty cssFiles}">
         <c:forEach var="cssFileItem" items="${cssFiles}">
             <link href="<c:url value="/css/${cssFileItem}"/>" rel="stylesheet">
         </c:forEach>
     </c:if>
     <link href="<c:url value="/css/main.css"/>" rel="stylesheet">
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>

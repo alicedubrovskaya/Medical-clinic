@@ -21,9 +21,10 @@ public class VacationSaveCommand extends AdministratorCommand {
     private static final Logger logger = LogManager.getLogger(VacationSaveCommand.class);
     private static final String HTML = ".html";
     private static final String SUCCESSFUL_SAVING = "message.vacation.saved";
+    private static final String DOCTOR_NOT_FOUND = "message.doctor.notFound";
 
     @Override
-    public Forward exec(HttpServletRequest request, HttpServletResponse response){
+    public Forward exec(HttpServletRequest request, HttpServletResponse response) {
         ResourceBundle rb = ResourceBundleUtil.getResourceBundle(request);
         Forward forward = new Forward(CommandType.VACATION_LIST.getCommand() + HTML);
         try {
@@ -39,7 +40,7 @@ public class VacationSaveCommand extends AdministratorCommand {
             if (vacation.getId() != null) {
                 doctor = doctorService.findById(vacation.getId());
             } else {
-                //TODO can be doctors with the same name and surname
+                //doctors cannot be with the same name and surname
                 doctor = doctorService.findBySurnameAndName(doctorFromRequest.getSurname(), doctorFromRequest.getName());
                 vacation.setId(doctor.getId());
             }
@@ -51,7 +52,9 @@ public class VacationSaveCommand extends AdministratorCommand {
             }
         } catch (IncorrectFormDataException | ServicePersistentException e) {
             logger.error(e);
+            forward.getAttributes().put(AttributeType.MESSAGE.getValue(), rb.getString(DOCTOR_NOT_FOUND));
         }
+        forward.setRedirect(true);
         return forward;
     }
 }

@@ -16,6 +16,7 @@ import by.dubrovskaya.service.validator.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -25,7 +26,6 @@ public class PatientSaveCommand extends Command {
     private static final String SUCCESSFUL_UPDATING = "message.patient.updated";
     private static final String SUCCESSFUL_SAVING = "message.patient.saved";
 
-
     @Override
     public Set<Role> getAllowRoles() {
         return null;
@@ -33,7 +33,7 @@ public class PatientSaveCommand extends Command {
 
     @Override
     public Forward exec(HttpServletRequest request, HttpServletResponse response) {
-        Forward forward = null;
+        Forward forward = new Forward(CommandType.PATIENT_LIST.getCommand() + HTML);
         ResourceBundle rb = ResourceBundleUtil.getResourceBundle(request);
 
         try {
@@ -45,8 +45,8 @@ public class PatientSaveCommand extends Command {
             if (patient.getId() != null) {
                 service.save(patient);
                 forward = new Forward(CommandType.PATIENT_EDIT.getCommand() + HTML);
-                forward.getAttributes().put(AttributeType.ID.getValue(), patient.getId());
-                forward.getAttributes().put(AttributeType.MESSAGE.getValue(), rb.getString(SUCCESSFUL_SAVING));
+                forward.getAttributes().put(AttributeType.PATIENT.getValue(), patient);
+                forward.getAttributes().put(AttributeType.MESSAGE.getValue(), rb.getString(SUCCESSFUL_UPDATING));
             } else {
                 Validator<User> userValidator = validatorFactory.createUserValidator();
                 User user = userValidator.validate(request);
@@ -56,12 +56,13 @@ public class PatientSaveCommand extends Command {
                     service.save(patient);
                     forward = new Forward(CommandType.LOGIN.getCommand() + HTML);
                     forward.getAttributes().put(AttributeType.ID.getValue(), patient.getId());
-                    forward.getAttributes().put(AttributeType.MESSAGE.getValue(), rb.getString(SUCCESSFUL_UPDATING));
+                    forward.getAttributes().put(AttributeType.MESSAGE.getValue(), rb.getString(SUCCESSFUL_SAVING));
                 }
             }
         } catch (IncorrectFormDataException | ServicePersistentException e) {
             logger.error(e);
         }
+        forward.setRedirect(true);
         return forward;
     }
 }

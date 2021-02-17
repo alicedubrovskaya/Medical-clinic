@@ -24,10 +24,10 @@ public class DoctorSaveCommand extends AdministratorCommand {
     private static final String SUCCESSFUL_SAVING = "message.doctor.saved";
 
     @Override
-    public Command.Forward exec(HttpServletRequest request, HttpServletResponse response)  {
-        Command.Forward forward = null;
-        ResourceBundle rb = ResourceBundleUtil.getResourceBundle(request);
+    public Command.Forward exec(HttpServletRequest request, HttpServletResponse response) {
+        Command.Forward forward = new Command.Forward(CommandType.DOCTOR_LIST.getCommand() + HTML);
 
+        ResourceBundle rb = ResourceBundleUtil.getResourceBundle(request);
         try {
             DoctorService service = serviceFactory.getDoctorService();
 
@@ -36,7 +36,6 @@ public class DoctorSaveCommand extends AdministratorCommand {
 
             if (doctor.getId() != null) {
                 service.save(doctor);
-                forward = new Command.Forward(CommandType.DOCTOR_LIST.getCommand() + HTML);
                 forward.getAttributes().put(AttributeType.ID.getValue(), doctor.getId());
                 forward.getAttributes().put(AttributeType.MESSAGE.getValue(), rb.getString(SUCCESSFUL_UPDATING));
             } else {
@@ -47,7 +46,6 @@ public class DoctorSaveCommand extends AdministratorCommand {
                     doctor.setPassword(user.getPassword());
 
                     service.save(doctor);
-                    forward = new Command.Forward(CommandType.DOCTOR_LIST.getCommand() + HTML);
                     forward.getAttributes().put(AttributeType.ID.getValue(), doctor.getId());
                     forward.getAttributes().put(AttributeType.MESSAGE.getValue(), rb.getString(SUCCESSFUL_SAVING));
                 }
@@ -55,6 +53,7 @@ public class DoctorSaveCommand extends AdministratorCommand {
         } catch (IncorrectFormDataException | ServicePersistentException e) {
             logger.error(e);
         }
+        forward.setRedirect(true);
         return forward;
     }
 }

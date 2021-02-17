@@ -23,6 +23,9 @@
 <fmt:message bundle="${textResources}" key="date" var="appointment_date"/>
 <fmt:message bundle="${textResources}" key="button.view" var="button_view"/>
 <fmt:message bundle="${textResources}" key="status.undefined" var="status_undefined"/>
+<fmt:message bundle="${textResources}" key="status.was" var="status_was"/>
+<fmt:message bundle="${textResources}" key="status.wasNot" var="status_wasNot"/>
+
 <fmt:message bundle="${textResources}" key="doctor.specialization" var="doctor_specialization"/>
 
 <u:html title="${patient_appointment}" message="${message}">
@@ -34,7 +37,7 @@
                 <input type="date" class="form-control" id="date" name="date">
             </div>
             <script>
-                getDate();
+                setCurrentDate();
             </script>
 
             <c:choose>
@@ -50,10 +53,9 @@
                 </c:when>
                 <c:otherwise>
                     <select id="status" class="form-control" name="status">
-                        <option>${status_undefined}</option>
-                        <c:forEach items="${statuses}" var="status">
-                            <option value="${status}">${status}</option>
-                        </c:forEach>
+                        <option value="Все">${status_undefined}</option>
+                        <option value="Был">${status_was}</option>
+                        <option value="Не был">${status_wasNot}</option>
                     </select>
                 </c:otherwise>
             </c:choose>
@@ -61,7 +63,6 @@
             <input type="submit" class="btn btn-info" value="${button_view}">
         </form>
     </div>
-
     <c:if test="${not empty appointments}">
         <jsp:include page="/WEB-INF/jsp/appointment/list.jsp"/>
     </c:if>

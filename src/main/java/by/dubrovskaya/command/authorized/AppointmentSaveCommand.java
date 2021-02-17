@@ -79,6 +79,7 @@ public class AppointmentSaveCommand extends AuthorizedUserCommand {
         } catch (ServicePersistentException | IncorrectFormDataException e) {
             logger.error(e);
         }
+        forward.setRedirect(true);
         return forward;
     }
 }

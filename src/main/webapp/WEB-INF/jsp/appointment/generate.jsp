@@ -37,7 +37,7 @@
                 <input type="date" class="form-control" id="date" name="date">
             </div>
             <script>
-                getDate();
+                setCurrentDate();
             </script>
             <input type="submit" class="btn btn-warning" value="${appointment_generate}">
         </form>

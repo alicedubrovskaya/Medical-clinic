@@ -50,7 +50,7 @@ public class AppointmentListCommand extends AuthorizedUserCommand {
             AppointmentService service = serviceFactory.getAppointmentService();
             List<Appointment> appointments;
 
-            //TODO
+            //TODO remove eng russ (already in value exists)
             if (date != null) {
                 if (specialization != null) {
                     appointments = service.findByTimeAndSpecialization(date, specialization);

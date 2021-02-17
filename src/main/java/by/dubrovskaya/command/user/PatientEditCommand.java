@@ -30,20 +30,25 @@ public class PatientEditCommand extends Command {
         HttpSession session = request.getSession(false);
         User authorizedUser = (User) session.getAttribute(AttributeType.USER_AUTHORIZED.getValue());
         try {
-            User user = (User) request.getAttribute(AttributeType.USER.getValue());
-            if (user == null) {
-                Integer id;
-                String parameter = request.getParameter(ParameterType.ID.getValue());
-                if (parameter != null) {
-                    id = Integer.parseInt(parameter);
-                } else {
-                    id = authorizedUser.getId();
-                }
-                PatientService service = serviceFactory.getPatientService();
-                Patient patient = service.findById(id);
-                request.setAttribute(AttributeType.PATIENT.getValue(), patient);
+            Patient patientFromAttribute = (Patient) request.getAttribute(AttributeType.PATIENT.getValue());
+            if (patientFromAttribute != null) {
+                request.setAttribute(AttributeType.PATIENT.getValue(), patientFromAttribute);
             } else {
-                request.setAttribute(AttributeType.USER.getValue(), user);
+                User user = (User) request.getAttribute(AttributeType.USER.getValue());
+                if (user == null) {
+                    Integer id;
+                    String parameter = request.getParameter(ParameterType.ID.getValue());
+                    if (parameter != null) {
+                        id = Integer.parseInt(parameter);
+                    } else {
+                        id = authorizedUser.getId();
+                    }
+                    PatientService service = serviceFactory.getPatientService();
+                    Patient patient = service.findById(id);
+                    request.setAttribute(AttributeType.PATIENT.getValue(), patient);
+                } else {
+                    request.setAttribute(AttributeType.USER.getValue(), user);
+                }
             }
         } catch (NumberFormatException | ServicePersistentException e) {
             logger.error(e);

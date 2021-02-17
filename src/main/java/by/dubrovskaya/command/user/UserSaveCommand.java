@@ -26,7 +26,6 @@ public class UserSaveCommand extends Command {
     private static final String USER_WITH_SUCH_LOGIN_ALREADY_EXISTS = "message.user.exists";
     private static final String SUCCESSFUL_PASSWORD_CHANGING = "message.user.password.changed";
 
-
     @Override
     public Set<Role> getAllowRoles() {
         return null;
@@ -71,6 +70,7 @@ public class UserSaveCommand extends Command {
         } catch (IncorrectFormDataException | ServicePersistentException e) {
             logger.error(e);
         }
+        forward.setRedirect(true);
         return forward;
     }
 }

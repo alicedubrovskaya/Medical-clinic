@@ -5,7 +5,6 @@ import by.dubrovskaya.domain.enumeration.AttributeType;
 import by.dubrovskaya.domain.enumeration.CommandType;
 import by.dubrovskaya.domain.enumeration.ParameterType;
 import by.dubrovskaya.domain.enumeration.Role;
-import by.dubrovskaya.exception.PersistentException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,13 +20,11 @@ public class ChangeLanguageCommand extends Command {
     }
 
     @Override
-    public Forward exec(HttpServletRequest request, HttpServletResponse response){
+    public Forward exec(HttpServletRequest request, HttpServletResponse response) {
         Forward forward = new Forward(CommandType.MAIN.getCommand() + HTML);
         String language = request.getParameter(ParameterType.LANGUAGE.getValue());
         if (language != null) {
             request.getSession().setAttribute(AttributeType.LANGUAGE.getValue(), language);
-            //TODO
-//            response.addCookie(new Cookie(AttributeType.LANGUAGE.getValue(), language));
         }
         return forward;
     }

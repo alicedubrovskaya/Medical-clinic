@@ -73,6 +73,12 @@
                 <label for="start">${date_start}:</label>
                 <input type="date" required class="form-control" id="start" name="vacation-start" min="2021-01-01"
                        value="${start}">
+                <c:if test="${empty start}">
+                    <script>
+                        alert('empty');
+                        setStartDate();
+                    </script>
+                </c:if>
             </div>
             <div class="form-group">
                 <label for="end">${date_end}:</label>
