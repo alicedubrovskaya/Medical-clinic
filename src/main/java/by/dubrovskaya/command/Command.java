@@ -1,9 +1,8 @@
 package by.dubrovskaya.command;
 
 import by.dubrovskaya.domain.enumeration.Role;
-import by.dubrovskaya.exception.PersistentException;
 import by.dubrovskaya.service.ServiceFactory;
-import by.dubrovskaya.controller.validator.ValidatorFactory;
+import by.dubrovskaya.service.validator.ValidatorFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

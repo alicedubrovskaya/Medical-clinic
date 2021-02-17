@@ -1,4 +1,4 @@
-package by.dubrovskaya.controller.validator;
+package by.dubrovskaya.service.validator;
 
 import by.dubrovskaya.domain.Doctor;
 import by.dubrovskaya.domain.Patient;
@@ -33,6 +33,10 @@ public class ValidatorFactory {
 
     public DateValidator createDateValidator() {
         return new DateValidator();
+    }
+
+    public PaginationValidator createPaginationValidator() {
+        return new PaginationValidator();
     }
 
     public AppointmentValidator createAppointmentValidator() {

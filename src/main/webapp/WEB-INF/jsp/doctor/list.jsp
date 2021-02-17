@@ -61,6 +61,7 @@
             </c:forEach>
             </tbody>
         </table>
+        <u:pagination entity="doctor"/>
     </div>
 </u:html>
 

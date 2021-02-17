@@ -14,6 +14,7 @@ import by.dubrovskaya.exception.ServicePersistentException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Doctor by.dubrovskaya.service
@@ -162,6 +163,24 @@ public class DoctorServiceImpl extends ServiceImpl implements DoctorService {
             } else {
                 throw new ServicePersistentException("Empty list of specializations");
             }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
+        }
+    }
+
+    /**
+     * Finds all doctors with specified offset and number of records
+     *
+     * @param offset
+     * @param noOfRecords
+     * @return
+     * @throws ServicePersistentException
+     */
+    @Override
+    public Map<Integer, List<Doctor>> find(int offset, int noOfRecords) throws ServicePersistentException {
+        try {
+            DoctorDao doctorDao = transaction.createDoctorDao();
+            return doctorDao.read(offset, noOfRecords);
         } catch (PersistentException e) {
             throw new ServicePersistentException(e);
         }

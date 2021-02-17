@@ -7,13 +7,12 @@ import by.dubrovskaya.domain.enumeration.ParameterType;
 import by.dubrovskaya.domain.User;
 import by.dubrovskaya.domain.enumeration.Role;
 import by.dubrovskaya.exception.IncorrectFormDataException;
-import by.dubrovskaya.exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.dubrovskaya.service.util.ResourceBundleUtil;
 import by.dubrovskaya.service.UserService;
 import by.dubrovskaya.exception.ServicePersistentException;
-import by.dubrovskaya.controller.validator.Validator;
+import by.dubrovskaya.service.validator.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

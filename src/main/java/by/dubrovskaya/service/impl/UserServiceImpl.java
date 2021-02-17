@@ -158,8 +158,7 @@ public class UserServiceImpl extends ServiceImpl implements UserService {
     public Map<Integer, List<User>> find(int offset, int noOfRecords) throws ServicePersistentException {
         try {
             UserDao userDao = transaction.createUserDao();
-            Map<Integer, List<User>> map = userDao.read(offset, noOfRecords);
-            return map;
+            return userDao.read(offset, noOfRecords);
         } catch (PersistentException e) {
             throw new ServicePersistentException(e);
         }

@@ -5,6 +5,7 @@ import by.dubrovskaya.dao.extractor.DoctorExtractor;
 import by.dubrovskaya.dao.extractor.Extractor;
 import by.dubrovskaya.dao.extractor.UserExtractor;
 import by.dubrovskaya.domain.Doctor;
+import by.dubrovskaya.domain.Patient;
 import by.dubrovskaya.domain.User;
 import by.dubrovskaya.exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
@@ -13,9 +14,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Data access object for doctor
@@ -49,6 +48,11 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
     private static final String READ_DOCTOR_BY_SURNAME_AND_NAME = READ_DOCTOR + " WHERE name=? AND surname=?";
 
     private static final String READ_DOCTOR_BY_SPECIALIZATION = READ_DOCTOR + " WHERE specialization_id=?";
+
+    private static final String READ_DOCTORS_LIMIT = "SELECT SQL_CALC_FOUND_ROWS `id`, `name`, `surname`, `specialization_id`," +
+            "`working_shift` FROM `doctor` LIMIT ? ,?";
+
+    private static final String SQL_NUMBER_OF_RECORDS = "SELECT FOUND_ROWS()";
 
     private static final String READ_SPECIALIZATIONS = "SELECT `id`, `type` FROM specialization";
 
@@ -255,6 +259,42 @@ public class DoctorDaoImpl extends BaseDaoImpl implements DoctorDao {
             throw new PersistentException("It is impossible to read specializations");
         }
     }
+
+    /**
+     * Reads doctors with specified offset number of records
+     *
+     * @param offset      starting from
+     * @param noOfRecords amount of doctors
+     * @return Map<K, V> , K- number of found rows, V- list of doctors with offset
+     * @throws PersistentException if database error occurs
+     */
+    @Override
+    public Map<Integer, List<Doctor>> read(int offset, int noOfRecords) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_DOCTORS_LIMIT)) {
+            statement.setInt(1, offset);
+            statement.setInt(2, noOfRecords);
+            ResultSet resultSet = statement.executeQuery();
+
+            Doctor doctor;
+            Map<Integer, List<Doctor>> map = new HashMap<>();
+            List<Doctor> doctors = new ArrayList<>();
+            while (resultSet.next()) {
+                doctor = doctorExtractor.extract(resultSet);
+                doctors.add(doctor);
+            }
+            resultSet = statement.executeQuery(SQL_NUMBER_OF_RECORDS);
+            Integer sqlNoOfRecords = null;
+            if (resultSet.next()) {
+                sqlNoOfRecords = resultSet.getInt(1);
+            }
+            map.put(sqlNoOfRecords, doctors);
+            logger.debug("Doctors were read");
+            return map;
+        } catch (SQLException e) {
+            throw new PersistentException("Doctors cannot be read", e);
+        }
+    }
+
 
     /**
      * Reads doctors by specialization

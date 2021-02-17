@@ -62,6 +62,7 @@
             </tbody>
         </table>
     </div>
+    <u:pagination entity="patient"/>
 
     <%--<form action="/patient/edit.html">--%>
     <%--    <button type="submit">Добавить пациента</button>--%>

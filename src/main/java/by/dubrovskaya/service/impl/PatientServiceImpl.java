@@ -14,6 +14,7 @@ import by.dubrovskaya.exception.ServicePersistentException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Patient by.dubrovskaya.service
@@ -95,6 +96,24 @@ public class PatientServiceImpl extends ServiceImpl implements PatientService {
             } else {
                 throw new ServicePersistentException("Empty list of patients");
             }
+        } catch (PersistentException e) {
+            throw new ServicePersistentException(e);
+        }
+    }
+
+    /**
+     * Finds all patients with specified offset and number of records
+     *
+     * @param offset
+     * @param noOfRecords
+     * @return
+     * @throws ServicePersistentException
+     */
+    @Override
+    public Map<Integer, List<Patient>> find(int offset, int noOfRecords) throws ServicePersistentException {
+        try {
+            PatientDao patientDao = transaction.createPatientDao();
+            return patientDao.read(offset, noOfRecords);
         } catch (PersistentException e) {
             throw new ServicePersistentException(e);
         }

@@ -1,7 +1,7 @@
 package by.dubrovskaya.command.authorized;
 
 import by.dubrovskaya.command.Command;
-import by.dubrovskaya.controller.validator.DateValidator;
+import by.dubrovskaya.service.validator.DateValidator;
 import by.dubrovskaya.domain.Appointment;
 import by.dubrovskaya.domain.User;
 import by.dubrovskaya.domain.enumeration.AttributeType;

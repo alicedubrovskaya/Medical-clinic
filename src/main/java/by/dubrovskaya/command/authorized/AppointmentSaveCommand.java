@@ -1,6 +1,6 @@
 package by.dubrovskaya.command.authorized;
 
-import by.dubrovskaya.controller.validator.Validator;
+import by.dubrovskaya.service.validator.Validator;
 import by.dubrovskaya.domain.Appointment;
 import by.dubrovskaya.domain.Patient;
 import by.dubrovskaya.domain.User;

@@ -4,6 +4,7 @@ import by.dubrovskaya.dao.PatientDao;
 import by.dubrovskaya.dao.extractor.Extractor;
 import by.dubrovskaya.dao.extractor.PatientExtractor;
 import by.dubrovskaya.domain.Patient;
+import by.dubrovskaya.domain.User;
 import by.dubrovskaya.exception.PersistentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
     private final Logger logger = LogManager.getLogger(getClass().getName());
@@ -42,6 +45,11 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
     private static final String READ_DISEASES = "SELECT `id`, `name` FROM `disease`";
 
     private static final String READ_DISEASE_BY_NAME = READ_DISEASES + " WHERE `name`=?";
+
+    private static final String READ_PATIENTS_LIMIT = "SELECT SQL_CALC_FOUND_ROWS `id`, `name`, `surname`, `email`, " +
+            "`phone_number`,`address` FROM `patient` LIMIT ? ,?";
+
+    private static final String SQL_NUMBER_OF_RECORDS = "SELECT FOUND_ROWS()";
 
     private static final String READ_DISEASES_BY_PATIENT = "SELECT disease.name FROM disease JOIN patient_disease" +
             " ON disease.id = patient_disease.disease_id WHERE patient_id=?";
@@ -276,6 +284,41 @@ public class PatientDaoImpl extends BaseDaoImpl implements PatientDao {
             return disease;
         } catch (SQLException e) {
             throw new PersistentException("It is impossible to read disease");
+        }
+    }
+
+    /**
+     * Reads patients with specified offset number of records
+     *
+     * @param offset      starting from
+     * @param noOfRecords amount of patients
+     * @return Map<K, V> , K- number of found rows, V- list of patients with offset
+     * @throws PersistentException if database error occurs
+     */
+    @Override
+    public Map<Integer, List<Patient>> read(int offset, int noOfRecords) throws PersistentException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_PATIENTS_LIMIT)) {
+            statement.setInt(1, offset);
+            statement.setInt(2, noOfRecords);
+            ResultSet resultSet = statement.executeQuery();
+
+            Patient patient;
+            Map<Integer, List<Patient>> map = new HashMap<>();
+            List<Patient> patients = new ArrayList<>();
+            while (resultSet.next()) {
+                patient = patientExtractor.extract(resultSet);
+                patients.add(patient);
+            }
+            resultSet = statement.executeQuery(SQL_NUMBER_OF_RECORDS);
+            Integer sqlNoOfRecords = null;
+            if (resultSet.next()) {
+                sqlNoOfRecords = resultSet.getInt(1);
+            }
+            map.put(sqlNoOfRecords, patients);
+            logger.debug("Patients were read");
+            return map;
+        } catch (SQLException e) {
+            throw new PersistentException("Patients cannot be read", e);
         }
     }
 

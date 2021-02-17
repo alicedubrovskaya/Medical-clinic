@@ -72,10 +72,6 @@
             </c:forEach>
             </tbody>
         </table>
+        <u:pagination entity="vacation"/>
     </div>
-
-    <%--    <form action="/vacation/edit.html" method="post">--%>
-    <%--        <button type="submit">Добавить отпуск</button>--%>
-    <%--    </form>--%>
-
 </u:html>

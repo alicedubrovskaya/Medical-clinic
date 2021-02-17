@@ -1,4 +1,4 @@
-package by.dubrovskaya.controller.validator;
+package by.dubrovskaya.service.validator;
 
 import by.dubrovskaya.domain.enumeration.ParameterType;
 import by.dubrovskaya.domain.Patient;
