@@ -114,10 +114,12 @@ function getCurrentDate() {
 }
 
 function getCurrentDatePlusDays(days) {
-    var today = new Date();
-    var dd = today.getDate() + days;
-    var mm = today.getMonth() + 1; //January is 0!
-    var yyyy = today.getFullYear();
+    var date = new Date();
+    date.setDate(date.getDate() + Number(days));
+
+    var dd = date.getDate();
+    var mm = date.getMonth() + 1; //January is 0!
+    var yyyy = date.getFullYear();
 
     if (dd < 10) {
         dd = '0' + dd
@@ -126,7 +128,7 @@ function getCurrentDatePlusDays(days) {
     if (mm < 10) {
         mm = '0' + mm
     }
-    today = yyyy + '-' + mm + '-' + dd;
+    var today = yyyy + '-' + mm + '-' + dd;
     return today;
 }
 

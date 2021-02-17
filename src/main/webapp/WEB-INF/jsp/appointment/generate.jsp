@@ -26,7 +26,7 @@
 
 <u:html title="${appointment_management}" message="${message}" validator="validator-of-edit-appointment-form.js">
     <div class="container">
-        <form action="/appointment/generate.html" method="post" onsubmit="return validateDays()">
+        <form action="/appointment/generate.html" method="post" onsubmit="return validateDateAndDays()">
             <div class="form-group">
                 <label for="days">${count_of_days}:</label>
                 <input type="text" required pattern="^[0-9]+$" class="form-control" id="days" name="days"
@@ -36,7 +36,7 @@
             <div class="form-group">
                 <label for="date">${date_start}:</label>
                 <input type="date" class="form-control" id="date" name="date"
-                       onblur="validateDays()">
+                       onblur="validateDateAndDays()">
             </div>
             <script>
                 setCurrentDate();
