@@ -26,7 +26,7 @@ public class VacationServiceImplTest {
 
     @BeforeClass
     public void setUpBeforeClass() throws PersistentException {
-        ServiceFactory serviceFactory = new ServiceFactoryImpl();
+        ServiceFactory serviceFactory = new ServiceFactoryImpl(new TransactionFactoryImpl());
         vacationService = serviceFactory.getVacationService();
     }
 

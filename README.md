@@ -19,7 +19,7 @@ conclusion. The doctor can view all
 information about the patients of the clinic.
 Appointments of the **patient** display in history of appointments
 
-##Roles
+## Roles
 0. Unregistered user
 
 * Patient registration

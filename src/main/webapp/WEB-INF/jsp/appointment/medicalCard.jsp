@@ -31,7 +31,6 @@
 <fmt:message bundle="${textResources}" key="patient.disease" var="patient_disease"/>
 <fmt:message bundle="${textResources}" key="patient.diseases" var="patient_diseases"/>
 
-
 <u:html title="${appointment_history}" message="${message}">
     <div class="container">
         <div class="row">

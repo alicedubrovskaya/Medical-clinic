@@ -3,7 +3,6 @@ package by.dubrovskaya.dao.impl;
 import by.dubrovskaya.dao.AppointmentDao;
 import by.dubrovskaya.dao.extractor.AppointmentExtractor;
 import by.dubrovskaya.dao.extractor.Extractor;
-import by.dubrovskaya.dao.extractor.PatientExtractor;
 import by.dubrovskaya.domain.Appointment;
 import by.dubrovskaya.domain.Doctor;
 import by.dubrovskaya.domain.Patient;
@@ -14,8 +13,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
@@ -34,8 +34,7 @@ public class AppointmentDaoImpl extends BaseDaoImpl implements AppointmentDao {
 
     private static final String CREATE_APPOINTMENT = "INSERT INTO `appointment` (`time`, `approved`," +
             "`status`, `complaints`, `medical_report`, `recommendation`, `patient_id`, `doctor_id`)" +
-            " VALUES (:dasd,?,?,?,?,?,?,?)";
-    //TODO
+            " VALUES (?,?,?,?,?,?,?,?)";
 
     private static final String READ_APPOINTMENTS = "SELECT `id`, `time`, `approved`,  `status`, `complaints`," +
             " `medical_report`,`recommendation`, `patient_id`, `doctor_id` FROM `appointment`";

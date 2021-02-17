@@ -58,7 +58,6 @@ public abstract class Command {
             return forward;
         }
 
-
         public void setForward(String forward) {
             this.forward = forward;
         }

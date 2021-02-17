@@ -3,6 +3,7 @@ package by.dubrovskaya.controller;
 import by.dubrovskaya.command.Command;
 import by.dubrovskaya.command.CommandManager;
 import by.dubrovskaya.command.factory.CommandManagerFactory;
+import by.dubrovskaya.dao.impl.TransactionFactoryImpl;
 import by.dubrovskaya.dao.pool.ConnectionPool;
 import by.dubrovskaya.domain.enumeration.AttributeType;
 import by.dubrovskaya.exception.PersistentException;
@@ -24,7 +25,7 @@ public class DispatcherServlet extends HttpServlet {
     private static final String JSP = ".jsp";
 
     public ServiceFactory getFactory() throws PersistentException {
-        return new ServiceFactoryImpl();
+        return new ServiceFactoryImpl(new TransactionFactoryImpl());
     }
 
     @Override

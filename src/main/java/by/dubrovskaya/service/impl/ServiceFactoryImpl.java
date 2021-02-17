@@ -17,19 +17,17 @@ import java.sql.SQLException;
  */
 public class ServiceFactoryImpl implements ServiceFactory {
     private final TransactionFactory factory;
-    private final Connection connection;
 
     private final Logger logger = LogManager.getLogger(getClass().getName());
 
-    public ServiceFactoryImpl() throws PersistentException {
-        this.factory = TransactionFactoryImpl.getInstance();
-        this.connection = ConnectionPool.getInstance().getConnection();
+    public ServiceFactoryImpl(TransactionFactory factory) {
+        this.factory = factory;
     }
 
     @Override
     public UserService getUserService() {
         ServiceImpl service = new UserServiceImpl();
-        Transaction transaction = factory.createTransaction(connection);
+        Transaction transaction = factory.createTransaction();
         service.setTransaction(transaction);
         return (UserService) service;
     }
@@ -37,7 +35,7 @@ public class ServiceFactoryImpl implements ServiceFactory {
     @Override
     public PatientService getPatientService() {
         ServiceImpl service = new PatientServiceImpl();
-        Transaction transaction = factory.createTransaction(connection);
+        Transaction transaction = factory.createTransaction();
         service.setTransaction(transaction);
         return (PatientService) service;
     }
@@ -45,7 +43,7 @@ public class ServiceFactoryImpl implements ServiceFactory {
     @Override
     public DoctorService getDoctorService() {
         ServiceImpl service = new DoctorServiceImpl();
-        Transaction transaction = factory.createTransaction(connection);
+        Transaction transaction = factory.createTransaction();
         service.setTransaction(transaction);
         return (DoctorService) service;
     }
@@ -53,7 +51,7 @@ public class ServiceFactoryImpl implements ServiceFactory {
     @Override
     public AppointmentService getAppointmentService() {
         ServiceImpl service = new AppointmentServiceImpl();
-        Transaction transaction = factory.createTransaction(connection);
+        Transaction transaction = factory.createTransaction();
         service.setTransaction(transaction);
         return (AppointmentService) service;
     }
@@ -61,17 +59,13 @@ public class ServiceFactoryImpl implements ServiceFactory {
     @Override
     public VacationService getVacationService() {
         ServiceImpl service = new VacationServiceImpl();
-        Transaction transaction = factory.createTransaction(connection);
+        Transaction transaction = factory.createTransaction();
         service.setTransaction(transaction);
         return (VacationService) service;
     }
 
     @Override
     public void close() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            logger.error(e);
-        }
+        factory.close();
     }
 }

@@ -24,7 +24,7 @@ public class UserServiceImplTest {
 
     @BeforeClass
     public void setUpBeforeClass() throws PersistentException {
-        ServiceFactory serviceFactory = new ServiceFactoryImpl();
+        ServiceFactory serviceFactory = new ServiceFactoryImpl(new TransactionFactoryImpl());
         userService = serviceFactory.getUserService();
     }
 

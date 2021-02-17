@@ -12,6 +12,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
 public final class ConnectionPool {
@@ -28,14 +29,16 @@ public final class ConnectionPool {
     protected final BlockingQueue<ProxyConnection> freeConnections = new LinkedBlockingQueue<>();
     private final BlockingQueue<ProxyConnection> usedConnections = new LinkedBlockingQueue<>();
 
-    private static volatile ConnectionPool instance = null;
+    private static AtomicBoolean isInitialized = new AtomicBoolean(false);
+    private static ConnectionPool instance = null;
 
     public static ConnectionPool getInstance() {
-        if (instance == null) {
+        if (!isInitialized.get()) {
             try {
                 lock.lock();
-                if (instance == null) {
+                if (!isInitialized.get()) {
                     instance = new ConnectionPool();
+                    isInitialized.set(true);
                 }
             } finally {
                 lock.unlock();

@@ -10,23 +10,24 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class TransactionFactoryImpl implements TransactionFactory {
-    private static TransactionFactoryImpl instance;
-
+    private Connection connection;
     private static final Logger logger = LogManager.getLogger(TransactionFactoryImpl.class);
 
-    private TransactionFactoryImpl() {
-    }
-
-    public static TransactionFactoryImpl getInstance() {
-        if (instance == null) {
-            instance = new TransactionFactoryImpl();
-        }
-        return instance;
+    public TransactionFactoryImpl() throws PersistentException {
+        connection = ConnectionPool.getInstance().getConnection();
     }
 
     @Override
-    public TransactionImpl createTransaction(Connection connection) {
+    public TransactionImpl createTransaction() {
         return new TransactionImpl(connection);
     }
 
+    @Override
+    public void close() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            logger.error("Connection cannot be closed");
+        }
+    }
 }
