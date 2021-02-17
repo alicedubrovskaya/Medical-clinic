@@ -52,19 +52,6 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         }
     }
 
-
-    private void saveGenerated(Appointment appointment) throws ServicePersistentException {
-        AppointmentDao appointmentDao = transaction.createAppointmentDao();
-        Appointment existingAppointment = findByTimeAndDoctor(appointment.getTime(), appointment.getDoctor());
-        try {
-            if (existingAppointment == null) {
-                appointment.setId(appointmentDao.create(appointment));
-            }
-        } catch (PersistentException e) {
-            throw new ServicePersistentException(e);
-        }
-    }
-
     @Override
     public List<Appointment> findAll() throws ServicePersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
@@ -178,22 +165,6 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
     }
 
     @Override
-    public Appointment findByPatientAndDisease(Integer patientId, String diseaseName) throws ServicePersistentException {
-        AppointmentDao appointmentDao = transaction.createAppointmentDao();
-        try {
-            Appointment appointment = appointmentDao.readByPatientAndDisease(patientId, diseaseName);
-            if (appointment != null) {
-                buildAppointment(Collections.singletonList(appointment));
-                return appointment;
-            } else {
-                throw new ServicePersistentException("Appointment is not found");
-            }
-        } catch (PersistentException e) {
-            throw new ServicePersistentException(e);
-        }
-    }
-
-    @Override
     public List<Appointment> findByPatient(Integer patientId) throws ServicePersistentException {
         AppointmentDao appointmentDao = transaction.createAppointmentDao();
         try {
@@ -228,7 +199,7 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
             if (defineDayOfWeek(date) != 1 && defineDayOfWeek(date) != 7 && vacationDao.readBySpecifiedDate(date) == null) {
                 appointments = appointmentDao.createAppointments(date, doctor);
                 for (Appointment appointment : appointments) {
-                    saveGenerated(appointment);
+                    save(appointment);
                 }
             }
             return appointments;
@@ -237,9 +208,12 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
         }
     }
 
+
     @Override
     public void createAppointmentsForDoctors(Date date, int countOfDays) throws ServicePersistentException {
         transaction.setWithoutAutoCommit();
+        AppointmentDao appointmentDao = transaction.createAppointmentDao();
+
         long currentDate = date.getTime();
         long lastDate = date.getTime() + TimeUnit.DAYS.toMillis(countOfDays);
 
@@ -251,14 +225,20 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
             while (currentDate < lastDate) {
                 appointmentDate = new Date(currentDate);
                 doctors = doctorDao.readWithoutVacation(appointmentDate);
-                for (Doctor doctor : doctors) {
-                    createAppointments(appointmentDate, doctor);
+                List<Appointment> existingAppointmentsOnThisDate = appointmentDao.readByTime(appointmentDate);
+                if (existingAppointmentsOnThisDate.isEmpty()) {
+                    for (Doctor doctor : doctors) {
+                        createAppointments(appointmentDate, doctor);
+                    }
+                } else {
+                    logger.warn("Appointments are already generated for this date");
                 }
                 doctors.clear();
                 currentDate += TimeUnit.DAYS.toMillis(1);
             }
             transaction.commit();
-        } catch (PersistentException e) {
+        } catch (
+                PersistentException e) {
             try {
                 transaction.rollback();
             } catch (PersistentException ex) {
@@ -266,6 +246,7 @@ public class AppointmentServiceImpl extends ServiceImpl implements AppointmentSe
             }
             throw new ServicePersistentException("Appointments for doctors were not created");
         }
+
     }
 
     private void buildAppointment(List<Appointment> appointments) throws ServicePersistentException {

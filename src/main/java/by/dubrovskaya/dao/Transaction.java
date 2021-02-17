@@ -2,6 +2,9 @@ package by.dubrovskaya.dao;
 
 import by.dubrovskaya.exception.PersistentException;
 
+/**
+ * Transaction interface
+ */
 public interface Transaction {
 	UserDao createUserDao();
 

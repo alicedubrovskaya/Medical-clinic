@@ -26,8 +26,6 @@ public interface AppointmentService extends Service {
 
     List<Appointment> findByDateAndStatus(Date date, String status) throws ServicePersistentException;
 
-    Appointment findByPatientAndDisease(Integer patientId, String diseaseName) throws ServicePersistentException;
-
     List<Appointment> findByPatient(Integer patientId) throws ServicePersistentException;
 
     void delete(Integer id) throws ServicePersistentException;

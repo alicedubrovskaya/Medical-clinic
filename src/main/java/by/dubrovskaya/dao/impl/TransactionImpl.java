@@ -8,10 +8,19 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+
+/**
+ * Transaction implementation
+ */
 public class TransactionImpl implements Transaction {
     private final Connection connection;
     private final Logger logger = LogManager.getLogger(getClass().getName());
 
+    /**
+     * Class constructor.
+     *
+     * @param connection - received connection
+     */
     public TransactionImpl(Connection connection) {
         this.connection = connection;
     }
@@ -51,7 +60,12 @@ public class TransactionImpl implements Transaction {
         return (VacationDao) dao;
     }
 
-
+    /**
+     * Makes all changes made since the previous
+     * commit/rollback permanent
+     *
+     * @throws PersistentException if a database access error occurs
+     */
     @Override
     public void commit() throws PersistentException {
         try {
@@ -62,6 +76,12 @@ public class TransactionImpl implements Transaction {
         }
     }
 
+    /**
+     * Undoes all changes made in the current transaction
+     * and releases any database locks
+     *
+     * @throws PersistentException if a database access error occurs
+     */
     @Override
     public void rollback() throws PersistentException {
         try {

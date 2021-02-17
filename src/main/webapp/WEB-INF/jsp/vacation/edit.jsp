@@ -38,7 +38,6 @@
 <fmt:message bundle="${textResources}" key="vacation.delete" var="delete_vacation"/>
 <fmt:message bundle="${textResources}" key="vacation.delete.question" var="delete_question"/>
 
-
 <c:choose>
     <c:when test="${not empty vacation}">
         <c:set var="start" value="${vacation.start}"/>
@@ -54,7 +53,7 @@
 
 <u:html title="${title}" message="${message}" validator="validator-of-edit-vacation-form.js">
     <div class="container">
-        <H2>${title}</H2>
+        <h2>${title}</h2>
         <form action="/vacation/save.html" method="post" onsubmit="return validateVacation()">
             <c:if test="${not empty id}">
                 <input type="hidden" name="id" value="${id}">

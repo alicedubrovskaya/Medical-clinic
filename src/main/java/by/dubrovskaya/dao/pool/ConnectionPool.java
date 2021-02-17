@@ -15,6 +15,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Connection pool class
+ */
 public final class ConnectionPool {
     private final Logger logger = LogManager.getLogger(getClass().getName());
     private static final String UNABLE_TO_CONNECT = "It is impossible to connect to a database";
@@ -60,6 +63,12 @@ public final class ConnectionPool {
         }
     }
 
+    /**
+     * Gets connection
+     *
+     * @return obtained connection
+     * @throws PersistentException
+     */
     public Connection getConnection() throws PersistentException {
         ProxyConnection connection;
         boolean permit;
@@ -81,6 +90,11 @@ public final class ConnectionPool {
         return connection;
     }
 
+    /**
+     * Releases connection and returnees it to pool.
+     *
+     * @param connection that should be returned to pool
+     */
     void freeConnection(ProxyConnection connection) {
         try {
             connection.clearWarnings();
@@ -103,10 +117,19 @@ public final class ConnectionPool {
         }
     }
 
+    /**
+     * Creates new connection
+     *
+     * @return created connection
+     * @throws SQLException
+     */
     private ProxyConnection createConnection() throws SQLException {
         return new ProxyConnection(DriverManager.getConnection(url, user, password));
     }
 
+    /**
+     * Destroys connections.
+     */
     public void destroy() {
         usedConnections.addAll(freeConnections);
         freeConnections.clear();

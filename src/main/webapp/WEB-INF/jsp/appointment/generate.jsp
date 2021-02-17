@@ -24,17 +24,19 @@
 <fmt:message bundle="${textResources}" key="date.startGeneration" var="date_start"/>
 <fmt:message bundle="${textResources}" key="button.generate" var="appointment_generate"/>
 
-<u:html title="${appointment_management}" message="${message}">
+<u:html title="${appointment_management}" message="${message}" validator="validator-of-edit-appointment-form.js">
     <div class="container">
-        <form action="/appointment/generate.html" method="post">
+        <form action="/appointment/generate.html" method="post" onsubmit="return validateDays()">
             <div class="form-group">
                 <label for="days">${count_of_days}:</label>
-                <input type="text" required pattern="^[0-9]+$" class="form-control" id="days" name="days">
+                <input type="text" required pattern="^[0-9]+$" class="form-control" id="days" name="days"
+                       onblur="validateDays()">
             </div>
 
             <div class="form-group">
                 <label for="date">${date_start}:</label>
-                <input type="date" class="form-control" id="date" name="date">
+                <input type="date" class="form-control" id="date" name="date"
+                       onblur="validateDays()">
             </div>
             <script>
                 setCurrentDate();

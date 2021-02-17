@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Connection factory
+ */
 public class ConnectionFactory {
     private static final String PROPERTY_PATH = "database.properties";
     private static final String DB_DRIVER = "db.driver";
@@ -16,6 +19,11 @@ public class ConnectionFactory {
     private static final String DB_POOL_SIZE = "db.poolSize";
     private final Logger logger = LogManager.getLogger(getClass().getName());
 
+    /**
+     * Initializes connection pool with properties
+     *
+     * @param connectionPool that should be initialized
+     */
     public void init(ConnectionPool connectionPool) {
         try {
             Properties properties = new Properties();

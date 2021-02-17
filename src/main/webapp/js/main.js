@@ -113,6 +113,23 @@ function getCurrentDate() {
     return today;
 }
 
+function getCurrentDatePlusDays(days) {
+    var today = new Date();
+    var dd = today.getDate() + days;
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+    today = yyyy + '-' + mm + '-' + dd;
+    return today;
+}
+
 function setCurrentDate() {
     var today = getCurrentDate();
     document.getElementById('date').value = today;
