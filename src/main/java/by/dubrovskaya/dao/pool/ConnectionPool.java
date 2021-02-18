@@ -39,9 +39,8 @@ public final class ConnectionPool {
         if (!isInitialized.get()) {
             try {
                 lock.lock();
-                if (!isInitialized.get()) {
+                if (isInitialized.compareAndSet(false, true)) {
                     instance = new ConnectionPool();
-                    isInitialized.set(true);
                 }
             } finally {
                 lock.unlock();
